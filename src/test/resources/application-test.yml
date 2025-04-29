@@ -1,0 +1,4 @@
+logging:
+  level:
+    root: DEBUG
+    org.hibernate.type: TRACE

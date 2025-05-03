@@ -1,12 +1,9 @@
 package com.uos.dsd.cinema.acceptance;
 
-import org.springframework.stereotype.Component;
 import org.springframework.test.context.TestContext;
 import org.springframework.test.context.support.AbstractTestExecutionListener;
-
 import io.restassured.RestAssured;
 
-@Component
 public class AcceptanceTestExecutionListener extends AbstractTestExecutionListener {
 
     @Override

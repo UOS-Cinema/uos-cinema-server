@@ -1,16 +1,16 @@
 package com.uos.dsd.cinema.utils;
 
-import org.springframework.stereotype.Component;
-
 import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
+
 import javax.sql.DataSource;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.ResultSet;
 import java.util.List;
 
-@Component
 public class OracleDBInitializeStrategy implements DBInitializeStrategy {
 
     private DataSource dataSource;
@@ -95,6 +95,7 @@ public class OracleDBInitializeStrategy implements DBInitializeStrategy {
     }
 
     @Override
+    @Transactional
     public void createData() {
 
         if (entityManager == null) {
@@ -112,6 +113,9 @@ public class OracleDBInitializeStrategy implements DBInitializeStrategy {
     @Override
     public void setEntityManager(EntityManager entityManager) {
 
+        if (this.entityManager != null) {
+            throw new RuntimeException("EntityManager is already set");
+        }
         this.entityManager = entityManager;
     }
 }

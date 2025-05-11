@@ -1,5 +1,8 @@
 package com.uos.dsd.cinema.domain.model;
 
+import com.uos.dsd.cinema.common.exception.code.CommonResultCode;
+import com.uos.dsd.cinema.common.exception.http.BadRequestException;
+import com.uos.dsd.cinema.common.exception.http.InternalServerErrorException;
 import com.uos.dsd.cinema.common.model.Base;
 
 import lombok.AccessLevel;
@@ -10,6 +13,14 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.spec.InvalidKeySpecException;
+import java.util.Base64;
 
 @Entity
 @Getter
@@ -22,12 +33,96 @@ public class Admin extends Base {
     private String name;
     private String password;
 
-    public Admin(String name, String encodedPassword) {
+    public Admin(String name, String password) {
+
         this.name = name;
-        this.password = encodedPassword;
+        setPassword(password);
     }
 
-    public boolean isPasswordMatched(String encodedPassword) {
-        return this.password.equals(encodedPassword);
+    public boolean isPasswordMatched(String password) {
+
+        // Decode the stored password
+        byte[] storedSaltAndHash = Base64.getDecoder().decode(this.password);
+        byte[] salt = new byte[16];
+        System.arraycopy(storedSaltAndHash, 0, salt, 0, salt.length);
+
+        // Hash the input password with the same salt
+        String saltString = Base64.getEncoder().encodeToString(salt);
+        String computedHash = hashPasswordWithSalt(password, saltString);
+
+        return password.equals(computedHash);
+    }
+
+    private void setPassword(String password) {
+
+        if (!isValidPassword(password)) {
+            throw new BadRequestException(CommonResultCode.BAD_REQUEST, "Invalid password format");
+        }
+        this.password = hashPasswordWithSalt(password, generateSalt());
+    }
+
+    private String generateSalt() {
+
+        byte[] salt = new byte[16];
+        SecureRandom secureRandom = new SecureRandom();
+        secureRandom.nextBytes(salt);
+        return Base64.getEncoder().encodeToString(salt);
+    }
+
+    private String hashPasswordWithSalt(String password, String salt) {
+
+        try {
+            // Hash password using PBKDF2
+            byte[] saltBytes = salt.getBytes();
+            int iteration = 10000;
+            int keyLength = 256;
+            PBEKeySpec spec = new PBEKeySpec(password.toCharArray(), saltBytes, iteration, keyLength);
+            SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+            byte[] hashedPassword = keyFactory.generateSecret(spec).getEncoded();
+
+            // Combine salt and hashed password
+            byte[] saltAndHash = new byte[saltBytes.length + hashedPassword.length];
+            System.arraycopy(saltBytes, 0, saltAndHash, 0, saltBytes.length);
+            System.arraycopy(hashedPassword, 0, saltAndHash, saltBytes.length, hashedPassword.length);
+
+            // Encode to Base64 for storage
+            return Base64.getEncoder().encodeToString(saltAndHash);
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+            throw new InternalServerErrorException(CommonResultCode.INTERNAL_SERVER_ERROR, "Error hashing password", e);
+        }
+    }
+
+    /*
+     * Checks if the password is valid.
+     * - 8 <= length <= 20
+     * - At least one letter
+     * - At least one digit
+     * - At least one special character
+     * - No spaces
+     */
+    private boolean isValidPassword(String password) {
+
+        if (password.length() < 8 || password.length() > 20) {
+            return false;
+        }
+
+        boolean hasLetter = false;
+        boolean hasDigit = false;
+        boolean hasSpecialChar = false;
+        String specialChars = "!@#$%^&*()-_=+[]{}|;:,.<>/?";
+
+        for (char c : password.toCharArray()) {
+            if (Character.isLetter(c)) {
+                hasLetter = true;
+            } else if (Character.isDigit(c)) {
+                hasDigit = true;
+            } else if (specialChars.contains(String.valueOf(c))) {
+                hasSpecialChar = true;
+            } else if (Character.isWhitespace(c)) {
+                return false; // No spaces allowed
+            }
+        }
+
+        return hasLetter && hasDigit && hasSpecialChar;
     }
 }

@@ -24,13 +24,13 @@ public class AuthService {
 
     private final AdminRepository adminRepository;
 
-    public Long registerAdmin(String name, String password) {
+    public Long signupAdmin(String name, String password) {
 
         Admin admin = new Admin(name, password);
         try {
             return adminRepository.save(admin).getId();
         } catch (DataIntegrityViolationException e) {
-            log.error("Failed to register admin: {}", e.getMessage());
+            log.error("Failed to signup admin: {}", e.getMessage());
             throw new BadRequestException(CommonResultCode.BAD_REQUEST, "Admin name already exists");
         }
     }

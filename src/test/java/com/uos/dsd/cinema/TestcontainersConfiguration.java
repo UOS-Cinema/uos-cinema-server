@@ -22,5 +22,4 @@ public class TestcontainersConfiguration {
 			.withPassword(PASSWORD)
 			.withDatabaseName(DATABASE_NAME);
 	}
-
 }

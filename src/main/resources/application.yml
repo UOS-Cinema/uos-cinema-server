@@ -15,12 +15,6 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.OracleDialect
 
-  flyway:
-    enabled: true
-    baseline-on-migrate: true
-    locations: classpath:db/migration
-    table: cinema_flyway_schema_version
-
 jasypt:
   encryptor:
     password: ${CINEMA_JASYPT_KEY}

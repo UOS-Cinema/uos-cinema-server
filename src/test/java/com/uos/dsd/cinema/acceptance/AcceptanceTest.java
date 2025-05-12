@@ -13,8 +13,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestExecutionListeners;
 
-import org.testcontainers.junit.jupiter.Testcontainers;
-
 import org.junit.jupiter.api.AfterEach;
 
 import org.slf4j.Logger;
@@ -28,7 +26,6 @@ import javax.sql.DataSource;
     listeners = {AcceptanceTestExecutionListener.class},
     mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS
 )
-@Testcontainers
 @Import({
     DBInitializer.class,
     TestcontainersConfiguration.class, 

@@ -15,11 +15,3 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.OracleDialect
 
-jasypt:
-  encryptor:
-    password: ${CINEMA_JASYPT_KEY}
-    algorithm: PBEWithMD5AndDES
-    key-obtention-iterations: 1000
-    pool-size: 1
-    salt-generator-classname: org.jasypt.salt.RandomSaltGenerator
-    string-output-type: base64

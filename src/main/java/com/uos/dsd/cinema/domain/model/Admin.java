@@ -8,23 +8,29 @@ import com.uos.dsd.cinema.common.model.Base;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+import java.nio.charset.StandardCharsets;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.spec.InvalidKeySpecException;
+import java.util.Arrays;
+import java.util.Base64;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.security.spec.InvalidKeySpecException;
-import java.util.Base64;
-
 @Entity
+@Table(name = "admins")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Slf4j
 public class Admin extends Base {
 
     @Id
@@ -47,10 +53,8 @@ public class Admin extends Base {
         System.arraycopy(storedSaltAndHash, 0, salt, 0, salt.length);
 
         // Hash the input password with the same salt
-        String saltString = Base64.getEncoder().encodeToString(salt);
-        String computedHash = hashPasswordWithSalt(password, saltString);
-
-        return password.equals(computedHash);
+        String computedHash = hashPasswordWithSalt(password, salt);
+        return this.password.equals(computedHash);
     }
 
     private void setPassword(String password) {
@@ -61,29 +65,28 @@ public class Admin extends Base {
         this.password = hashPasswordWithSalt(password, generateSalt());
     }
 
-    private String generateSalt() {
+    private byte[] generateSalt() {
 
         byte[] salt = new byte[16];
         SecureRandom secureRandom = new SecureRandom();
         secureRandom.nextBytes(salt);
-        return Base64.getEncoder().encodeToString(salt);
+        return salt;
     }
 
-    private String hashPasswordWithSalt(String password, String salt) {
+    private String hashPasswordWithSalt(String password, byte[] salt) {
 
         try {
             // Hash password using PBKDF2
-            byte[] saltBytes = salt.getBytes();
             int iteration = 10000;
             int keyLength = 256;
-            PBEKeySpec spec = new PBEKeySpec(password.toCharArray(), saltBytes, iteration, keyLength);
+            PBEKeySpec spec = new PBEKeySpec(password.toCharArray(), salt, iteration, keyLength);
             SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
             byte[] hashedPassword = keyFactory.generateSecret(spec).getEncoded();
 
             // Combine salt and hashed password
-            byte[] saltAndHash = new byte[saltBytes.length + hashedPassword.length];
-            System.arraycopy(saltBytes, 0, saltAndHash, 0, saltBytes.length);
-            System.arraycopy(hashedPassword, 0, saltAndHash, saltBytes.length, hashedPassword.length);
+            byte[] saltAndHash = new byte[salt.length + hashedPassword.length];
+            System.arraycopy(salt, 0, saltAndHash, 0, salt.length);
+            System.arraycopy(hashedPassword, 0, saltAndHash, salt.length, hashedPassword.length);
 
             // Encode to Base64 for storage
             return Base64.getEncoder().encodeToString(saltAndHash);

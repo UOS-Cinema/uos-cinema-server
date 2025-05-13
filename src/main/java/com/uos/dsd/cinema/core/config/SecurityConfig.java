@@ -26,8 +26,8 @@ public class SecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
             .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                .requestMatchers(SecurityConstants.OPEN_ACCESS_URLS.toArray(String[]::new))
-                .permitAll()
+                .requestMatchers(SecurityConstants.OPEN_ACCESS_URLS.toArray(String[]::new)).permitAll()
+                .requestMatchers(SecurityConstants.ADMIN_URLS.toArray(String[]::new)).permitAll() // TODO: admin 권한 확인으로 변경 필요
             .anyRequest()
                 .authenticated())
 

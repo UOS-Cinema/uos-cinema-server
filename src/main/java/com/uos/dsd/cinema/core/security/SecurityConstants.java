@@ -3,11 +3,16 @@ package com.uos.dsd.cinema.core.security;
 import java.util.List;
 
 public class SecurityConstants {
+    
     public static final List<String> BYPASS_URLS = List.of(
         "/hello"
     );
 
     public static final List<String> OPEN_ACCESS_URLS = List.of(
+    );
+
+    public static final List<String> ADMIN_URLS = List.of(
+        "/admin/**"
     );
 
     public static final String USER_ID_CLAIM = "userId";

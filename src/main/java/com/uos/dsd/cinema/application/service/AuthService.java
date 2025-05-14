@@ -10,13 +10,11 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 import jakarta.transaction.Transactional;
 
 import java.util.Optional;
 
-@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -30,7 +28,6 @@ public class AuthService {
         try {
             return adminRepository.save(admin).getId();
         } catch (DataIntegrityViolationException e) {
-            log.error("Failed to signup admin: {}", e.getMessage());
             throw new BadRequestException(CommonResultCode.BAD_REQUEST, "Admin name already exists");
         }
     }
@@ -39,7 +36,7 @@ public class AuthService {
 
         Optional<Admin> admin = adminRepository.findByName(name);
         if (admin.isEmpty() || !admin.get().isPasswordMatched(password)) {
-            throw new UnauthorizedException(CommonResultCode.UNAUTHORIZED);
+            throw new UnauthorizedException(CommonResultCode.UNAUTHORIZED, "Invalid admin name or password");
         }
         return admin.get();
     }

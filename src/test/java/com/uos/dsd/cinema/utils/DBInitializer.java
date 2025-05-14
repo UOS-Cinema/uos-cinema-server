@@ -43,6 +43,7 @@ public class DBInitializer {
         dbInitializeStrategy.createTable();
         dbInitializeStrategy.createData();
         findDatabaseTableNames();
+        log.debug("tableNames: {}", tableNames);
     }
 
     @Transactional
@@ -57,17 +58,11 @@ public class DBInitializer {
 
         try (Connection connection = dataSource.getConnection()) {
             DatabaseMetaData metaData = connection.getMetaData();
-            String currentUser = metaData.getUserName();
-            ResultSet tables = metaData.getTables(null, currentUser, "%", new String[] {"TABLE"});
-            log.info("currentUser: {}", currentUser);
+            ResultSet tables = metaData.getTables(null, "PUBLIC", "%", new String[] {"TABLE"});
 
             while (tables.next()) {
                 String tableName = tables.getString("TABLE_NAME");
-
-                // TODO: Flyway 추가 시 해당 테이블 제외
-                // if (!"FLYWAY_SCHEMA_HISTORY".equalsIgnoreCase(tableName)) {
                 tableNames.add(tableName);
-                // }
             }
         } catch (SQLException e) {
             throw new RuntimeException("Exception occurred while finding database table names", e);

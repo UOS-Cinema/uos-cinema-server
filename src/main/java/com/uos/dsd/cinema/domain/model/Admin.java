@@ -16,11 +16,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
-import java.util.Arrays;
 import java.util.Base64;
 
 import javax.crypto.SecretKeyFactory;
@@ -115,14 +113,14 @@ public class Admin extends Base {
         String specialChars = "!@#$%^&*()-_=+[]{}|;:,.<>/?";
 
         for (char c : password.toCharArray()) {
-            if (Character.isLetter(c)) {
+            if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z')) {
                 hasLetter = true;
             } else if (Character.isDigit(c)) {
                 hasDigit = true;
             } else if (specialChars.contains(String.valueOf(c))) {
                 hasSpecialChar = true;
-            } else if (Character.isWhitespace(c)) {
-                return false; // No spaces allowed
+            } else {
+                return false;
             }
         }
 

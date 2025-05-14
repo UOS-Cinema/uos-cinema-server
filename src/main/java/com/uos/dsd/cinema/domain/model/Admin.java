@@ -8,7 +8,6 @@ import com.uos.dsd.cinema.common.model.Base;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -28,7 +27,6 @@ import javax.crypto.spec.PBEKeySpec;
 @Table(name = "admins")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Slf4j
 public class Admin extends Base {
 
     @Id

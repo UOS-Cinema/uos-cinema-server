@@ -37,7 +37,7 @@ public class Admin extends Base {
 
     public Admin(String name, String password) {
 
-        this.name = name;
+        setName(name);
         setPassword(password);
     }
 
@@ -51,6 +51,14 @@ public class Admin extends Base {
         // Hash the input password with the same salt
         String computedHash = hashPasswordWithSalt(password, salt);
         return this.password.equals(computedHash);
+    }
+
+    private void setName(String name) {
+
+        if (name == null || (name.length() < 6 || name.length() > 20)) {
+            throw new BadRequestException(CommonResultCode.BAD_REQUEST, "Invalid name format");
+        }
+        this.name = name;
     }
 
     private void setPassword(String password) {

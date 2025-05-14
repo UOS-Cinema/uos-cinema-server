@@ -18,6 +18,7 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
         return http
             .csrf(AbstractHttpConfigurer::disable)
             .formLogin(AbstractHttpConfigurer::disable)
@@ -36,6 +37,7 @@ public class SecurityConfig {
 
     @Bean
     WebSecurityCustomizer webSecurityCustomizer() {
+        
         return web -> web.ignoring()
             .requestMatchers(SecurityConstants.BYPASS_URLS.toArray(String[]::new));
     }

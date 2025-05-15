@@ -44,6 +44,26 @@ public class H2DBInitializeStrategy implements DBInitializeStrategy {
     }
 
     @Override
+    public List<String> getTableNames() {
+
+        try (Connection connection = dataSource.getConnection()) {
+            List<String> tableNames = new ArrayList<>();
+            DatabaseMetaData metaData = connection.getMetaData();
+            ResultSet tables = metaData.getTables(null, "PUBLIC", "%", new String[] {"TABLE"});
+
+            while (tables.next()) {
+                String tableName = tables.getString("TABLE_NAME");
+                tableNames.add(tableName);
+            }
+            log.info("Table Names: {}", tableNames);
+
+            return tableNames;
+        } catch (SQLException e) {
+            throw new RuntimeException("Exception occurred while finding database table names", e);
+        }
+    }
+
+    @Override
     public void truncateTables(List<String> tableNames) {
 
         log.info("[H2DBInitializeStrategy] truncateTables");

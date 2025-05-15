@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface DBInitializeStrategy {
 
+    List<String> getTableNames();
+
     void truncateTables(List<String> tableNames);
 
     void setForeignKeyCheck(boolean check);

@@ -60,14 +60,13 @@ public class JwtUtils {
     /*
      * Generate Access Token
      * - subject: id
-     * - claim: username, role, tokenType
+     * - claim: role, tokenType
      * - expiration: accessTokenExpirationMs
      */
-    public String generateAccessToken(Long id, String username, Role role) {
+    public String generateAccessToken(Long id, Role role) {
 
         return Jwts.builder()
                 .setSubject(id.toString())
-                .claim(USER_NAME_CLAIM, username)
                 .claim(ROLE_CLAIM, role.name())
                 .claim(TOKEN_TYPE_CLAIM, TokenType.ACCESS.name())
                 .setExpiration(new Date(System.currentTimeMillis() + accessTokenExpirationMs))
@@ -78,13 +77,12 @@ public class JwtUtils {
     /*
      * Generate Refresh Token
      * - subject: id
-     * - claim: username, role, tokenType
+     * - claim: role, tokenType
      * - expiration: refreshTokenExpirationMs
      */
-    public String generateRefreshToken(Long id, String username, Role role) {
+    public String generateRefreshToken(Long id, Role role) {
         return Jwts.builder()
                 .setSubject(id.toString())
-                .claim(USER_NAME_CLAIM, username)
                 .claim(ROLE_CLAIM, role.name())
                 .claim(TOKEN_TYPE_CLAIM, TokenType.REFRESH.name())
                 .setExpiration(new Date(System.currentTimeMillis() + refreshTokenExpirationMs))

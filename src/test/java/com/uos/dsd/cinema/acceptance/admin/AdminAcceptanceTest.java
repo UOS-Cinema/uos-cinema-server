@@ -176,7 +176,7 @@ public class AdminAcceptanceTest extends AcceptanceTest {
         String password = EXIST_ADMIN_PASSWORD;
 
         /* When */
-        Map<String, Object> headers = new HashMap<>();
+        Map<String, Object> headers = AuthHeaderProvider.createEmptyHeader();
 
         Response response = AdminSteps.sendLoginAdmin(headers, new AdminLoginRequest(username, password));
         log.info("response: {}", response.asString());
@@ -206,7 +206,7 @@ public class AdminAcceptanceTest extends AcceptanceTest {
         // username and password are provided as parameters
 
         /* When */
-        Map<String, Object> headers = new HashMap<>();
+        Map<String, Object> headers = AuthHeaderProvider.createEmptyHeader();
 
         Response response = AdminSteps.sendLoginAdmin(headers, new AdminLoginRequest(username, password));
         log.info("response: {}", response.asString());
@@ -319,8 +319,7 @@ public class AdminAcceptanceTest extends AcceptanceTest {
         String password = EXIST_ADMIN_PASSWORD;
 
         /* When */
-        String adminAccessToken = "adminAccessToken";
-        Map<String, Object> headers = AuthHeaderProvider.createAuthorizationHeader(adminAccessToken);
+        Map<String, Object> headers = AuthHeaderProvider.createEmptyHeader();
 
         Response response = AdminSteps.sendDeleteAdmin(headers, new AdminDeleteRequest(id, password));
         log.info("response: {}", response.asString());

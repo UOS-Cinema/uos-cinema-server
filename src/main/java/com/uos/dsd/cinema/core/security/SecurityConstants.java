@@ -14,14 +14,25 @@ public class SecurityConstants {
     );
 
     public static final List<String> ADMIN_URLS = List.of(
-        "/admin/**"
+        "/admin/signup"
     );
 
-    public static final String USER_ID_CLAIM = "userId";
-    public static final String EMAIL_CLAIM = "email";
+    public static final String USER_NAME_CLAIM = "username";
+    public static final String ROLE_CLAIM = "role";
     public static final String TOKEN_TYPE_CLAIM = "tokenType";
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
     public static final String REISSUE_HEADER = "RefreshToken";
     public static final String AUTH_SCHEME_PREFIX = "Bearer ";
+
+    public static enum Role {
+        ADMIN,
+        MEMBER,
+        GUEST;
+    }
+
+    public static enum TokenType {
+        ACCESS,
+        REFRESH;
+    }
 }

@@ -22,7 +22,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @Slf4j
 @RestController
-public class AuthController {
+public class AdminController {
 
     private final SignupAdminUsecase signupAdminUsecase;
     private final LoginAdminUsecase loginAdminUsecase;
@@ -32,7 +32,7 @@ public class AuthController {
     private final JwtUtils jwtUtils;
     private final long refreshTokenExpirationMs;
 
-    public AuthController(
+    public AdminController(
         SignupAdminUsecase signupAdminUsecase,
         LoginAdminUsecase loginAdminUsecase,
         UpdateAdminUsecase updateAdminUsecase,

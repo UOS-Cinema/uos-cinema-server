@@ -9,8 +9,9 @@ public class SecurityConstants {
     );
 
     public static final List<String> OPEN_ACCESS_URLS = List.of(
-        "/*",
-        "/*/*" // TODO: 추후 삭제
+        "/admin/login",
+        "/admin/update",
+        "/admin/delete"
     );
 
     public static final List<String> ADMIN_URLS = List.of(

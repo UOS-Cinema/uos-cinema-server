@@ -10,6 +10,8 @@ import com.uos.dsd.cinema.common.exception.code.CommonResultCode;
 import com.uos.dsd.cinema.common.response.ApiResponse;
 import com.uos.dsd.cinema.domain.exception.IllegalPasswordException;
 import com.uos.dsd.cinema.domain.exception.IllegalUsernameException;
+import com.uos.dsd.cinema.core.jwt.JwtUtils;
+import com.uos.dsd.cinema.core.security.SecurityConstants.Role;
 import com.uos.dsd.cinema.utils.AuthHeaderProvider;
 
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -20,6 +22,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import io.restassured.common.mapper.TypeRef;
 import io.restassured.response.Response;
@@ -47,6 +50,13 @@ public class AdminAcceptanceTest extends AcceptanceTest {
     private static final String NEW_ADMIN_USERNAME = "newAdministrator";
     private static final String NEW_ADMIN_PASSWORD = "newpassword123!";
 
+    private final JwtUtils jwtUtils;
+
+    @Autowired
+    public AdminAcceptanceTest(JwtUtils jwtUtils) {
+        this.jwtUtils = jwtUtils;
+    }
+
     @Test
     public void signup() {
 
@@ -55,8 +65,7 @@ public class AdminAcceptanceTest extends AcceptanceTest {
         String password = NEW_ADMIN_PASSWORD;
 
         /* When */
-        // TODO: Admin 권한의 Access Token이 주어져야 함
-        String adminAccessToken = "adminAccessToken";
+        String adminAccessToken = jwtUtils.generateAccessToken(1L, Role.ADMIN);
         Map<String, Object> headers = AuthHeaderProvider.createAuthorizationHeader(adminAccessToken);
 
         Response response = AdminSteps.sendSignupAdmin(headers, new AdminSignupRequest(username, password));
@@ -69,6 +78,31 @@ public class AdminAcceptanceTest extends AcceptanceTest {
         assertEquals(username, apiResponse.data().username());
     }
 
+    @Test
+    public void signupWithInvalidToken() {
+
+        /* Given */
+        String username = NEW_ADMIN_USERNAME;
+        String password = EXIST_ADMIN_PASSWORD;
+
+        /* When */
+        String adminAccessToken = "invalidToken";
+        Map<String, Object> headers = AuthHeaderProvider.createAuthorizationHeader(adminAccessToken);
+
+        Response response = AdminSteps.sendSignupAdmin(headers, new AdminSignupRequest(username, password));
+        log.info("response: {}", response.asString());
+        ApiResponse<AdminSignupResponse> apiResponse = response.as(new TypeRef<ApiResponse<AdminSignupResponse>>() {});
+        log.info("ApiResponse: {}", apiResponse);
+
+        /* Then */
+        // status code: 401
+        assertEquals(401, response.statusCode());
+        // code: COM003
+        assertEquals("COM003", apiResponse.code());
+        // message: Full authentication is required to access this resource
+        assertEquals("Full authentication is required to access this resource", apiResponse.message());
+    }
+
     @ParameterizedTest
     @ValueSource(strings = { EXIST_ADMIN_USERNAME, DELETED_ADMIN_USERNAME })
     public void signupWithExistingName(String username) {
@@ -77,8 +111,7 @@ public class AdminAcceptanceTest extends AcceptanceTest {
         String password = NEW_ADMIN_PASSWORD;
 
         /* When */
-        // TODO: Admin 권한의 Access Token이 주어져야 함
-        String adminAccessToken = "adminAccessToken";
+        String adminAccessToken = jwtUtils.generateAccessToken(1L, Role.ADMIN);
         Map<String, Object> headers = AuthHeaderProvider.createAuthorizationHeader(adminAccessToken);
 
         Response response = AdminSteps.sendSignupAdmin(headers, new AdminSignupRequest(username, password));
@@ -99,8 +132,7 @@ public class AdminAcceptanceTest extends AcceptanceTest {
         String password = NEW_ADMIN_PASSWORD;
 
         /* When */
-        // TODO: Admin 권한의 Access Token이 주어져야 함
-        String adminAccessToken = "adminAccessToken";
+        String adminAccessToken = jwtUtils.generateAccessToken(1L, Role.ADMIN);
         Map<String, Object> headers = AuthHeaderProvider.createAuthorizationHeader(adminAccessToken);
 
         Response response = AdminSteps.sendSignupAdmin(headers, new AdminSignupRequest(username, password));
@@ -122,8 +154,7 @@ public class AdminAcceptanceTest extends AcceptanceTest {
         String username = NEW_ADMIN_USERNAME;
 
         /* When */
-        // TODO: Admin 권한의 Access Token이 주어져야 함
-        String adminAccessToken = "adminAccessToken";
+        String adminAccessToken = jwtUtils.generateAccessToken(1L, Role.ADMIN);
         Map<String, Object> headers = AuthHeaderProvider.createAuthorizationHeader(adminAccessToken);
 
         Response response = AdminSteps.sendSignupAdmin(headers, new AdminSignupRequest(username, password));
@@ -153,7 +184,14 @@ public class AdminAcceptanceTest extends AcceptanceTest {
 
         /* Then */
         checkSuccess(response.statusCode(), apiResponse.code());
-        // TODO: check body accessToken, refreshToken
+        // check body accessToken
+        String accessToken = apiResponse.data().accessToken();
+        String accessTokenUsername = jwtUtils.getUsernameFromJwtToken(accessToken);
+        assertEquals(EXIST_ADMIN_USERNAME, accessTokenUsername);
+        // check cookie refreshToken
+        String refreshToken = response.getCookie("refreshToken");
+        String refreshTokenUsername = jwtUtils.getUsernameFromJwtToken(refreshToken);
+        assertEquals(EXIST_ADMIN_USERNAME, refreshTokenUsername);
     }
 
     @ParameterizedTest
@@ -206,7 +244,14 @@ public class AdminAcceptanceTest extends AcceptanceTest {
         ApiResponse<AdminLoginResponse> loginApiResponse = loginResponse.as(new TypeRef<ApiResponse<AdminLoginResponse>>() {});
 
         checkSuccess(loginResponse.statusCode(), loginApiResponse.code());
-        // TODO: check body accessToken, refreshToken
+        // check body accessToken
+        String accessToken = loginApiResponse.data().accessToken();
+        String accessTokenUsername = jwtUtils.getUsernameFromJwtToken(accessToken);
+        assertEquals(EXIST_ADMIN_USERNAME, accessTokenUsername);
+        // check cookie refreshToken
+        String refreshToken = loginResponse.getCookie("refreshToken");
+        String refreshTokenUsername = jwtUtils.getUsernameFromJwtToken(refreshToken);
+        assertEquals(EXIST_ADMIN_USERNAME, refreshTokenUsername);
     }
 
     /*

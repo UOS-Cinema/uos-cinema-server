@@ -1,10 +1,10 @@
-package com.uos.dsd.cinema.application.service;
+package com.uos.dsd.cinema.application.service.admin;
 
-import com.uos.dsd.cinema.application.port.out.repository.AdminRepository;
+import com.uos.dsd.cinema.application.port.out.repository.admin.AdminRepository;
 import com.uos.dsd.cinema.common.exception.code.CommonResultCode;
 import com.uos.dsd.cinema.common.exception.http.BadRequestException;
 import com.uos.dsd.cinema.common.exception.http.UnauthorizedException;
-import com.uos.dsd.cinema.domain.model.Admin;
+import com.uos.dsd.cinema.domain.admin.Admin;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;

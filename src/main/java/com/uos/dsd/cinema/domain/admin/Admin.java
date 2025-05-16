@@ -1,4 +1,4 @@
-package com.uos.dsd.cinema.domain.model;
+package com.uos.dsd.cinema.domain.admin;
 
 import com.uos.dsd.cinema.common.exception.code.CommonResultCode;
 import com.uos.dsd.cinema.common.exception.http.BadRequestException;

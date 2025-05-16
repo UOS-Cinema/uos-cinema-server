@@ -1,6 +1,6 @@
-package com.uos.dsd.cinema.application.port.out.repository;
+package com.uos.dsd.cinema.application.port.out.repository.admin;
 
-import com.uos.dsd.cinema.domain.model.Admin;
+import com.uos.dsd.cinema.domain.admin.Admin;
 
 import java.util.Optional;
 

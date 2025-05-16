@@ -23,7 +23,7 @@ public class SecurityConstants {
     public static final String TOKEN_TYPE_CLAIM = "tokenType";
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
-    public static final String REISSUE_HEADER = "RefreshToken";
+    public static final String REISSUE_COOKIE_NAME = "RefreshToken";
     public static final String AUTH_SCHEME_PREFIX = "Bearer ";
 
     public static enum Role {

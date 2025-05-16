@@ -11,6 +11,7 @@ import com.uos.dsd.cinema.common.response.ApiResponse;
 import com.uos.dsd.cinema.domain.exception.IllegalPasswordException;
 import com.uos.dsd.cinema.domain.exception.IllegalUsernameException;
 import com.uos.dsd.cinema.core.jwt.JwtUtils;
+import com.uos.dsd.cinema.core.security.SecurityConstants;
 import com.uos.dsd.cinema.core.security.SecurityConstants.Role;
 import com.uos.dsd.cinema.utils.AuthHeaderProvider;
 
@@ -189,7 +190,7 @@ public class AdminAcceptanceTest extends AcceptanceTest {
         String accessTokenUsername = jwtUtils.getUsernameFromJwtToken(accessToken);
         assertEquals(EXIST_ADMIN_USERNAME, accessTokenUsername);
         // check cookie refreshToken
-        String refreshToken = response.getCookie("refreshToken");
+        String refreshToken = response.getCookie(SecurityConstants.REISSUE_COOKIE_NAME);
         String refreshTokenUsername = jwtUtils.getUsernameFromJwtToken(refreshToken);
         assertEquals(EXIST_ADMIN_USERNAME, refreshTokenUsername);
     }

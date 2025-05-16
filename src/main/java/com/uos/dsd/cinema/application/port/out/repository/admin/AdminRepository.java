@@ -6,7 +6,7 @@ import java.util.Optional;
 
 public interface AdminRepository {
 
-    Optional<Admin> findByName(String name);
+    Optional<Admin> findByUsername(String username);
 
     Admin save(Admin admin);
 }

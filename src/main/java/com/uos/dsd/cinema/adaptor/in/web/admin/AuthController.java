@@ -25,19 +25,19 @@ public class AuthController {
     @PostMapping("/admin/signup")
     public ApiResponse<AdminSignupResponse> signup(@RequestBody AdminSignupRequest request) {
 
-        log.info("signup request: {}", request.name());
-        authService.signupAdmin(request.name(), request.password());
-        return ApiResponse.success(new AdminSignupResponse(request.name()));
+        log.info("signup request: {}", request.username());
+        authService.signupAdmin(request.username(), request.password());
+        return ApiResponse.success(new AdminSignupResponse(request.username()));
     }
 
     @PostMapping("/admin/login")
     public ApiResponse<AdminLoginResponse> login(@RequestBody AdminLoginRequest request) {
 
-        log.info("login request: {}", request.name());
-        Admin admin = authService.loginAdmin(request.name(), request.password());
+        log.info("login request: {}", request.username());
+        Admin admin = authService.loginAdmin(request.username(), request.password());
 
         // TODO: Generate JWT token and return it in the response
 
-        return ApiResponse.success(new AdminLoginResponse(admin.getName()));
+        return ApiResponse.success(new AdminLoginResponse(admin.getUsername()));
     }
 }

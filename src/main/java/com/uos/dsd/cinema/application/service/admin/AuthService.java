@@ -22,21 +22,21 @@ public class AuthService {
 
     private final AdminRepository adminRepository;
 
-    public Long signupAdmin(String name, String password) {
+    public Long signupAdmin(String username, String password) {
 
-        Admin admin = new Admin(name, password);
+        Admin admin = new Admin(username, password);
         try {
             return adminRepository.save(admin).getId();
         } catch (DataIntegrityViolationException e) {
-            throw new BadRequestException(CommonResultCode.BAD_REQUEST, "Admin name already exists");
+            throw new BadRequestException(CommonResultCode.BAD_REQUEST, "Admin username already exists");
         }
     }
 
-    public Admin loginAdmin(String name, String password) {
+    public Admin loginAdmin(String username, String password) {
 
-        Optional<Admin> admin = adminRepository.findByName(name);
+        Optional<Admin> admin = adminRepository.findByUsername(username);
         if (admin.isEmpty() || !admin.get().isPasswordMatched(password)) {
-            throw new UnauthorizedException(CommonResultCode.UNAUTHORIZED, "Invalid admin name or password");
+            throw new UnauthorizedException(CommonResultCode.UNAUTHORIZED, "Invalid admin username or password");
         }
         return admin.get();
     }

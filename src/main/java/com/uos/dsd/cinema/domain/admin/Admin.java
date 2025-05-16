@@ -5,6 +5,7 @@ import com.uos.dsd.cinema.common.exception.http.BadRequestException;
 import com.uos.dsd.cinema.common.model.Base;
 import com.uos.dsd.cinema.common.utils.PasswordUtil;
 import com.uos.dsd.cinema.domain.constraint.PasswordConstraint;
+import com.uos.dsd.cinema.domain.constraint.UsernameConstraint;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -25,12 +26,12 @@ public class Admin extends Base {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
+    private String username;
     private String password;
 
-    public Admin(String name, String password) {
+    public Admin(String username, String password) {
 
-        this.name = name;
+        setUsername(username);
         setPassword(password);
     }
 
@@ -39,6 +40,14 @@ public class Admin extends Base {
         byte[] salt = PasswordUtil.extractSalt(this.password);
         String hashedPassword = PasswordUtil.hashPasswordWithSalt(password, salt);
         return this.password.equals(hashedPassword);
+    }
+
+    private void setUsername(String username) {
+
+        if (!UsernameConstraint.isValidUsername(username)) {
+            throw new BadRequestException(CommonResultCode.BAD_REQUEST, "Invalid username format");
+        }
+        this.username = username;
     }
 
     private void setPassword(String password) {

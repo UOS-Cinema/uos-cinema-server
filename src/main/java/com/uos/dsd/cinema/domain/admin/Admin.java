@@ -32,7 +32,7 @@ public class Admin extends Base {
     public Admin(String username, String password) {
 
         setUsername(username);
-        setPassword(password);
+        validateAndSetPassword(password);
     }
 
     public boolean isPasswordMatched(String password) {
@@ -50,11 +50,9 @@ public class Admin extends Base {
         this.username = username;
     }
 
-    private void setPassword(String password) {
+    private void validateAndSetPassword(String password) {
 
-        if (!PasswordConstraint.isValidPassword(password)) {
-            throw new BadRequestException(CommonResultCode.BAD_REQUEST, "Invalid password format");
-        }
+        PasswordConstraint.validatePassword(password);
         this.password = PasswordUtil.hashPasswordWithSalt(password, PasswordUtil.generateSalt());
     }
 }

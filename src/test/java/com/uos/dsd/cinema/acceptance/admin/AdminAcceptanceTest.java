@@ -106,7 +106,7 @@ public class AdminAcceptanceTest extends AcceptanceTest {
         // code: COM001
         assertEquals("COM001", apiResponse.code());
         // message: Invalid name format
-        assertEquals("Invalid username format", apiResponse.message());
+        assertEquals("아이디는 6자 이상 20자 이하이며, 영문자와 숫자만 포함해야 합니다.", apiResponse.message());
     }
 
     @ParameterizedTest
@@ -133,7 +133,7 @@ public class AdminAcceptanceTest extends AcceptanceTest {
         // code: COM001
         assertEquals("COM001", apiResponse.code());
         // message: Invalid password format
-        assertEquals("Invalid password format", apiResponse.message());
+        assertEquals("비밀번호는 8자 이상 20자 이하이며, 영문자, 숫자, 특수문자를 포함해야 합니다.", apiResponse.message());
     }
 
     @Test

@@ -38,6 +38,11 @@ public class JwtUtils {
         this.refreshTokenExpirationMs = refreshTokenExpirationMs;
     }
 
+    public long getRefreshTokenExpirationMs() {
+        
+        return refreshTokenExpirationMs;
+    }
+
     public boolean validateJwtToken(String jwt) {
 
         try {

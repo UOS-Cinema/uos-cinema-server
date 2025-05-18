@@ -1,7 +1,5 @@
 package com.uos.dsd.cinema.domain.admin;
 
-import com.uos.dsd.cinema.common.exception.code.CommonResultCode;
-import com.uos.dsd.cinema.common.exception.http.BadRequestException;
 import com.uos.dsd.cinema.common.model.Base;
 import com.uos.dsd.cinema.common.utils.PasswordUtil;
 import com.uos.dsd.cinema.domain.constraint.PasswordConstraint;

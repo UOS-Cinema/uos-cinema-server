@@ -6,7 +6,6 @@ import com.uos.dsd.cinema.adaptor.in.web.admin.response.AdminLoginResponse;
 import com.uos.dsd.cinema.adaptor.in.web.admin.response.AdminSignupResponse;
 import com.uos.dsd.cinema.application.service.admin.AuthService;
 import com.uos.dsd.cinema.common.response.ApiResponse;
-import com.uos.dsd.cinema.domain.admin.Admin;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

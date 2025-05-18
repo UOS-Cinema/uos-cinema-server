@@ -35,7 +35,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     @NonNull FilterChain filterChain) throws ServletException, IOException {
         
         // Access Token 유효성 검사
-        String jwt = parseJwt(request);
+        String jwt = extractJwt(request);
         if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
             Long id = jwtUtils.getIdFromJwtToken(jwt);
             String username = jwtUtils.getUsernameFromJwtToken(jwt);
@@ -52,7 +52,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    private String parseJwt(HttpServletRequest request) {
+    private String extractJwt(HttpServletRequest request) {
         String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(AUTH_SCHEME_PREFIX)) {
             return bearerToken.substring(AUTH_SCHEME_PREFIX.length());

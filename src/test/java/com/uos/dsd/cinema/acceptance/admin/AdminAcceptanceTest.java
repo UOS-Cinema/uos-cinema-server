@@ -28,7 +28,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import io.restassured.common.mapper.TypeRef;
 import io.restassured.response.Response;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 

@@ -43,7 +43,7 @@ public class JwtUtils {
         return refreshTokenExpirationMs;
     }
 
-    public boolean validateJwtToken(String jwt) {
+    public boolean isValidJwtToken(String jwt) {
 
         try {
             Jwts.parserBuilder().setSigningKey(secretKey).build().parse(jwt);

@@ -36,7 +36,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         
         // Access Token 유효성 검사
         String jwt = extractJwt(request);
-        if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
+        if (jwt != null && jwtUtils.isValidJwtToken(jwt)) {
             Long id = jwtUtils.getIdFromJwtToken(jwt);
             String username = jwtUtils.getUsernameFromJwtToken(jwt);
             Role role = jwtUtils.getRoleFromJwtToken(jwt);

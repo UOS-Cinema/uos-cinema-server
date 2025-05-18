@@ -32,12 +32,12 @@ public class AuthService {
         }
     }
 
-    public Admin loginAdmin(String username, String password) {
+    public Long loginAdmin(String username, String password) {
 
         Optional<Admin> admin = adminRepository.findByUsername(username);
         if (admin.isEmpty() || !admin.get().isPasswordMatched(password)) {
             throw new UnauthorizedException(CommonResultCode.UNAUTHORIZED, "Invalid admin username or password");
         }
-        return admin.get();
+        return admin.get().getId();
     }
 }

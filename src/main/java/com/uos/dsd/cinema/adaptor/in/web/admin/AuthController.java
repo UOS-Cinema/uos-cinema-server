@@ -34,10 +34,10 @@ public class AuthController {
     public ApiResponse<AdminLoginResponse> login(@RequestBody AdminLoginRequest request) {
 
         log.info("login request: {}", request.username());
-        Admin admin = authService.loginAdmin(request.username(), request.password());
+        Long adminId = authService.loginAdmin(request.username(), request.password());
 
         // TODO: Generate JWT token and return it in the response
 
-        return ApiResponse.success(new AdminLoginResponse(admin.getUsername()));
+        return ApiResponse.success(new AdminLoginResponse(adminId.toString()));
     }
 }

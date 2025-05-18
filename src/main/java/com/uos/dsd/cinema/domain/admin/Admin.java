@@ -31,7 +31,7 @@ public class Admin extends Base {
 
     public Admin(String username, String password) {
 
-        setUsername(username);
+        validateAndSetUsername(username);
         validateAndSetPassword(password);
     }
 
@@ -42,11 +42,9 @@ public class Admin extends Base {
         return this.password.equals(hashedPassword);
     }
 
-    private void setUsername(String username) {
+    private void validateAndSetUsername(String username) {
 
-        if (!UsernameConstraint.isValidUsername(username)) {
-            throw new BadRequestException(CommonResultCode.BAD_REQUEST, "Invalid username format");
-        }
+        UsernameConstraint.validateUsername(username);
         this.username = username;
     }
 

@@ -108,19 +108,7 @@ public class JwtUtils {
             throw new IllegalArgumentException("Invalid JWT token: " + jwt, e);
         }
     }
-
-    public String getUsernameFromJwtToken(String jwt) {
-        try {
-            return parser.parseClaimsJws(jwt).getBody()
-                    .get(USER_NAME_CLAIM).toString();
-        } catch (ExpiredJwtException e) {
-            // 만료된 토큰에서도 사용자 이름 추출
-            return e.getClaims().get(USER_NAME_CLAIM).toString();
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Invalid JWT token: " + jwt, e);
-        }
-    }
-
+    
     public Role getRoleFromJwtToken(String jwt) {
         try {
             return Role.valueOf(parser.parseClaimsJws(jwt).getBody()

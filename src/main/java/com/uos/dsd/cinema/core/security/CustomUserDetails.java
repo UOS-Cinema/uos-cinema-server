@@ -14,12 +14,10 @@ import java.util.Collections;
 public class CustomUserDetails implements UserDetails {
 
     private final Long id;
-    private final String username;
     private final Role role;
 
-    public CustomUserDetails(Long id, String username, Role role) {
+    public CustomUserDetails(Long id, Role role) {
         this.id = id;
-        this.username = username;
         this.role = role;
     }
 
@@ -31,6 +29,12 @@ public class CustomUserDetails implements UserDetails {
     @Override
     public String getPassword() {
         // 비밀번호는 JWT 기반 인증에선 사용하지 않음
+        return null;
+    }
+
+    @Override
+    public String getUsername() {
+        // username은 사용하지 않음
         return null;
     }
 }

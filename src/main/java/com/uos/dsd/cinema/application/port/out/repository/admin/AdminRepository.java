@@ -6,11 +6,11 @@ import java.util.Optional;
 
 public interface AdminRepository {
 
-    Optional<Admin> findByUsername(String username);
+    Optional<Admin> findByUsernameAndDeletedAtIsNull(String username);
 
-    Optional<Admin> findById(Long id);
+    Optional<Admin> findByIdAndDeletedAtIsNull(Long id);
 
     Admin save(Admin admin);
 
-    void delete(Admin admin);
+    void softDelete(Admin admin);
 }

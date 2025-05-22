@@ -42,7 +42,7 @@ public class AuthService implements
     @Override
     public Long login(LoginAdminCommand command) {
 
-        Optional<Admin> admin = adminRepository.findByUsername(command.username());
+        Optional<Admin> admin = adminRepository.findByUsernameAndDeletedAtIsNull(command.username());
         if (admin.isEmpty() || !admin.get().isPasswordMatched(command.password())) {
             throw new UnauthorizedException(CommonResultCode.UNAUTHORIZED, "Invalid admin username or password");
         }
@@ -51,7 +51,7 @@ public class AuthService implements
 
     @Override
     public void update(UpdateAdminCommand command) {
-        Optional<Admin> admin = adminRepository.findById(command.adminId());
+        Optional<Admin> admin = adminRepository.findByIdAndDeletedAtIsNull(command.adminId());
         if (admin.isEmpty() || !admin.get().isPasswordMatched(command.currentPassword())) {
             throw new UnauthorizedException(CommonResultCode.UNAUTHORIZED, "Invalid admin current password");
         }
@@ -60,10 +60,10 @@ public class AuthService implements
 
     @Override
     public void delete(DeleteAdminCommand command) {
-        Optional<Admin> admin = adminRepository.findById(command.adminId());
+        Optional<Admin> admin = adminRepository.findByIdAndDeletedAtIsNull(command.adminId());
         if (admin.isEmpty() || !admin.get().isPasswordMatched(command.password())) {
             throw new UnauthorizedException(CommonResultCode.UNAUTHORIZED, "Invalid admin password");
         }
-        adminRepository.delete(admin.get());
+        adminRepository.softDelete(admin.get());
     }
 }

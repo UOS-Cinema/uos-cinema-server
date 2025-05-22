@@ -10,9 +10,11 @@ import com.uos.dsd.cinema.common.exception.code.CommonResultCode;
 import com.uos.dsd.cinema.common.response.ApiResponse;
 import com.uos.dsd.cinema.domain.exception.IllegalPasswordException;
 import com.uos.dsd.cinema.domain.exception.IllegalUsernameException;
+import com.uos.dsd.cinema.core.jwt.JwtClaim;
 import com.uos.dsd.cinema.core.jwt.JwtUtils;
 import com.uos.dsd.cinema.core.security.SecurityConstants;
 import com.uos.dsd.cinema.core.security.SecurityConstants.Role;
+import com.uos.dsd.cinema.core.security.SecurityConstants.TokenType;
 import com.uos.dsd.cinema.utils.AuthHeaderProvider;
 
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -171,6 +173,7 @@ public class AdminAcceptanceTest extends AcceptanceTest {
     public void login() {
 
         /* Given */
+        Long adminId = 1L;
         String username = EXIST_ADMIN_USERNAME;
         String password = EXIST_ADMIN_PASSWORD;
 
@@ -186,12 +189,16 @@ public class AdminAcceptanceTest extends AcceptanceTest {
         checkSuccess(response.statusCode(), apiResponse.code());
         // check body accessToken
         String accessToken = apiResponse.data().accessToken();
-        String accessTokenUsername = jwtUtils.getUsernameFromJwtToken(accessToken);
-        assertEquals(EXIST_ADMIN_USERNAME, accessTokenUsername);
+        JwtClaim accessTokenClaim = jwtUtils.getJwtClaim(accessToken);
+        assertEquals(adminId, accessTokenClaim.id());
+        assertEquals(Role.ADMIN, accessTokenClaim.role());
+        assertEquals(TokenType.ACCESS, accessTokenClaim.tokenType());
         // check cookie refreshToken
         String refreshToken = response.getCookie(SecurityConstants.REISSUE_COOKIE_NAME);
-        String refreshTokenUsername = jwtUtils.getUsernameFromJwtToken(refreshToken);
-        assertEquals(EXIST_ADMIN_USERNAME, refreshTokenUsername);
+        JwtClaim refreshTokenClaim = jwtUtils.getJwtClaim(refreshToken);
+        assertEquals(adminId, refreshTokenClaim.id());
+        assertEquals(Role.ADMIN, refreshTokenClaim.role());
+        assertEquals(TokenType.REFRESH, refreshTokenClaim.tokenType());
     }
 
     @ParameterizedTest

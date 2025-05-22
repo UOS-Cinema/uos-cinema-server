@@ -15,6 +15,7 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import io.restassured.common.mapper.TypeRef;
@@ -159,35 +160,14 @@ public class AdminAcceptanceTest extends AcceptanceTest {
         // TODO: check body accessToken, refreshToken
     }
 
-    @Test
-    public void loginWithNotExistedAdmin() {
-
+    @ParameterizedTest
+    @CsvSource({
+        NEW_ADMIN_USERNAME + "," + EXIST_ADMIN_PASSWORD,
+        EXIST_ADMIN_USERNAME + "," + INVALID_ADMIN_PASSWORD
+    })
+    public void loginFailure(String username, String password) {
         /* Given */
-        String username = NEW_ADMIN_USERNAME;
-        String password = EXIST_ADMIN_PASSWORD;
-
-        /* When */
-        Map<String, Object> headers = new HashMap<>();
-
-        Response response = AdminSteps.sendLoginAdmin(headers, new AdminLoginRequest(username, password));
-        log.info("response: {}", response.asString());
-        ApiResponse<AdminLoginResponse> apiResponse = response.as(new TypeRef<ApiResponse<AdminLoginResponse>>() {});
-        log.info("ApiResponse: {}", apiResponse);
-
-        /* Then */
-        // status code: 401
-        assertEquals(401, response.statusCode());
-        // code: COM003
-        assertEquals("COM003", apiResponse.code());
-        // message: Invalid admin name or password
-        assertEquals("Invalid admin username or password", apiResponse.message());
-    }
-
-    @Test
-    public void loginWithInvalidPassword() {
-        /* Given */
-        String username = EXIST_ADMIN_USERNAME;
-        String password = INVALID_ADMIN_PASSWORD;
+        // username and password are provided as parameters
 
         /* When */
         Map<String, Object> headers = new HashMap<>();

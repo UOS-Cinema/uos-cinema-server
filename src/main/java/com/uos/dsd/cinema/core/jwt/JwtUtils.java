@@ -5,6 +5,7 @@ import static com.uos.dsd.cinema.core.security.SecurityConstants.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
@@ -98,39 +99,23 @@ public class JwtUtils {
                 .compact();
     }
 
-    public Long getIdFromJwtToken(String jwt) {
+    public JwtClaim getJwtClaim(String jwt) {
+        
+        Claims claims;
         try {
-            return Long.parseLong(parser.parseClaimsJws(jwt).getBody().getSubject());
+            claims = parser.parseClaimsJws(jwt).getBody();
         } catch (ExpiredJwtException e) {
-            // 만료된 토큰에서도 id 추출
-            return Long.parseLong(e.getClaims().getSubject());
+            // 만료된 토큰에서도 클레임 추출
+            claims = e.getClaims();
         } catch (Exception e) {
             throw new IllegalArgumentException("Invalid JWT token: " + jwt, e);
         }
-    }
-    
-    public Role getRoleFromJwtToken(String jwt) {
-        try {
-            return Role.valueOf(parser.parseClaimsJws(jwt).getBody()
-                    .get(ROLE_CLAIM).toString());
-        } catch (ExpiredJwtException e) {
-            // 만료된 토큰에서도 역할 추출
-            return Role.valueOf(e.getClaims().get(ROLE_CLAIM).toString());
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Invalid JWT token: " + jwt, e);
-        }
-    }
 
-    public TokenType getTokenTypeFromJwtToken(String jwt) {
-        try {
-            return TokenType.valueOf(parser.parseClaimsJws(jwt).getBody()
-                    .get(TOKEN_TYPE_CLAIM).toString());
-        } catch (ExpiredJwtException e) {
-            // 만료된 토큰에서도 토큰 타입 추출
-            return TokenType.valueOf(e.getClaims().get(TOKEN_TYPE_CLAIM).toString());
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Invalid JWT token: " + jwt, e);
-        }
+        return new JwtClaim(
+                Long.parseLong(claims.getSubject()),
+                Role.valueOf(claims.get(ROLE_CLAIM).toString()),
+                TokenType.valueOf(claims.get(TOKEN_TYPE_CLAIM).toString()),
+                claims.getExpiration()
+            );
     }
-
 }

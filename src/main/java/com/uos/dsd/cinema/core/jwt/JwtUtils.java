@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -24,6 +25,7 @@ import javax.crypto.SecretKey;
 @Component
 public class JwtUtils {
 
+    private final JwtParser parser;
     private final SecretKey secretKey;
     private final long accessTokenExpirationMs;
     private final long refreshTokenExpirationMs;
@@ -34,6 +36,7 @@ public class JwtUtils {
             @Value("${jwt.refreshTokenExpirationMs}") long refreshTokenExpirationMs) {
 
         this.secretKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secretKey));
+        this.parser = Jwts.parserBuilder().setSigningKey(this.secretKey).build();
         this.accessTokenExpirationMs = accessTokenExpirationMs;
         this.refreshTokenExpirationMs = refreshTokenExpirationMs;
     }
@@ -46,7 +49,7 @@ public class JwtUtils {
     public boolean isValidJwtToken(String jwt) {
 
         try {
-            Jwts.parserBuilder().setSigningKey(secretKey).build().parse(jwt);
+            parser.parse(jwt);
             return true;
         } catch (ExpiredJwtException e) {
             log.error("JWT 토큰이 만료되었습니다: {}", e.getMessage());
@@ -97,8 +100,7 @@ public class JwtUtils {
 
     public Long getIdFromJwtToken(String jwt) {
         try {
-            return Long.parseLong(Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(jwt).getBody()
-                    .getSubject());
+            return Long.parseLong(parser.parseClaimsJws(jwt).getBody().getSubject());
         } catch (ExpiredJwtException e) {
             // 만료된 토큰에서도 id 추출
             return Long.parseLong(e.getClaims().getSubject());
@@ -109,7 +111,7 @@ public class JwtUtils {
 
     public String getUsernameFromJwtToken(String jwt) {
         try {
-            return Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(jwt).getBody()
+            return parser.parseClaimsJws(jwt).getBody()
                     .get(USER_NAME_CLAIM).toString();
         } catch (ExpiredJwtException e) {
             // 만료된 토큰에서도 사용자 이름 추출
@@ -121,7 +123,7 @@ public class JwtUtils {
 
     public Role getRoleFromJwtToken(String jwt) {
         try {
-            return Role.valueOf(Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(jwt).getBody()
+            return Role.valueOf(parser.parseClaimsJws(jwt).getBody()
                     .get(ROLE_CLAIM).toString());
         } catch (ExpiredJwtException e) {
             // 만료된 토큰에서도 역할 추출
@@ -133,8 +135,8 @@ public class JwtUtils {
 
     public TokenType getTokenTypeFromJwtToken(String jwt) {
         try {
-            return TokenType.valueOf(Jwts.parserBuilder().setSigningKey(secretKey).build()
-                    .parseClaimsJws(jwt).getBody().get(TOKEN_TYPE_CLAIM).toString());
+            return TokenType.valueOf(parser.parseClaimsJws(jwt).getBody()
+                    .get(TOKEN_TYPE_CLAIM).toString());
         } catch (ExpiredJwtException e) {
             // 만료된 토큰에서도 토큰 타입 추출
             return TokenType.valueOf(e.getClaims().get(TOKEN_TYPE_CLAIM).toString());

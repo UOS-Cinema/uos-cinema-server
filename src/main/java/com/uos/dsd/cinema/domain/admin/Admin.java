@@ -33,6 +33,10 @@ public class Admin extends Base {
         validateAndSetPassword(password);
     }
 
+    public void updatePassword(String newPassword) {
+        validateAndSetPassword(newPassword);
+    }
+
     public boolean isPasswordMatched(String password) {
 
         byte[] salt = PasswordUtil.extractSalt(this.password);

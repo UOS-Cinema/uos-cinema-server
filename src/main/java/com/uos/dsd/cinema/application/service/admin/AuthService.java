@@ -1,5 +1,13 @@
 package com.uos.dsd.cinema.application.service.admin;
 
+import com.uos.dsd.cinema.application.port.in.admin.command.DeleteAdminCommand;
+import com.uos.dsd.cinema.application.port.in.admin.command.LoginAdminCommand;
+import com.uos.dsd.cinema.application.port.in.admin.command.SignupAdminCommand;
+import com.uos.dsd.cinema.application.port.in.admin.command.UpdateAdminCommand;
+import com.uos.dsd.cinema.application.port.in.admin.usecase.DeleteAdminUsecase;
+import com.uos.dsd.cinema.application.port.in.admin.usecase.LoginAdminUsecase;
+import com.uos.dsd.cinema.application.port.in.admin.usecase.SignupAdminUsecase;
+import com.uos.dsd.cinema.application.port.in.admin.usecase.UpdateAdminUsecase;
 import com.uos.dsd.cinema.application.port.out.repository.admin.AdminRepository;
 import com.uos.dsd.cinema.common.exception.code.CommonResultCode;
 import com.uos.dsd.cinema.common.exception.http.BadRequestException;
@@ -18,13 +26,18 @@ import java.util.Optional;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class AuthService {
+public class AuthService implements
+        SignupAdminUsecase,
+        LoginAdminUsecase,
+        UpdateAdminUsecase,
+        DeleteAdminUsecase {
 
     private final AdminRepository adminRepository;
 
-    public Long signupAdmin(String username, String password) {
+    @Override
+    public Long signup(SignupAdminCommand command) {
 
-        Admin admin = new Admin(username, password);
+        Admin admin = new Admin(command.username(), command.password());
         try {
             return adminRepository.save(admin).getId();
         } catch (DataIntegrityViolationException e) {
@@ -32,12 +45,31 @@ public class AuthService {
         }
     }
 
-    public Long loginAdmin(String username, String password) {
+    @Override
+    public Long login(LoginAdminCommand command) {
 
-        Optional<Admin> admin = adminRepository.findByUsername(username);
-        if (admin.isEmpty() || !admin.get().isPasswordMatched(password)) {
+        Optional<Admin> admin = adminRepository.findByUsername(command.username());
+        if (admin.isEmpty() || !admin.get().isPasswordMatched(command.password())) {
             throw new UnauthorizedException(CommonResultCode.UNAUTHORIZED, "Invalid admin username or password");
         }
         return admin.get().getId();
+    }
+
+    @Override
+    public void update(UpdateAdminCommand command) {
+        Optional<Admin> admin = adminRepository.findById(command.adminId());
+        if (admin.isEmpty() || !admin.get().isPasswordMatched(command.currentPassword())) {
+            throw new UnauthorizedException(CommonResultCode.UNAUTHORIZED, "Invalid admin current password");
+        }
+        admin.get().updatePassword(command.newPassword());
+    }
+
+    @Override
+    public void delete(DeleteAdminCommand command) {
+        Optional<Admin> admin = adminRepository.findById(command.adminId());
+        if (admin.isEmpty() || !admin.get().isPasswordMatched(command.password())) {
+            throw new UnauthorizedException(CommonResultCode.UNAUTHORIZED, "Invalid admin password");
+        }
+        adminRepository.delete(admin.get());
     }
 }

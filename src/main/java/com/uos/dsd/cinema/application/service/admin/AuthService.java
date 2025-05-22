@@ -1,13 +1,7 @@
 package com.uos.dsd.cinema.application.service.admin;
 
-import com.uos.dsd.cinema.application.port.in.admin.command.DeleteAdminCommand;
-import com.uos.dsd.cinema.application.port.in.admin.command.LoginAdminCommand;
-import com.uos.dsd.cinema.application.port.in.admin.command.SignupAdminCommand;
-import com.uos.dsd.cinema.application.port.in.admin.command.UpdateAdminCommand;
-import com.uos.dsd.cinema.application.port.in.admin.usecase.DeleteAdminUsecase;
-import com.uos.dsd.cinema.application.port.in.admin.usecase.LoginAdminUsecase;
-import com.uos.dsd.cinema.application.port.in.admin.usecase.SignupAdminUsecase;
-import com.uos.dsd.cinema.application.port.in.admin.usecase.UpdateAdminUsecase;
+import com.uos.dsd.cinema.application.port.in.admin.command.*;
+import com.uos.dsd.cinema.application.port.in.admin.usecase.*;
 import com.uos.dsd.cinema.application.port.out.repository.admin.AdminRepository;
 import com.uos.dsd.cinema.common.exception.code.CommonResultCode;
 import com.uos.dsd.cinema.common.exception.http.BadRequestException;

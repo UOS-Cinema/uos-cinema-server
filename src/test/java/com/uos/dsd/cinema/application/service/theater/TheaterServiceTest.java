@@ -28,6 +28,7 @@ import org.mockito.Mock;
 import java.util.Optional;
 import java.util.List;
 
+@ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(ReplaceUnderscores.class)
 public class TheaterServiceTest {
 

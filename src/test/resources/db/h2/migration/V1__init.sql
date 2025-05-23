@@ -41,6 +41,30 @@ CREATE TABLE theater_screen_types (
     FOREIGN KEY (screen_type) REFERENCES screen_types(type)
 );
 
+-- 어드민
+CREATE TABLE admins (
+    id       INT AUTO_INCREMENT,
+    username VARCHAR(20) UNIQUE NOT NULL,
+    password CHAR(64) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted_at TIMESTAMP,
+    
+    PRIMARY KEY (id)
+);
+
+-- 어드민
+CREATE TABLE admins (
+    id       INT AUTO_INCREMENT,
+    username VARCHAR(20) UNIQUE NOT NULL,
+    password CHAR(64) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted_at TIMESTAMP,
+    
+    PRIMARY KEY (id)
+);
+
 -- 장르
 CREATE TABLE genres (
     name         VARCHAR(50),

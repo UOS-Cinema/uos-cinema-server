@@ -6,7 +6,7 @@ import com.uos.dsd.cinema.application.port.out.repository.admin.AdminRepository;
 import com.uos.dsd.cinema.common.exception.code.CommonResultCode;
 import com.uos.dsd.cinema.common.exception.http.BadRequestException;
 import com.uos.dsd.cinema.common.exception.http.UnauthorizedException;
-import com.uos.dsd.cinema.domain.admin.Admin;
+import com.uos.dsd.cinema.domain.admin.model.Admin;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -51,7 +51,7 @@ public class AuthService implements
 
     @Override
     public void update(UpdateAdminCommand command) {
-        Optional<Admin> admin = adminRepository.findByIdAndDeletedAtIsNull(command.adminId());
+        Optional<Admin> admin = adminRepository.findByIdAndDeletedAtIsNull(command.id());
         if (admin.isEmpty() || !admin.get().isPasswordMatched(command.currentPassword())) {
             throw new UnauthorizedException(CommonResultCode.UNAUTHORIZED, "Invalid admin current password");
         }
@@ -60,9 +60,9 @@ public class AuthService implements
 
     @Override
     public void delete(DeleteAdminCommand command) {
-        Optional<Admin> admin = adminRepository.findByIdAndDeletedAtIsNull(command.adminId());
+        Optional<Admin> admin = adminRepository.findByIdAndDeletedAtIsNull(command.id());
         if (admin.isEmpty() || !admin.get().isPasswordMatched(command.password())) {
-            throw new UnauthorizedException(CommonResultCode.UNAUTHORIZED, "Invalid admin password");
+            throw new UnauthorizedException(CommonResultCode.UNAUTHORIZED, "Invalid admin id or password");
         }
         adminRepository.softDelete(admin.get());
     }

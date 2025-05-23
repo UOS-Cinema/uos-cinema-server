@@ -1,7 +1,6 @@
 package com.uos.dsd.cinema.domain.constraint;
 
-import com.uos.dsd.cinema.common.exception.code.CommonResultCode;
-import com.uos.dsd.cinema.common.exception.http.BadRequestException;
+import com.uos.dsd.cinema.domain.exception.IllegalPasswordException;
 
 public class PasswordConstraint {
 
@@ -12,8 +11,7 @@ public class PasswordConstraint {
     public static void validatePassword(String password) {
         
         if (!isValidPassword(password)) {
-            throw new BadRequestException(CommonResultCode.BAD_REQUEST,
-                "비밀번호는 8자 이상 20자 이하이며, 영문자, 숫자, 특수문자를 포함해야 합니다.");
+            throw new IllegalPasswordException();
         }
     }
 

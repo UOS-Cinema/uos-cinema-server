@@ -3,11 +3,11 @@ package com.uos.dsd.cinema.adaptor.in.web.admin.request;
 import com.uos.dsd.cinema.common.exception.code.CommonResultCode;
 import com.uos.dsd.cinema.common.exception.http.BadRequestException;
 
-public record AdminUpdateRequest(Long adminId, String currentPassword, String newPassword) {
+public record AdminUpdateRequest(Long id, String currentPassword, String newPassword) {
 
     public AdminUpdateRequest {
 
-        if (adminId == null) {
+        if (id == null) {
             throw new BadRequestException(CommonResultCode.BAD_REQUEST, "Admin ID cannot be null");
         }
         if (currentPassword == null || currentPassword.isBlank()) {

@@ -1,4 +1,4 @@
-package com.uos.dsd.cinema.domain.admin;
+package com.uos.dsd.cinema.domain.admin.model;
 
 import com.uos.dsd.cinema.common.model.Base;
 import com.uos.dsd.cinema.common.utils.PasswordUtil;

@@ -1,5 +1,7 @@
 package com.uos.dsd.cinema.utils;
 
+import org.springframework.core.io.Resource;
+
 import jakarta.persistence.EntityManager;
 
 import java.util.List;
@@ -14,7 +16,7 @@ public interface DBInitializeStrategy {
 
     void createTable();
 
-    void createData();
+    void createData(List<Resource> dataScripts);
 
     void setEntityManager(EntityManager entityManager);
 }

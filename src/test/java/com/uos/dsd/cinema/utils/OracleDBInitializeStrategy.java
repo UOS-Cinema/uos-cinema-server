@@ -1,6 +1,5 @@
 package com.uos.dsd.cinema.utils;
 
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.init.ScriptUtils;
 
@@ -23,22 +22,15 @@ public class OracleDBInitializeStrategy implements DBInitializeStrategy {
 
     private static final Logger log = LoggerFactory.getLogger(OracleDBInitializeStrategy.class);
 
-    private static final Resource initScript = new ClassPathResource("db/migration/V1__init.sql");
-    private static final List<Resource> dataScripts = new ArrayList<>();
+    private final Resource initScript;
 
     private final DataSource dataSource;
     private EntityManager entityManager;
 
-    static {
-
-        // insert data considering foreign key constraint
-        dataScripts.add(new ClassPathResource("db/screen_type.sql"));
-        dataScripts.add(new ClassPathResource("db/theater.sql"));
-    }
-
-    public OracleDBInitializeStrategy(DataSource dataSource) {
+    public OracleDBInitializeStrategy(DataSource dataSource, Resource initScript) {
 
         this.dataSource = dataSource;
+        this.initScript = initScript;
         this.entityManager = null;
     }
 
@@ -123,7 +115,7 @@ public class OracleDBInitializeStrategy implements DBInitializeStrategy {
 
     @Override
     @Transactional
-    public void createData() {
+    public void createData(List<Resource> dataScripts) {
 
         log.info("[OracleDBInitializeStrategy] createData");
         try (Connection connection = dataSource.getConnection()) {

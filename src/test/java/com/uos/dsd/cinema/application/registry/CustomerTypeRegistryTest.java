@@ -34,10 +34,10 @@ public class CustomerTypeRegistryTest extends IntegrationTest {
     public void customerTypeRegistryGetTest() {
 
         // when
-        CustomerType customerType = customerTypeRegistry.get("Student");
+        CustomerType customerType = customerTypeRegistry.get("Adult");
 
         // then
-        assertThat(customerType.getType()).isEqualTo("Student");
+        assertThat(customerType.getType()).isEqualTo("Adult");
     }
 
     @Test

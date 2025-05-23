@@ -87,7 +87,6 @@ public class Theater extends Base implements Persistable<Long>{
 
     @Override
     public boolean isNew() {
-        System.out.println("[Theater] isNew: " + getCreatedAt());
         return getCreatedAt() == null;
     }
 
@@ -105,15 +104,16 @@ public class Theater extends Base implements Persistable<Long>{
             if (row == null || row.isEmpty()) {
                 throw new IllegalArgumentException("Layout is required");
             }
-            for (LayoutElement seat : row) {
-                if (seat == null) {
-                    throw new IllegalArgumentException("Layout element is invalid: Only 0, 1, 2 are allowed");
-                }
-            }
         }
     }
 
-    public List<TheaterSeat> generateSeats() {
+    public void validateScreenTypes(List<ScreenType> screenTypes) {
+        if (screenTypes == null || screenTypes.isEmpty()) {
+            throw new IllegalArgumentException("Screen types are required");
+        }
+    }
+
+    private List<TheaterSeat> generateSeats() {
 
         List<TheaterSeat> seats = new ArrayList<>();
         char row = 'A';
@@ -155,6 +155,7 @@ public class Theater extends Base implements Persistable<Long>{
 
     public void modifyScreenTypes(List<ScreenType> screenTypes) {
 
+        validateScreenTypes(screenTypes);
         this.screenTypes.clear();
         this.screenTypes.addAll(screenTypes);
     }

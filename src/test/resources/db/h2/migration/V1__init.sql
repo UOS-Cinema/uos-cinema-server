@@ -1,7 +1,7 @@
 -- 상영유형
 CREATE TABLE screen_types (
     type         VARCHAR(50),
-    icon         VARCHAR(255),
+    icon_url     VARCHAR(255),
     price        INT,
     PRIMARY KEY (type)
 );

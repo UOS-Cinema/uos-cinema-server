@@ -1,7 +1,7 @@
 -- 상영 유형
 CREATE TABLE screen_types (
     type         VARCHAR2(50),
-    icon         VARCHAR2(255),
+    icon_url     VARCHAR2(255),
     price        NUMBER(10),
 
     PRIMARY KEY (type)
@@ -9,7 +9,7 @@ CREATE TABLE screen_types (
 
 -- 상영관
 CREATE TABLE theaters (
-    id       NUMBER,
+    id           NUMBER,
     name         VARCHAR2(100) UNIQUE NOT NULL,
     layout       CLOB CHECK (layout IS JSON) NOT NULL,
     created_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

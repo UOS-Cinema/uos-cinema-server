@@ -8,6 +8,8 @@ public class SecurityConstants {
     );
 
     public static final List<String> OPEN_ACCESS_URLS = List.of(
+        "/*",
+        "/*/*" // TODO: 추후 삭제
     );
 
     public static final String USER_ID_CLAIM = "userId";

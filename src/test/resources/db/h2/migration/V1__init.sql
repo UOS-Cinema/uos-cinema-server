@@ -42,15 +42,15 @@ CREATE TABLE theater_screen_types (
 );
 
 -- 어드민
+CREATE SEQUENCE admin_seq START WITH 1 INCREMENT BY 1;
+
 CREATE TABLE admins (
-    id       INT AUTO_INCREMENT,
+    id INT DEFAULT NEXT VALUE FOR admin_seq PRIMARY KEY,
     username VARCHAR(20) UNIQUE NOT NULL,
     password CHAR(64) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    deleted_at TIMESTAMP,
-    
-    PRIMARY KEY (id)
+    deleted_at TIMESTAMP
 );
 
 -- 장르

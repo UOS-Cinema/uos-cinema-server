@@ -15,12 +15,14 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import jakarta.servlet.http.HttpServletResponse;
 
 @Slf4j
 @RestController
+@RequiredArgsConstructor
 public class AdminController {
 
     private final SignupAdminUsecase signupAdminUsecase;
@@ -29,20 +31,6 @@ public class AdminController {
     private final DeleteAdminUsecase deleteAdminUsecase;
 
     private final JwtUtils jwtUtils;
-
-    public AdminController(
-        SignupAdminUsecase signupAdminUsecase,
-        LoginAdminUsecase loginAdminUsecase,
-        UpdateAdminUsecase updateAdminUsecase,
-        DeleteAdminUsecase deleteAdminUsecase,
-        JwtUtils jwtUtils) {
-
-        this.signupAdminUsecase = signupAdminUsecase;
-        this.loginAdminUsecase = loginAdminUsecase;
-        this.updateAdminUsecase = updateAdminUsecase;
-        this.deleteAdminUsecase = deleteAdminUsecase;
-        this.jwtUtils = jwtUtils;
-    }
 
     @PostMapping("/admin/signup")
     public ApiResponse<AdminSignupResponse> signup(@RequestBody AdminSignupRequest request) {

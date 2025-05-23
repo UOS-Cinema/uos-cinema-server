@@ -5,7 +5,19 @@ spring:
     password:
     driver-class-name: org.h2.Driver
 
+  jpa:
+    show_sql: true
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.OracleDialect
+        '[format_sql]': true
+        '[use_sql_comments]': true
+
 logging:
   level:
     root: DEBUG
-    org.hibernate.type: TRACE
+    '[org.hibernate.SQL]': DEBUG
+    '[org.hibernate.type.descriptor.sql.BasicBinder]': TRACE
+    '[org.hibernate.type]': TRACE

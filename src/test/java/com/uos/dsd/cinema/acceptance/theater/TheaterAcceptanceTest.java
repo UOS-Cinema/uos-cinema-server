@@ -7,6 +7,7 @@ import com.uos.dsd.cinema.adaptor.in.web.theater.request.TheaterCreateRequest;
 import com.uos.dsd.cinema.adaptor.in.web.theater.request.TheaterUpdateRequest;
 import com.uos.dsd.cinema.adaptor.in.web.theater.response.TheaterResponse;
 import com.uos.dsd.cinema.common.response.ApiResponse;
+import com.uos.dsd.cinema.domain.theater.TheaterFixture;
 import com.uos.dsd.cinema.domain.theater.enums.LayoutElement;
 import com.uos.dsd.cinema.common.exception.code.CommonResultCode;
 import com.uos.dsd.cinema.acceptance.theater.steps.TheaterSteps;
@@ -31,27 +32,11 @@ public class TheaterAcceptanceTest extends AcceptanceTest {
     public void createTheaterAcceptanceTest() {
 
         /* Given */
-        Long theaterNumber = 10L;
-        String theaterName = "Theater Name";
-        List<List<LayoutElement>> layout = Arrays.asList(
-            Arrays.asList(LayoutElement.NONE, LayoutElement.SEAT, LayoutElement.SEAT, 
-            LayoutElement.AISLE, LayoutElement.SEAT, LayoutElement.SEAT, LayoutElement.NONE),
-            Arrays.asList(LayoutElement.NONE, LayoutElement.SEAT, LayoutElement.SEAT, 
-            LayoutElement.AISLE, LayoutElement.SEAT, LayoutElement.SEAT, LayoutElement.NONE),
-            Arrays.asList(LayoutElement.NONE, LayoutElement.SEAT, LayoutElement.SEAT, 
-            LayoutElement.AISLE, LayoutElement.SEAT, LayoutElement.SEAT, LayoutElement.NONE),
-            Arrays.asList(LayoutElement.NONE, LayoutElement.SEAT, LayoutElement.SEAT, 
-            LayoutElement.AISLE, LayoutElement.SEAT, LayoutElement.SEAT, LayoutElement.NONE),
-            Arrays.asList(LayoutElement.SEAT, LayoutElement.SEAT, LayoutElement.SEAT, 
-            LayoutElement.AISLE, LayoutElement.SEAT, LayoutElement.SEAT, LayoutElement.SEAT),
-            Arrays.asList(LayoutElement.SEAT, LayoutElement.SEAT, LayoutElement.SEAT, 
-            LayoutElement.AISLE, LayoutElement.SEAT, LayoutElement.SEAT, LayoutElement.SEAT),
-            Arrays.asList(LayoutElement.SEAT, LayoutElement.SEAT, LayoutElement.SEAT, 
-            LayoutElement.AISLE, LayoutElement.SEAT, LayoutElement.SEAT, LayoutElement.SEAT)
-        );
-        List<String> screenTypes = Arrays.asList("2D", "3D");
-        TheaterCreateRequest request =
-                new TheaterCreateRequest(theaterNumber, theaterName, layout, screenTypes);
+        TheaterCreateRequest request = TheaterFixture.getTheaterCreateRequest();
+        Long theaterNumber = TheaterFixture.getTheaterNumber();
+        String theaterName = TheaterFixture.getTheaterName();
+        List<List<LayoutElement>> layout = TheaterFixture.getLayout();
+        List<String> screenTypes = TheaterFixture.getScreenTypes();
 
         /* When */
         // 1. Store access token after admin login
@@ -136,31 +121,10 @@ public class TheaterAcceptanceTest extends AcceptanceTest {
 
         /* Given */
         Long theaterNumber = 1L;
-        String theaterName = "Changed Theater Name";
-        List<List<LayoutElement>> layout = Arrays.asList(
-                Arrays.asList(LayoutElement.NONE, LayoutElement.SEAT, LayoutElement.SEAT,
-                        LayoutElement.AISLE, LayoutElement.SEAT, LayoutElement.SEAT,
-                        LayoutElement.NONE),
-                Arrays.asList(LayoutElement.NONE, LayoutElement.SEAT, LayoutElement.SEAT,
-                        LayoutElement.AISLE, LayoutElement.SEAT, LayoutElement.SEAT,
-                        LayoutElement.NONE),
-                Arrays.asList(LayoutElement.NONE, LayoutElement.SEAT, LayoutElement.SEAT,
-                        LayoutElement.AISLE, LayoutElement.SEAT, LayoutElement.SEAT,
-                        LayoutElement.NONE),
-                Arrays.asList(LayoutElement.NONE, LayoutElement.SEAT, LayoutElement.SEAT,
-                        LayoutElement.AISLE, LayoutElement.SEAT, LayoutElement.SEAT,
-                        LayoutElement.NONE),
-                Arrays.asList(LayoutElement.SEAT, LayoutElement.SEAT, LayoutElement.SEAT,
-                        LayoutElement.AISLE, LayoutElement.SEAT, LayoutElement.SEAT,
-                        LayoutElement.SEAT),
-                Arrays.asList(LayoutElement.SEAT, LayoutElement.SEAT, LayoutElement.SEAT,
-                        LayoutElement.AISLE, LayoutElement.SEAT, LayoutElement.SEAT,
-                        LayoutElement.SEAT),
-                Arrays.asList(LayoutElement.SEAT, LayoutElement.SEAT, LayoutElement.SEAT,
-                        LayoutElement.AISLE, LayoutElement.SEAT, LayoutElement.SEAT,
-                        LayoutElement.SEAT));
-        List<String> screenTypes = Arrays.asList("2D", "3D");
-        TheaterUpdateRequest request = new TheaterUpdateRequest(theaterName, layout, screenTypes);
+        TheaterUpdateRequest request = TheaterFixture.getTheaterModifyRequest();
+        String theaterName = TheaterFixture.getUpdateTheaterName();
+        List<List<LayoutElement>> layout = TheaterFixture.getUpdateLayout();
+        List<String> screenTypes = TheaterFixture.getUpdateScreenTypes();
 
         /* When */
         // 1. Store access token after admin login

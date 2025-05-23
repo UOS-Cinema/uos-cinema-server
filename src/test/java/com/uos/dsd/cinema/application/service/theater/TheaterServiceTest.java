@@ -2,6 +2,7 @@ package com.uos.dsd.cinema.application.service.theater;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -15,20 +16,18 @@ import com.uos.dsd.cinema.domain.theater.Theater;
 import com.uos.dsd.cinema.domain.theater.TheaterFixture;
 import com.uos.dsd.cinema.domain.theater.enums.LayoutElement;
 
+
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
-
-import lombok.RequiredArgsConstructor;
 
 import java.util.Optional;
 import java.util.List;
 
-@SpringBootTest
-@RequiredArgsConstructor
 @DisplayNameGeneration(ReplaceUnderscores.class)
 public class TheaterServiceTest {
 
@@ -43,6 +42,7 @@ public class TheaterServiceTest {
     private final List<List<LayoutElement>> layout = TheaterFixture.getLayout();
     private final List<String> screenTypes = TheaterFixture.getScreenTypes();
     private final Theater theater = TheaterFixture.getTheater();
+    private final Theater updateTheater = TheaterFixture.getUpdateTheater();
     private final CreateTheaterCommand createTheaterCommand = TheaterFixture.getCreateTheaterCommand();
     private final ModifyTheaterCommand modifyTheaterCommand = TheaterFixture.getModifyTheaterCommand();
 
@@ -50,7 +50,7 @@ public class TheaterServiceTest {
     public void testCreateTheater() {
 
         // given
-        when(theaterRepository.save(theater))
+        when(theaterRepository.save(any(Theater.class)))
                 .thenReturn(theater);
 
         // when
@@ -66,16 +66,16 @@ public class TheaterServiceTest {
         // given
         when(theaterRepository.findById(theaterNumber))
                 .thenReturn(Optional.of(theater));
-        when(theaterRepository.save(theater))
-                .thenReturn(theater);
-        when(theaterRepository.saveAndFlush(theater))
+        when(theaterRepository.save(any(Theater.class)))
+                .thenReturn(updateTheater);
+        when(theaterRepository.saveAndFlush(any(Theater.class)))
                 .thenReturn(theater);
 
         // when
-        theaterService.modifyTheater(modifyTheaterCommand);
+        Long modifiedTheaterNumber = theaterService.modifyTheater(modifyTheaterCommand);
 
         // then
-        assertEquals(theaterNumber, theater.getNumber());
+        assertEquals(theaterNumber, modifiedTheaterNumber);
     }
 
     @Test

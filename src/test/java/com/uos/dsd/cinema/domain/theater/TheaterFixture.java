@@ -16,6 +16,7 @@ public class TheaterFixture {
 
     private final static Long theaterNumber = 10L;
     private final static String theaterName = "Theater Name";
+    private final static String updateTheaterName = "Update Theater Name";
     private final static List<List<LayoutElement>> layout = Arrays.asList(
             Arrays.asList(LayoutElement.NONE, LayoutElement.SEAT, LayoutElement.SEAT, 
             LayoutElement.AISLE, LayoutElement.SEAT, LayoutElement.SEAT, LayoutElement.NONE),
@@ -31,8 +32,25 @@ public class TheaterFixture {
             LayoutElement.AISLE, LayoutElement.SEAT, LayoutElement.SEAT, LayoutElement.SEAT),
             Arrays.asList(LayoutElement.SEAT, LayoutElement.SEAT, LayoutElement.SEAT, 
             LayoutElement.AISLE, LayoutElement.SEAT, LayoutElement.SEAT, LayoutElement.SEAT)
-        );
+    );
+    private final static List<List<LayoutElement>> updateLayout = Arrays.asList(
+            Arrays.asList(LayoutElement.NONE, LayoutElement.SEAT, LayoutElement.SEAT, 
+            LayoutElement.AISLE, LayoutElement.SEAT, LayoutElement.SEAT, LayoutElement.NONE),
+            Arrays.asList(LayoutElement.NONE, LayoutElement.SEAT, LayoutElement.SEAT, 
+            LayoutElement.AISLE, LayoutElement.SEAT, LayoutElement.SEAT, LayoutElement.NONE),
+            Arrays.asList(LayoutElement.NONE, LayoutElement.SEAT, LayoutElement.SEAT, 
+            LayoutElement.AISLE, LayoutElement.SEAT, LayoutElement.SEAT, LayoutElement.NONE),
+            Arrays.asList(LayoutElement.NONE, LayoutElement.SEAT, LayoutElement.SEAT, 
+            LayoutElement.AISLE, LayoutElement.SEAT, LayoutElement.SEAT, LayoutElement.NONE),
+            Arrays.asList(LayoutElement.SEAT, LayoutElement.SEAT, LayoutElement.SEAT, 
+            LayoutElement.AISLE, LayoutElement.SEAT, LayoutElement.SEAT, LayoutElement.SEAT),
+            Arrays.asList(LayoutElement.SEAT, LayoutElement.SEAT, LayoutElement.SEAT, 
+            LayoutElement.AISLE, LayoutElement.SEAT, LayoutElement.SEAT, LayoutElement.SEAT),
+            Arrays.asList(LayoutElement.SEAT, LayoutElement.SEAT, LayoutElement.SEAT, 
+            LayoutElement.AISLE, LayoutElement.SEAT, LayoutElement.SEAT, LayoutElement.SEAT)
+    );
     private final static List<String> screenTypes = Arrays.asList("2D", "3D");
+    private final static List<String> updateScreenTypes = Arrays.asList("2D", "3D", "4D");
 
     private final static Theater theater = new Theater(
         theaterNumber,
@@ -40,8 +58,18 @@ public class TheaterFixture {
         layout,
         screenTypes.stream()
             .map(ScreenType::reference)
-                    .collect(Collectors.toList()));
-            
+            .collect(Collectors.toList())
+    );
+
+    private final static Theater updateTheater = new Theater(
+        theaterNumber,
+        updateTheaterName,
+        updateLayout,
+        updateScreenTypes.stream()
+            .map(ScreenType::reference)
+            .collect(Collectors.toList())
+    );
+
     private final static TheaterCreateRequest theaterCreateRequest = new TheaterCreateRequest(
         theaterNumber,
         theaterName,
@@ -50,9 +78,9 @@ public class TheaterFixture {
     );
 
     private final static TheaterUpdateRequest theaterModifyRequest = new TheaterUpdateRequest(
-        theaterName,
-        layout,
-        screenTypes
+        updateTheaterName,
+        updateLayout,
+        updateScreenTypes
     );
 
     private final static CreateTheaterCommand createTheaterCommand = new CreateTheaterCommand(
@@ -66,9 +94,9 @@ public class TheaterFixture {
 
     private final static ModifyTheaterCommand modifyTheaterCommand = new ModifyTheaterCommand(
         theaterNumber,
-        theaterName,
-        layout,
-        screenTypes.stream()
+        updateTheaterName,
+        updateLayout,
+        updateScreenTypes.stream()
             .map(ScreenType::reference)
             .collect(Collectors.toList())
     );
@@ -88,16 +116,32 @@ public class TheaterFixture {
         return theaterName;
     }
 
+    public static String getUpdateTheaterName() {
+        return updateTheaterName;
+    }
+
     public static List<List<LayoutElement>> getLayout() {
         return layout;
+    }
+
+    public static List<List<LayoutElement>> getUpdateLayout() {
+        return updateLayout;
     }
 
     public static List<String> getScreenTypes() {
         return screenTypes;
     }
 
+    public static List<String> getUpdateScreenTypes() {
+        return updateScreenTypes;
+    }
+
     public static Theater getTheater() {
         return theater;
+    }
+
+    public static Theater getUpdateTheater() {
+        return updateTheater;
     }
 
     public static TheaterCreateRequest getTheaterCreateRequest() {

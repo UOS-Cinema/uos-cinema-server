@@ -60,9 +60,12 @@ public class TheaterAcceptanceTest extends AcceptanceTest {
 
         // 2. Create theater
         Response response = TheaterSteps.postTheater(headers, request);
-        log.info("Response: {}", response.asString());
         ApiResponse<Long> apiResponse = response.as(new TypeRef<ApiResponse<Long>>() {});
         log.info("ApiResponse: {}", apiResponse);
+        Response theaterResponse = TheaterSteps.getTheater(headers, theaterNumber);
+        ApiResponse<TheaterResponse> theaterApiResponse =
+            theaterResponse.as(new TypeRef<ApiResponse<TheaterResponse>>() {});
+        log.info("TheaterApiResponse: {}", theaterApiResponse);
 
         /* Then */
         // status code: 200
@@ -73,6 +76,15 @@ public class TheaterAcceptanceTest extends AcceptanceTest {
         assertEquals(CommonResultCode.SUCCESS.getMessage(), apiResponse.message());
         // data: 10
         assertEquals(10, apiResponse.data());
+
+        // theater number is 10
+        assertEquals(theaterNumber, theaterApiResponse.data().number());
+        // theater name is "Theater Name"
+        assertEquals(theaterName, theaterApiResponse.data().name());
+        // layout is the same
+        assertEquals(layout, theaterApiResponse.data().layout());
+        // screen types are the same
+        assertEquals(screenTypes, theaterApiResponse.data().screenTypes());
     }
 
     @Test
@@ -159,6 +171,10 @@ public class TheaterAcceptanceTest extends AcceptanceTest {
         Response response = TheaterSteps.updateTheater(theaterNumber, headers, request);
         ApiResponse<Integer> apiResponse = response.as(new TypeRef<ApiResponse<Integer>>() {});
         log.info("ApiResponse: {}", apiResponse);
+        Response theaterResponse = TheaterSteps.getTheater(headers, theaterNumber);
+        ApiResponse<TheaterResponse> theaterApiResponse =
+            theaterResponse.as(new TypeRef<ApiResponse<TheaterResponse>>() {});
+        log.info("TheaterApiResponse: {}", theaterApiResponse);
 
         /* Then */
         // status code: 200
@@ -169,8 +185,17 @@ public class TheaterAcceptanceTest extends AcceptanceTest {
         assertEquals(CommonResultCode.SUCCESS.getMessage(), apiResponse.message());
         // data: 1
         assertEquals(1, apiResponse.data());
+
+        // theater number is 1
+        assertEquals(theaterNumber, theaterApiResponse.data().number());
+        // theater name is "Changed Theater Name"
+        assertEquals(theaterName, theaterApiResponse.data().name());
+        // layout is the same
+        assertEquals(layout, theaterApiResponse.data().layout());
+        // screen types are the same
+        assertEquals(screenTypes, theaterApiResponse.data().screenTypes());
     }
-    
+
     @Test
     public void deleteTheaterAcceptanceTest() {
 

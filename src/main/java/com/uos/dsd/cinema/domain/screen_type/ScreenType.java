@@ -1,12 +1,10 @@
 package com.uos.dsd.cinema.domain.screen_type;
 
-import com.uos.dsd.cinema.domain.screen_type.constaint.PriceConstraint;
-
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-
+import com.uos.dsd.cinema.domain.price.constaint.PriceConstraint;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;

@@ -1,8 +1,6 @@
 package com.uos.dsd.cinema.domain.screen_type.exception;
 
-import com.uos.dsd.cinema.domain.screen_type.constaint.PriceConstraint;
 import com.uos.dsd.cinema.common.exception.code.ResultCode;
-
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -12,10 +10,6 @@ public enum ScreenTypeExceptionCode implements ResultCode {
 
     SCREEN_TYPE_NOT_FOUND("SCT001", "Screen type not found"),
     AT_LEAST_ONE_SCREEN_TYPE_REQUIRED("SCT002", "At least one screen type is required"),
-    INVALID_PRICE("SCT003", String.format(
-        "Price must be between %d and %d", 
-        PriceConstraint.MIN_PRICE, 
-        PriceConstraint.MAX_PRICE)),
     ;
 
     private final String code;

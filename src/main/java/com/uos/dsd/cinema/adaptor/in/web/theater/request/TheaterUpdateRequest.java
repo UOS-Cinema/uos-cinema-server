@@ -17,9 +17,7 @@ public record TheaterUpdateRequest(
         return new ModifyTheaterCommand(
             theaterNumber,
             name,
-            layout.stream()
-                .map(row -> row.stream().map(LayoutElement::getCode).toList())
-                .toList(),
+            layout,
             screenTypes.stream()
                 .map(ScreenType::reference)
                 .toList());

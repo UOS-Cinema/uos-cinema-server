@@ -18,9 +18,7 @@ public record TheaterCreateRequest(
         return new CreateTheaterCommand(
             number, 
             name, 
-            layout.stream()
-                .map(row -> row.stream().map(LayoutElement::getCode).toList())
-                .toList(), 
+            layout, 
             screenTypes.stream()
                 .map(ScreenType::reference)
                 .toList());

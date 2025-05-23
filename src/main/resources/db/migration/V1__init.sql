@@ -41,3 +41,12 @@ CREATE TABLE theater_screen_types (
     FOREIGN KEY (theater_id) REFERENCES theaters(id),
     FOREIGN KEY (screen_type) REFERENCES screen_types(type)
 );
+
+-- 장르
+CREATE TABLE genres (
+    name         VARCHAR2(50) UNIQUE NOT NULL,
+    description  VARCHAR2(255) DEFAULT NULL,
+    image_url    VARCHAR2(255) DEFAULT NULL,
+
+    PRIMARY KEY (name)
+);

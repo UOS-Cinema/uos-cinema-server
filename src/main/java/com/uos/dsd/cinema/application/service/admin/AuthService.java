@@ -62,7 +62,7 @@ public class AuthService implements
     public void delete(DeleteAdminCommand command) {
         Optional<Admin> admin = adminRepository.findByIdAndDeletedAtIsNull(command.id());
         if (admin.isEmpty() || !admin.get().isPasswordMatched(command.password())) {
-            throw new UnauthorizedException(CommonResultCode.UNAUTHORIZED, "Invalid admin password");
+            throw new UnauthorizedException(CommonResultCode.UNAUTHORIZED, "Invalid admin id or password");
         }
         adminRepository.softDelete(admin.get());
     }

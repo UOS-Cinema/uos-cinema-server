@@ -20,7 +20,7 @@ public class GenreRegistryTest extends IntegrationTest {
     }
 
     @Test
-    public void screenTypeRegistryInitTest() {
+    public void genreRegistryInitTest() {
 
         // when
         List<Genre> genres = genreRegistry.getAll();
@@ -31,7 +31,7 @@ public class GenreRegistryTest extends IntegrationTest {
     }
 
     @Test
-    public void screenTypeRegistryGetTest() {
+    public void genreRegistryGetTest() {
 
         // when
         Genre genre = genreRegistry.get("Action");
@@ -41,7 +41,7 @@ public class GenreRegistryTest extends IntegrationTest {
     }
 
     @Test
-    public void screenTypeRegistryReloadTestWhenAdded() throws InterruptedException {
+    public void genreRegistryReloadTestWhenAdded() throws InterruptedException {
 
         // given
         int size = genreRegistry.getAll().size();

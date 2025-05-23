@@ -7,6 +7,12 @@ import com.uos.dsd.cinema.application.registry.ScreenTypeRegistry;
 import com.uos.dsd.cinema.application.port.out.screen_type.ScreenTypeRepository;
 import com.uos.dsd.cinema.application.registry.GenreRegistry;
 import com.uos.dsd.cinema.application.port.out.genre.GenreRepository;
+import com.uos.dsd.cinema.application.registry.BankRegistry;
+import com.uos.dsd.cinema.application.port.out.affiliate.BankRepository;
+import com.uos.dsd.cinema.application.registry.CardCompanyRegistry;
+import com.uos.dsd.cinema.application.port.out.affiliate.CardCompanyRepository;
+import com.uos.dsd.cinema.application.port.out.customer_type.CustomerTypeRepository;
+import com.uos.dsd.cinema.application.registry.CustomerTypeRegistry;
 
 import org.springframework.context.annotation.Import;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -53,6 +59,24 @@ public abstract class IntegrationTest {
 
     @Autowired
     protected GenreRepository genreRepository;
+
+    @Autowired
+    protected BankRegistry bankRegistry;
+
+    @Autowired
+    protected BankRepository bankRepository;
+
+    @Autowired
+    protected CardCompanyRegistry cardCompanyRegistry;
+
+    @Autowired
+    protected CardCompanyRepository cardCompanyRepository;
+
+    @Autowired
+    protected CustomerTypeRegistry customerTypeRegistry;
+
+    @Autowired
+    protected CustomerTypeRepository customerTypeRepository;
 
     protected Logger log = LoggerFactory.getLogger(IntegrationTest.class);
 

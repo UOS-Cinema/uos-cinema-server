@@ -13,48 +13,29 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 
 import lombok.RequiredArgsConstructor;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.ArrayList;
-
 @Component
 @RequiredArgsConstructor
-public class ScreenTypeRegistry {
+public class ScreenTypeRegistry extends LookupRegistry<ScreenType> {
 
     private final ScreenTypeRepository screenTypeRepository;
 
-    private final Map<String, ScreenType> screenTypeMap = new HashMap<>();
+    @Override
+    protected RuntimeException notFoundException() {
+
+        return new NotFoundException(ScreenTypeExceptionCode.SCREEN_TYPE_NOT_FOUND);
+    }
 
     @EventListener(ApplicationReadyEvent.class)
     @Transactional
     public void register() {
 
-        List<ScreenType> screenTypes = screenTypeRepository.findAll();
-        screenTypes.forEach(screenType -> {
-            screenTypeMap.put(screenType.getType(), screenType);
-        });
+        super.register(screenTypeRepository.findAll(), ScreenType::getType);
     }
 
     @EventListener
     public void reload(ScreenTypeReloadEvent event) {
 
-        screenTypeMap.clear();
-        register();
-    }
-
-    public ScreenType get(String type) {
-
-        ScreenType screenType = screenTypeMap.get(type);
-        if (screenType == null) {
-            throw new NotFoundException(ScreenTypeExceptionCode.SCREEN_TYPE_NOT_FOUND);
-        }
-        return screenType;
-    }
-
-    public List<ScreenType> getAll() {
-
-        return new ArrayList<>(screenTypeMap.values());
+        super.register(screenTypeRepository.findAll(), ScreenType::getType);
     }
 }
 

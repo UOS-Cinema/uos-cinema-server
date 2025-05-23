@@ -1,9 +1,9 @@
 package com.uos.dsd.cinema.application.registry;
 
-import com.uos.dsd.cinema.application.port.out.genre.GenreRepository;
-import com.uos.dsd.cinema.domain.genre.Genre;
-import com.uos.dsd.cinema.domain.genre.GenreExceptionCode;
-import com.uos.dsd.cinema.domain.genre.GenreReloadEvent;
+import com.uos.dsd.cinema.application.port.out.affiliate.BankRepository;
+import com.uos.dsd.cinema.domain.affiliate.AffiliateExceptionCode;
+import com.uos.dsd.cinema.domain.affiliate.Bank;
+import com.uos.dsd.cinema.domain.affiliate.BankReloadEvent;
 import com.uos.dsd.cinema.common.exception.http.NotFoundException;
 
 import org.springframework.stereotype.Component;
@@ -15,26 +15,25 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class GenreRegistry extends LookupRegistry<Genre> {
+public class BankRegistry extends LookupRegistry<Bank> {
 
-    private final GenreRepository genreRepository;
+    private final BankRepository bankRepository;
 
     @Override
     protected RuntimeException notFoundException() {
-
-        return new NotFoundException(GenreExceptionCode.GENRE_NOT_FOUND);
+        return new NotFoundException(AffiliateExceptionCode.AFFILIATE_NOT_FOUND);
     }
 
     @EventListener(ApplicationReadyEvent.class)
     @Transactional
     public void register() {
-
-        super.register(genreRepository.findAll(), Genre::getName);
+        super.register(bankRepository.findAll(), Bank::getName);
     }
 
     @EventListener
-    public void reload(GenreReloadEvent event) {
+    public void reload(BankReloadEvent event) {
 
-        super.register(genreRepository.findAll(), Genre::getName);
+        super.register(bankRepository.findAll(), Bank::getName);
     }
 }
+

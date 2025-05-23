@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import jakarta.persistence.Embeddable;
+import jakarta.persistence.Column;
 
 import java.io.Serializable;
 @Embeddable
@@ -15,6 +16,9 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class TheaterSeatId implements Serializable {
 
+    @Column(name = "theater_id")
     private Long theaterId;
+
+    @Column(name = "seat_number")
     private String seatNumber;
 }

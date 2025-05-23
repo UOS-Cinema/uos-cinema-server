@@ -1,7 +1,10 @@
 package com.uos.dsd.cinema.domain.theater;
 
+import org.springframework.data.domain.Persistable;
+
 import com.uos.dsd.cinema.common.model.Base;
 import com.uos.dsd.cinema.domain.screen_type.ScreenType;
+import com.uos.dsd.cinema.domain.theater.converter.LayoutConverter;
 import com.uos.dsd.cinema.domain.theater.enums.LayoutElement;
 
 import lombok.EqualsAndHashCode;
@@ -18,10 +21,10 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Lob;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 
-import java.util.stream.Collectors;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,19 +34,23 @@ import java.util.List;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
-public class Theater extends Base {
+public class Theater extends Base implements Persistable<Long>{
 
     @Id
-    private Long id;
+    @Column(name = "id")
+    private Long number;
 
     private String name;
 
     @Lob
     @Column(columnDefinition = "CLOB")
     @Convert(converter = LayoutConverter.class)
-    private List<List<Integer>> layout;
+    private List<List<LayoutElement>> layout;
 
-    @OneToMany(mappedBy = "theater", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "theater",
+            fetch = FetchType.LAZY, 
+            cascade = CascadeType.PERSIST, 
+            orphanRemoval = true)
     private List<TheaterSeat> seats;
 
     @ManyToMany
@@ -55,14 +62,14 @@ public class Theater extends Base {
     private List<ScreenType> screenTypes;
 
     public Theater(
-            Long id, 
+            Long number, 
             String name, 
-            List<List<Integer>> layout,
+            List<List<LayoutElement>> layout,
             List<ScreenType> screenTypes) {
 
         super();
-        if (id == null || id <= 0) {
-            throw new IllegalArgumentException("Id is required");
+        if (number == null || number <= 0) {
+            throw new IllegalArgumentException("Number is required");
         }
         if (name == null || name.isEmpty()) {
             throw new IllegalArgumentException("Name is required");
@@ -71,31 +78,42 @@ public class Theater extends Base {
             throw new IllegalArgumentException("Screen types are required");
         }
         validateLayout(layout);
-        this.id = id;
+        this.number = number;
         this.name = name;
         this.layout = layout;
-        this.seats = generateSeats();
         this.screenTypes = screenTypes;
+        this.seats = generateSeats();
     }
 
-    public void validateLayout(List<List<Integer>> layout) {
+    @Override
+    public boolean isNew() {
+        return getCreatedAt() == null;
+    }
+
+    @Override
+    public Long getId() {
+        return this.number;
+    }
+
+    public void validateLayout(List<List<LayoutElement>> layout) {
 
         if (layout == null || layout.isEmpty()) {
             throw new IllegalArgumentException("Layout is required");
         }
-        for (List<Integer> row : layout) {
+        for (List<LayoutElement> row : layout) {
             if (row == null || row.isEmpty()) {
                 throw new IllegalArgumentException("Layout is required");
-            }
-            for (Integer seat : row) {
-                if (seat == null || (seat < 0 && seat > 2)) {
-                    throw new IllegalArgumentException("Layout element is invalid");
-                }
             }
         }
     }
 
-    public List<TheaterSeat> generateSeats() {
+    public void validateScreenTypes(List<ScreenType> screenTypes) {
+        if (screenTypes == null || screenTypes.isEmpty()) {
+            throw new IllegalArgumentException("Screen types are required");
+        }
+    }
+
+    private List<TheaterSeat> generateSeats() {
 
         List<TheaterSeat> seats = new ArrayList<>();
         char row = 'A';
@@ -103,9 +121,12 @@ public class Theater extends Base {
 
         for (int i = 0; i < layout.size(); i++) {
             for (int j = 0; j < layout.get(i).size(); j++) {
-                if (layout.get(i).get(j) == 1) {
+                if (layout.get(i).get(j) == LayoutElement.SEAT) {
                     column++;
-                    seats.add(new TheaterSeat(id, row + "" + column, true));
+
+                    TheaterSeat seat = new TheaterSeat(this.number, row + "" + column, true);
+                    seat.setTheater(this);
+                    seats.add(seat);
                 }
             }
             if (column != 0) {
@@ -113,16 +134,29 @@ public class Theater extends Base {
                 column = 0;
             }
         }
-
         return seats;
     }
 
-    public List<List<LayoutElement>> getLayout() {
+    public void modifyName(String name) {
 
-        return layout.stream()
-            .map(row -> row.stream()
-                .map(LayoutElement::of)
-                .collect(Collectors.toList()))
-            .collect(Collectors.toList());
+        this.name = name;
+    }
+
+    public void deleteSeats() {
+        this.seats.clear();
+    }
+
+    public void modifyLayout(List<List<LayoutElement>> layout) {
+
+        validateLayout(layout);
+        this.layout = layout;
+        this.seats.addAll(generateSeats());
+    }
+
+    public void modifyScreenTypes(List<ScreenType> screenTypes) {
+
+        validateScreenTypes(screenTypes);
+        this.screenTypes.clear();
+        this.screenTypes.addAll(screenTypes);
     }
 }

@@ -4,14 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.uos.dsd.cinema.acceptance.AcceptanceTest;
 import com.uos.dsd.cinema.acceptance.admin.steps.AdminSteps;
-import com.uos.dsd.cinema.adaptor.in.web.admin.request.AdminDeleteRequest;
-import com.uos.dsd.cinema.adaptor.in.web.admin.request.AdminLoginRequest;
-import com.uos.dsd.cinema.adaptor.in.web.admin.request.AdminSignupRequest;
-import com.uos.dsd.cinema.adaptor.in.web.admin.request.AdminUpdateRequest;
-import com.uos.dsd.cinema.adaptor.in.web.admin.response.AdminDeleteResponse;
-import com.uos.dsd.cinema.adaptor.in.web.admin.response.AdminLoginResponse;
-import com.uos.dsd.cinema.adaptor.in.web.admin.response.AdminSignupResponse;
-import com.uos.dsd.cinema.adaptor.in.web.admin.response.AdminUpdateResponse;
+import com.uos.dsd.cinema.adaptor.in.web.admin.request.*;
+import com.uos.dsd.cinema.adaptor.in.web.admin.response.*;
 import com.uos.dsd.cinema.common.exception.code.CommonResultCode;
 import com.uos.dsd.cinema.common.response.ApiResponse;
 import com.uos.dsd.cinema.domain.exception.IllegalPasswordException;
@@ -37,20 +31,28 @@ import java.util.stream.Stream;
 @DisplayNameGeneration(ReplaceUnderscores.class)
 public class AdminAcceptanceTest extends AcceptanceTest {
 
-    private static final String NEW_ADMIN_USERNAME = "newAdministrator";
+    private static final Long EXIST_ADMIN_ID = 1L;
     private static final String EXIST_ADMIN_USERNAME = "administrator";
     private static final String EXIST_ADMIN_PASSWORD = "password123!";
-    private static final String INVALID_ADMIN_PASSWORD = "invalidpw123!";
+    private static final String WRONG_ADMIN_PASSWORD = "wrongpw123!";
+
+    private static final Long DELETED_ADMIN_ID = 2L;
+    private static final String DELETED_ADMIN_USERNAME = "deletedAdministrator";
+    private static final String DELETED_ADMIN_PASSWORD = "password123!";
+
+    private static final Long NOT_EXIST_ADMIN_ID = 999L;
+    private static final String NOT_EXIST_ADMIN_USERNAME = "notexistAdmin";
+    private static final String NOT_EXIST_ADMIN_PASSWORD = "notexistpw123!";
+
+    private static final String NEW_ADMIN_USERNAME = "newAdministrator";
     private static final String NEW_ADMIN_PASSWORD = "newpassword123!";
-    private static final Long ADMIN_ID = 0L;
-    private static final Long INVALID_ADMIN_ID = 999L;
 
     @Test
     public void signup() {
 
         /* Given */
         String username = NEW_ADMIN_USERNAME;
-        String password = EXIST_ADMIN_PASSWORD;
+        String password = NEW_ADMIN_PASSWORD;
 
         /* When */
         // TODO: Admin 권한의 Access Token이 주어져야 함
@@ -64,15 +66,15 @@ public class AdminAcceptanceTest extends AcceptanceTest {
 
         /* Then */
         checkSuccess(response.statusCode(), apiResponse.code());
-        assertEquals(NEW_ADMIN_USERNAME, apiResponse.data().username());
+        assertEquals(username, apiResponse.data().username());
     }
 
-    @Test
-    public void signupWithExistingName() {
+    @ParameterizedTest
+    @ValueSource(strings = { EXIST_ADMIN_USERNAME, DELETED_ADMIN_USERNAME })
+    public void signupWithExistingName(String username) {
 
         /* Given */
-        String username = EXIST_ADMIN_USERNAME;
-        String password = EXIST_ADMIN_PASSWORD;
+        String password = NEW_ADMIN_PASSWORD;
 
         /* When */
         // TODO: Admin 권한의 Access Token이 주어져야 함
@@ -94,7 +96,7 @@ public class AdminAcceptanceTest extends AcceptanceTest {
     public void signupWithInvalidUsername(String username) {
 
         /* Given */
-        String password = EXIST_ADMIN_PASSWORD;
+        String password = NEW_ADMIN_PASSWORD;
 
         /* When */
         // TODO: Admin 권한의 Access Token이 주어져야 함
@@ -156,8 +158,9 @@ public class AdminAcceptanceTest extends AcceptanceTest {
 
     @ParameterizedTest
     @CsvSource({
-        NEW_ADMIN_USERNAME + "," + EXIST_ADMIN_PASSWORD,
-        EXIST_ADMIN_USERNAME + "," + INVALID_ADMIN_PASSWORD
+        EXIST_ADMIN_USERNAME + "," + WRONG_ADMIN_PASSWORD,
+        DELETED_ADMIN_USERNAME + "," + DELETED_ADMIN_PASSWORD,
+        NOT_EXIST_ADMIN_USERNAME + "," + NOT_EXIST_ADMIN_PASSWORD
     })
     public void loginFailure(String username, String password) {
         /* Given */
@@ -179,7 +182,7 @@ public class AdminAcceptanceTest extends AcceptanceTest {
     @Test
     public void updatePassword() {
         /* Given */
-        Long adminId = ADMIN_ID;
+        Long id = EXIST_ADMIN_ID;
         String currentPassword = EXIST_ADMIN_PASSWORD;
         String newPassword = NEW_ADMIN_PASSWORD;
 
@@ -188,14 +191,14 @@ public class AdminAcceptanceTest extends AcceptanceTest {
         String adminAccessToken = "adminAccessToken";
         Map<String, Object> headers = AuthHeaderProvider.createAuthorizationHeader(adminAccessToken);
 
-        Response response = AdminSteps.sendUpdateAdmin(headers, new AdminUpdateRequest(adminId, currentPassword, newPassword));
+        Response response = AdminSteps.sendUpdateAdmin(headers, new AdminUpdateRequest(id, currentPassword, newPassword));
         log.info("response: {}", response.asString());
         ApiResponse<AdminUpdateResponse> apiResponse = response.as(new TypeRef<ApiResponse<AdminUpdateResponse>>() {});
         log.info("ApiResponse: {}", apiResponse);
 
         /* Then */
         checkSuccess(response.statusCode(), apiResponse.code());
-        assertEquals(ADMIN_ID, apiResponse.data().id());
+        assertEquals(id, apiResponse.data().id());
 
         /* Login Test */
         Map<String, Object> loginHeaders = AuthHeaderProvider.createEmptyHeader();
@@ -206,10 +209,15 @@ public class AdminAcceptanceTest extends AcceptanceTest {
         // TODO: check body accessToken, refreshToken
     }
 
+    /*
+     * provide id, password
+     */
     private static Stream<Arguments> provideInvalidAdminCredentials() {
+
         return Stream.of(
-            Arguments.of(ADMIN_ID, INVALID_ADMIN_PASSWORD),
-            Arguments.of(INVALID_ADMIN_ID, EXIST_ADMIN_PASSWORD)
+            Arguments.of(EXIST_ADMIN_ID, WRONG_ADMIN_PASSWORD),
+            Arguments.of(DELETED_ADMIN_ID, DELETED_ADMIN_PASSWORD),
+            Arguments.of(NOT_EXIST_ADMIN_ID, NOT_EXIST_ADMIN_PASSWORD)
         );
     }
     
@@ -238,7 +246,7 @@ public class AdminAcceptanceTest extends AcceptanceTest {
             "short!1", "한글", "space space" })
     public void updatePasswordWithInvalidNewPassword(String newPassword) {
         /* Given */
-        Long id = ADMIN_ID;
+        Long id = EXIST_ADMIN_ID;
         String currentPassword = EXIST_ADMIN_PASSWORD;
 
         /* When */
@@ -260,7 +268,7 @@ public class AdminAcceptanceTest extends AcceptanceTest {
     @Test
     public void deleteAdmin() {
         /* Given */
-        Long id = ADMIN_ID;
+        Long id = EXIST_ADMIN_ID;
         String username = EXIST_ADMIN_USERNAME;
         String password = EXIST_ADMIN_PASSWORD;
 
@@ -275,11 +283,11 @@ public class AdminAcceptanceTest extends AcceptanceTest {
 
         /* Then */
         checkSuccess(response.statusCode(), apiResponse.code());
-        assertEquals(ADMIN_ID, apiResponse.data().id());
+        assertEquals(id, apiResponse.data().id());
 
         /* Login Test -> fail */
         Map<String, Object> loginHeaders = AuthHeaderProvider.createEmptyHeader();
-        Response loginResponse = AdminSteps.sendLoginAdmin(loginHeaders, new AdminLoginRequest(EXIST_ADMIN_USERNAME, password)); 
+        Response loginResponse = AdminSteps.sendLoginAdmin(loginHeaders, new AdminLoginRequest(username, password)); 
         ApiResponse<AdminLoginResponse> loginApiResponse = loginResponse.as(new TypeRef<ApiResponse<AdminLoginResponse>>() {});
 
         checkUnauthorized(loginResponse.statusCode(), loginApiResponse.code());
@@ -311,7 +319,8 @@ public class AdminAcceptanceTest extends AcceptanceTest {
     @MethodSource("provideInvalidAdminCredentials")
     void deleteAdminFailure(Long id, String password) {
         /* Given */
-        
+        // id and password are provided as parameters
+
         /* When */
         String adminAccessToken = "adminAccessToken";
         Map<String, Object> headers = AuthHeaderProvider.createAuthorizationHeader(adminAccessToken);

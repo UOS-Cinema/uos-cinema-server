@@ -26,7 +26,7 @@ CREATE TABLE theater_seats (
     updated_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     deleted_at   TIMESTAMP,
     PRIMARY KEY (theater_id, seat_number),
-    FOREIGN KEY (theater_id) REFERENCES theaters(id)
+    FOREIGN KEY (theater_id) REFERENCES theaters(id) ON DELETE CASCADE
 );
 
 -- 상영관 제공 상영유형

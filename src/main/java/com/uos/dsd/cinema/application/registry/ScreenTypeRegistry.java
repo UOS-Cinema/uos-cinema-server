@@ -13,10 +13,10 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 
 import lombok.RequiredArgsConstructor;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ArrayList;
 
 @Component
 @RequiredArgsConstructor
@@ -52,9 +52,9 @@ public class ScreenTypeRegistry {
         return screenType;
     }
 
-    public Collection<ScreenType> getAll() {
+    public List<ScreenType> getAll() {
 
-        return screenTypeMap.values();
+        return new ArrayList<>(screenTypeMap.values());
     }
 }
 

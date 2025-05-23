@@ -63,11 +63,7 @@ public class AdminAcceptanceTest extends AcceptanceTest {
         log.info("ApiResponse: {}", apiResponse);
 
         /* Then */
-        // status code: 200
-        assertEquals(200, response.statusCode());
-        // code: COM000
-        assertEquals("COM000", apiResponse.code());
-        // body username: NEW_ADMIN_USERNAME
+        checkSuccess(response.statusCode(), apiResponse.code());
         assertEquals(NEW_ADMIN_USERNAME, apiResponse.data().username());
     }
 
@@ -89,11 +85,7 @@ public class AdminAcceptanceTest extends AcceptanceTest {
         log.info("ApiResponse: {}", apiResponse);
         
         /* Then */
-        // status code: 400
-        assertEquals(400, response.statusCode());
-        // code: COM001
-        assertEquals("COM001", apiResponse.code());
-        // message: Admin name already exists
+        checkBadRequest(response.statusCode(), apiResponse.code());
         assertEquals("Admin username already exists", apiResponse.message());
     }
 
@@ -115,11 +107,7 @@ public class AdminAcceptanceTest extends AcceptanceTest {
         log.info("ApiResponse: {}", apiResponse);
 
         /* Then */
-        // status code: 400
-        assertEquals(400, response.statusCode());
-        // code: CommonResultCode.BAD_REQUEST
-        assertEquals(CommonResultCode.BAD_REQUEST.getCode(), apiResponse.code());
-        // message: IllegalUsernameException
+        checkBadRequest(response.statusCode(), apiResponse.code());
         assertEquals(IllegalUsernameException.MESSAGE, apiResponse.message());
     }
 
@@ -142,11 +130,7 @@ public class AdminAcceptanceTest extends AcceptanceTest {
         log.info("ApiResponse: {}", apiResponse);
 
         /* Then */
-        // status code: 400
-        assertEquals(400, response.statusCode());
-        // code: CommonResultCode.BAD_REQUEST
-        assertEquals(CommonResultCode.BAD_REQUEST.getCode(), apiResponse.code());
-        // message: IllegalPasswordException
+        checkBadRequest(response.statusCode(), apiResponse.code());
         assertEquals(IllegalPasswordException.MESSAGE, apiResponse.message());
     }
 
@@ -166,10 +150,7 @@ public class AdminAcceptanceTest extends AcceptanceTest {
         log.info("ApiResponse: {}", apiResponse);
 
         /* Then */
-        // status code: 200
-        assertEquals(200, response.statusCode());
-        // code: COM000
-        assertEquals("COM000", apiResponse.code());
+        checkSuccess(response.statusCode(), apiResponse.code());
         // TODO: check body accessToken, refreshToken
     }
 
@@ -191,11 +172,7 @@ public class AdminAcceptanceTest extends AcceptanceTest {
         log.info("ApiResponse: {}", apiResponse);
 
         /* Then */
-        // status code: 401
-        assertEquals(401, response.statusCode());
-        // code: COM003
-        assertEquals("COM003", apiResponse.code());
-        // message: Invalid admin name or password
+        checkUnauthorized(response.statusCode(), apiResponse.code());
         assertEquals("Invalid admin username or password", apiResponse.message());
     }
 
@@ -217,11 +194,7 @@ public class AdminAcceptanceTest extends AcceptanceTest {
         log.info("ApiResponse: {}", apiResponse);
 
         /* Then */
-        // status code: 200
-        assertEquals(200, response.statusCode());
-        // code: COM000
-        assertEquals("COM000", apiResponse.code());
-        // body id: ADMIN_ID
+        checkSuccess(response.statusCode(), apiResponse.code());
         assertEquals(ADMIN_ID, apiResponse.data().id());
 
         /* Login Test */
@@ -229,8 +202,7 @@ public class AdminAcceptanceTest extends AcceptanceTest {
         Response loginResponse = AdminSteps.sendLoginAdmin(loginHeaders, new AdminLoginRequest(EXIST_ADMIN_USERNAME, newPassword)); 
         ApiResponse<AdminLoginResponse> loginApiResponse = loginResponse.as(new TypeRef<ApiResponse<AdminLoginResponse>>() {});
 
-        assertEquals(200, loginResponse.statusCode());
-        assertEquals("COM000", loginApiResponse.code());
+        checkSuccess(loginResponse.statusCode(), loginApiResponse.code());
         // TODO: check body accessToken, refreshToken
     }
 
@@ -257,11 +229,7 @@ public class AdminAcceptanceTest extends AcceptanceTest {
         log.info("ApiResponse: {}", apiResponse);
 
         /* Then */
-        // status code: 401
-        assertEquals(401, response.statusCode());
-        // code: COM003
-        assertEquals("COM003", apiResponse.code());
-        // message: Invalid admin current password
+        checkUnauthorized(response.statusCode(), apiResponse.code());
         assertEquals("Invalid admin current password", apiResponse.message());
     }
 
@@ -285,11 +253,7 @@ public class AdminAcceptanceTest extends AcceptanceTest {
         log.info("ApiResponse: {}", apiResponse);
 
         /* Then */
-        // status code: 400
-        assertEquals(400, response.statusCode());
-        // code: CommonResultCode.BAD_REQUEST
-        assertEquals(CommonResultCode.BAD_REQUEST.getCode(), apiResponse.code());
-        // message: IllegalPasswordException
+        checkBadRequest(response.statusCode(), apiResponse.code());
         assertEquals(IllegalPasswordException.MESSAGE, apiResponse.message());
     }
 
@@ -310,11 +274,7 @@ public class AdminAcceptanceTest extends AcceptanceTest {
         log.info("ApiResponse: {}", apiResponse);
 
         /* Then */
-        // status code: 200
-        assertEquals(200, response.statusCode());
-        // code: COM000
-        assertEquals("COM000", apiResponse.code());
-        // body id: ADMIN_ID
+        checkSuccess(response.statusCode(), apiResponse.code());
         assertEquals(ADMIN_ID, apiResponse.data().id());
 
         /* Login Test -> fail */
@@ -322,32 +282,28 @@ public class AdminAcceptanceTest extends AcceptanceTest {
         Response loginResponse = AdminSteps.sendLoginAdmin(loginHeaders, new AdminLoginRequest(EXIST_ADMIN_USERNAME, password)); 
         ApiResponse<AdminLoginResponse> loginApiResponse = loginResponse.as(new TypeRef<ApiResponse<AdminLoginResponse>>() {});
 
-        assertEquals(401, loginResponse.statusCode());
-        assertEquals("COM003", loginApiResponse.code());
+        checkUnauthorized(loginResponse.statusCode(), loginApiResponse.code());
         assertEquals("Invalid admin username or password", loginApiResponse.message());
 
         /* Update Test -> fail */
         Response updateResponse = AdminSteps.sendUpdateAdmin(headers, new AdminUpdateRequest(id, password, NEW_ADMIN_PASSWORD));
         ApiResponse<AdminUpdateResponse> updateApiResponse = updateResponse.as(new TypeRef<ApiResponse<AdminUpdateResponse>>() {});
 
-        assertEquals(401, updateResponse.statusCode());
-        assertEquals("COM003", updateApiResponse.code());
+        checkUnauthorized(updateResponse.statusCode(), updateApiResponse.code());
         assertEquals("Invalid admin current password", updateApiResponse.message());
 
         /* Delete Test -> fail */
         Response deleteResponse = AdminSteps.sendDeleteAdmin(headers, new AdminDeleteRequest(id, password));
         ApiResponse<AdminDeleteResponse> deleteApiResponse = deleteResponse.as(new TypeRef<ApiResponse<AdminDeleteResponse>>() {});
         
-        assertEquals(401, deleteResponse.statusCode());
-        assertEquals("COM003", deleteApiResponse.code());
+        checkUnauthorized(deleteResponse.statusCode(), deleteApiResponse.code());
         assertEquals("Invalid admin id or password", deleteApiResponse.message());
 
         /* Signup Test -> fail */
         Response signupResponse = AdminSteps.sendSignupAdmin(headers, new AdminSignupRequest(username, password));
         ApiResponse<AdminSignupResponse> signupApiResponse = signupResponse.as(new TypeRef<ApiResponse<AdminSignupResponse>>() {});
 
-        assertEquals(400, signupResponse.statusCode());
-        assertEquals("COM001", signupApiResponse.code());
+        checkBadRequest(signupResponse.statusCode(), signupApiResponse.code());
         assertEquals("Admin username already exists", signupApiResponse.message());
     }
 
@@ -365,11 +321,22 @@ public class AdminAcceptanceTest extends AcceptanceTest {
         ApiResponse<AdminDeleteResponse> apiResponse = response.as(new TypeRef<ApiResponse<AdminDeleteResponse>>() {});
 
         /* Then */
-        // status code: 401
-        assertEquals(401, response.statusCode());
-        // code: COM003
-        assertEquals("COM003", apiResponse.code());
-        // message: Invalid admin current password
+        checkUnauthorized(response.statusCode(), apiResponse.code());
         assertEquals("Invalid admin id or password", apiResponse.message());
+    }
+
+    void checkSuccess(int statusCode, String code) {
+        assertEquals(200, statusCode);
+        assertEquals(CommonResultCode.SUCCESS.getCode(), code);
+    }
+
+    void checkBadRequest(int statusCode, String code) {
+        assertEquals(400, statusCode);
+        assertEquals(CommonResultCode.BAD_REQUEST.getCode(), code);
+    }
+
+    void checkUnauthorized(int statusCode, String code) {
+        assertEquals(401, statusCode);
+        assertEquals(CommonResultCode.UNAUTHORIZED.getCode(), code);
     }
 }

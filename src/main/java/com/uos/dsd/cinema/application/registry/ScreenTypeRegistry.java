@@ -28,7 +28,7 @@ public class ScreenTypeRegistry {
 
     @EventListener(ApplicationReadyEvent.class)
     @Transactional
-    public void init() {
+    public void register() {
 
         List<ScreenType> screenTypes = screenTypeRepository.findAll();
         screenTypes.forEach(screenType -> {
@@ -40,7 +40,7 @@ public class ScreenTypeRegistry {
     public void reload(ScreenTypeReloadEvent event) {
 
         screenTypeMap.clear();
-        init();
+        register();
     }
 
     public ScreenType get(String type) {

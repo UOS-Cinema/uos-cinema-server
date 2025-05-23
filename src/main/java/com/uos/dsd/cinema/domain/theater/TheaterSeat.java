@@ -1,17 +1,21 @@
 package com.uos.dsd.cinema.domain.theater;
 
 import com.uos.dsd.cinema.common.model.Base;
+import com.uos.dsd.cinema.domain.theater.converter.BooleanYNConverter;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MapsId;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.Convert;
 
 @Entity
 @Table(name = "theater_seats")
@@ -24,10 +28,12 @@ public class TheaterSeat extends Base {
     @EmbeddedId
     private TheaterSeatId id;
 
+    @Convert(converter = BooleanYNConverter.class)
     private Boolean isAvailable;
 
+    @MapsId("theaterId")
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "theater_id")
     private Theater theater;
 
     public TheaterSeat(
@@ -59,5 +65,9 @@ public class TheaterSeat extends Base {
 
     public Long getTheaterId() {
         return id.getTheaterId();
+    }
+
+    public void setTheater(Theater theater) {
+        this.theater = theater;
     }
 }

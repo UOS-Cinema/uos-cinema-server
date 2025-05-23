@@ -1,0 +1,10 @@
+INSERT INTO genres (name, description, image_url) VALUES ('Action', 'Action genre', 'https://example.com/action.jpg');
+INSERT INTO genres (name, description, image_url) VALUES ('Drama', 'Drama genre', 'https://example.com/drama.jpg');
+INSERT INTO genres (name, description, image_url) VALUES ('Comedy', 'Comedy genre', 'https://example.com/comedy.jpg');
+INSERT INTO genres (name, description, image_url) VALUES ('Horror', 'Horror genre', 'https://example.com/horror.jpg');
+INSERT INTO genres (name, description, image_url) VALUES ('Romance', 'Romance genre', 'https://example.com/romance.jpg');
+INSERT INTO genres (name, description, image_url) VALUES ('Sci-Fi', 'Sci-Fi genre', 'https://example.com/sci-fi.jpg');
+INSERT INTO genres (name, description, image_url) VALUES ('Thriller', 'Thriller genre', 'https://example.com/thriller.jpg');
+INSERT INTO genres (name, description, image_url) VALUES ('Fantasy', 'Fantasy genre', 'https://example.com/fantasy.jpg');
+INSERT INTO genres (name, description, image_url) VALUES ('Mystery', 'Mystery genre', 'https://example.com/mystery.jpg');
+INSERT INTO genres (name, description, image_url) VALUES ('Western', 'Western genre', 'https://example.com/western.jpg');

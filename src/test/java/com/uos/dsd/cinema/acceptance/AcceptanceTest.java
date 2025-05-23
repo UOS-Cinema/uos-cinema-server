@@ -12,6 +12,8 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ClassPathResource;
 
 import org.junit.jupiter.api.AfterEach;
 
@@ -50,7 +52,8 @@ public abstract class AcceptanceTest {
         @Bean
         DBInitializeStrategy dbInitializeStrategy(@Autowired DataSource dataSource) {
 
-            return new OracleDBInitializeStrategy(dataSource);
+            Resource initScript = new ClassPathResource("db/migration/V1__init.sql");
+            return new OracleDBInitializeStrategy(dataSource, initScript);
         }
     }
 }

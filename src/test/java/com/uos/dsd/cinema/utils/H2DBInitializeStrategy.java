@@ -1,7 +1,6 @@
 package com.uos.dsd.cinema.utils;
 
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.datasource.init.ScriptUtils;
 
 import org.slf4j.Logger;
@@ -24,22 +23,16 @@ public class H2DBInitializeStrategy implements DBInitializeStrategy {
 
     private static final Logger log = LoggerFactory.getLogger(H2DBInitializeStrategy.class);
 
-    private static final Resource initScript = new ClassPathResource("db/h2/migration/V1__init.sql");
-    private static final List<Resource> dataScripts = new ArrayList<>();
+    private final Resource initScript;
 
     private final DataSource dataSource;
+
     private EntityManager entityManager;
 
-    static {
-
-        // insert data considering foreign key constraint
-        dataScripts.add(new ClassPathResource("db/screen_type.sql"));
-        dataScripts.add(new ClassPathResource("db/theater.sql"));
-    }
-
-    public H2DBInitializeStrategy(DataSource dataSource) {
+    public H2DBInitializeStrategy(DataSource dataSource, Resource initScript) {
 
         this.dataSource = dataSource;
+        this.initScript = initScript;
         entityManager = null;
     }
 
@@ -115,7 +108,7 @@ public class H2DBInitializeStrategy implements DBInitializeStrategy {
 
     @Override
     @Transactional
-    public void createData() {
+    public void createData(List<Resource> dataScripts) {
 
         log.info("[H2DBInitializeStrategy] createData");
         try (Connection connection = dataSource.getConnection()) {

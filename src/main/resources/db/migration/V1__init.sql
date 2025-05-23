@@ -2,7 +2,7 @@
 CREATE TABLE screen_types (
     type         VARCHAR2(50),
     icon_url     VARCHAR2(255),
-    price        NUMBER(10),
+    price        NUMBER(10) NOT NULL,
 
     PRIMARY KEY (type)
 );
@@ -40,4 +40,45 @@ CREATE TABLE theater_screen_types (
     PRIMARY KEY (theater_id, screen_type),
     FOREIGN KEY (theater_id) REFERENCES theaters(id),
     FOREIGN KEY (screen_type) REFERENCES screen_types(type)
+);
+
+-- 장르
+CREATE TABLE genres (
+    name         VARCHAR2(50),
+    description  VARCHAR2(255),
+    image_url    VARCHAR2(255),
+
+    PRIMARY KEY (name)
+);
+
+-- 고객 유형
+CREATE TABLE customer_types (
+    type            VARCHAR2(50),
+    discount_amount NUMBER(10) NOT NULL,
+
+    PRIMARY KEY (type)
+);
+
+-- 은행
+CREATE TABLE banks (
+    name            VARCHAR2(50),
+    logo_url        VARCHAR2(255),
+    discount_amount NUMBER(10) NOT NULL,
+    created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted_at      TIMESTAMP,
+
+    PRIMARY KEY (name)
+);
+
+-- 카드사
+CREATE TABLE card_companies (
+    name            VARCHAR2(50),
+    logo_url        VARCHAR2(255),
+    discount_amount NUMBER(10) NOT NULL,
+    created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted_at      TIMESTAMP,
+
+    PRIMARY KEY (name)
 );

@@ -1,12 +1,10 @@
 package com.uos.dsd.cinema;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
+import com.uos.dsd.cinema.integration.IntegrationTest;
 
-@Import(TestcontainersConfiguration.class)
-@SpringBootTest
-class CinemaApplicationTests {
+import org.junit.jupiter.api.Test;
+
+class CinemaApplicationTests extends IntegrationTest {
 
 	@Test
 	void contextLoads() {

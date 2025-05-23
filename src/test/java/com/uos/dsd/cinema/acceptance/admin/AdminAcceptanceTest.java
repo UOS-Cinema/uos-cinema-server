@@ -67,7 +67,7 @@ public class AdminAcceptanceTest extends AcceptanceTest {
         String password = NEW_ADMIN_PASSWORD;
 
         /* When */
-        String adminAccessToken = jwtUtils.generateAccessToken(1L, Role.ADMIN);
+        String adminAccessToken = jwtUtils.generateAccessToken(EXIST_ADMIN_ID, Role.ADMIN);
         Map<String, Object> headers = AuthHeaderProvider.createAuthorizationHeader(adminAccessToken);
 
         Response response = AdminSteps.sendSignupAdmin(headers, new AdminSignupRequest(username, password));
@@ -97,11 +97,7 @@ public class AdminAcceptanceTest extends AcceptanceTest {
         log.info("ApiResponse: {}", apiResponse);
 
         /* Then */
-        // status code: 401
-        assertEquals(401, response.statusCode());
-        // code: COM003
-        assertEquals("COM003", apiResponse.code());
-        // message: Full authentication is required to access this resource
+        checkUnauthorized(response.statusCode(), apiResponse.code());
         assertEquals("Full authentication is required to access this resource", apiResponse.message());
     }
 
@@ -113,7 +109,7 @@ public class AdminAcceptanceTest extends AcceptanceTest {
         String password = NEW_ADMIN_PASSWORD;
 
         /* When */
-        String adminAccessToken = jwtUtils.generateAccessToken(1L, Role.ADMIN);
+        String adminAccessToken = jwtUtils.generateAccessToken(EXIST_ADMIN_ID, Role.ADMIN);
         Map<String, Object> headers = AuthHeaderProvider.createAuthorizationHeader(adminAccessToken);
 
         Response response = AdminSteps.sendSignupAdmin(headers, new AdminSignupRequest(username, password));
@@ -134,7 +130,7 @@ public class AdminAcceptanceTest extends AcceptanceTest {
         String password = NEW_ADMIN_PASSWORD;
 
         /* When */
-        String adminAccessToken = jwtUtils.generateAccessToken(1L, Role.ADMIN);
+        String adminAccessToken = jwtUtils.generateAccessToken(EXIST_ADMIN_ID, Role.ADMIN);
         Map<String, Object> headers = AuthHeaderProvider.createAuthorizationHeader(adminAccessToken);
 
         Response response = AdminSteps.sendSignupAdmin(headers, new AdminSignupRequest(username, password));
@@ -156,7 +152,7 @@ public class AdminAcceptanceTest extends AcceptanceTest {
         String username = NEW_ADMIN_USERNAME;
 
         /* When */
-        String adminAccessToken = jwtUtils.generateAccessToken(1L, Role.ADMIN);
+        String adminAccessToken = jwtUtils.generateAccessToken(EXIST_ADMIN_ID, Role.ADMIN);
         Map<String, Object> headers = AuthHeaderProvider.createAuthorizationHeader(adminAccessToken);
 
         Response response = AdminSteps.sendSignupAdmin(headers, new AdminSignupRequest(username, password));
@@ -173,7 +169,7 @@ public class AdminAcceptanceTest extends AcceptanceTest {
     public void login() {
 
         /* Given */
-        Long adminId = 1L;
+        Long id = EXIST_ADMIN_ID;
         String username = EXIST_ADMIN_USERNAME;
         String password = EXIST_ADMIN_PASSWORD;
 
@@ -190,13 +186,13 @@ public class AdminAcceptanceTest extends AcceptanceTest {
         // check body accessToken
         String accessToken = apiResponse.data().accessToken();
         JwtClaim accessTokenClaim = jwtUtils.getJwtClaim(accessToken);
-        assertEquals(adminId, accessTokenClaim.id());
+        assertEquals(id, accessTokenClaim.id());
         assertEquals(Role.ADMIN, accessTokenClaim.role());
         assertEquals(TokenType.ACCESS, accessTokenClaim.tokenType());
         // check cookie refreshToken
         String refreshToken = response.getCookie(SecurityConstants.REISSUE_COOKIE_NAME);
         JwtClaim refreshTokenClaim = jwtUtils.getJwtClaim(refreshToken);
-        assertEquals(adminId, refreshTokenClaim.id());
+        assertEquals(id, refreshTokenClaim.id());
         assertEquals(Role.ADMIN, refreshTokenClaim.role());
         assertEquals(TokenType.REFRESH, refreshTokenClaim.tokenType());
     }
@@ -232,8 +228,7 @@ public class AdminAcceptanceTest extends AcceptanceTest {
         String newPassword = NEW_ADMIN_PASSWORD;
 
         /* When */
-        // TODO: Admin 권한의 Access Token이 주어져야 함
-        String adminAccessToken = "adminAccessToken";
+        String adminAccessToken = jwtUtils.generateAccessToken(EXIST_ADMIN_ID, Role.ADMIN);
         Map<String, Object> headers = AuthHeaderProvider.createAuthorizationHeader(adminAccessToken);
 
         Response response = AdminSteps.sendUpdateAdmin(headers, new AdminUpdateRequest(id, currentPassword, newPassword));
@@ -253,12 +248,16 @@ public class AdminAcceptanceTest extends AcceptanceTest {
         checkSuccess(loginResponse.statusCode(), loginApiResponse.code());
         // check body accessToken
         String accessToken = loginApiResponse.data().accessToken();
-        String accessTokenUsername = jwtUtils.getUsernameFromJwtToken(accessToken);
-        assertEquals(EXIST_ADMIN_USERNAME, accessTokenUsername);
+        JwtClaim accessTokenClaim = jwtUtils.getJwtClaim(accessToken);
+        assertEquals(id, accessTokenClaim.id());
+        assertEquals(Role.ADMIN, accessTokenClaim.role());
+        assertEquals(TokenType.ACCESS, accessTokenClaim.tokenType());
         // check cookie refreshToken
         String refreshToken = loginResponse.getCookie("refreshToken");
-        String refreshTokenUsername = jwtUtils.getUsernameFromJwtToken(refreshToken);
-        assertEquals(EXIST_ADMIN_USERNAME, refreshTokenUsername);
+        JwtClaim refreshTokenClaim = jwtUtils.getJwtClaim(refreshToken);
+        assertEquals(id, refreshTokenClaim.id());
+        assertEquals(Role.ADMIN, refreshTokenClaim.role());
+        assertEquals(TokenType.REFRESH, refreshTokenClaim.tokenType());
     }
 
     /*
@@ -280,7 +279,7 @@ public class AdminAcceptanceTest extends AcceptanceTest {
         String newPassword = NEW_ADMIN_PASSWORD;
 
         /* When */
-        String adminAccessToken = "adminAccessToken";
+        String adminAccessToken = jwtUtils.generateAccessToken(EXIST_ADMIN_ID, Role.ADMIN);
         Map<String, Object> headers = AuthHeaderProvider.createAuthorizationHeader(adminAccessToken);
 
         Response response = AdminSteps.sendUpdateAdmin(headers, new AdminUpdateRequest(id, currentPassword, newPassword));
@@ -302,7 +301,7 @@ public class AdminAcceptanceTest extends AcceptanceTest {
         String currentPassword = EXIST_ADMIN_PASSWORD;
 
         /* When */
-        String adminAccessToken = "adminAccessToken";
+        String adminAccessToken = jwtUtils.generateAccessToken(EXIST_ADMIN_ID, Role.ADMIN);
         Map<String, Object> headers = AuthHeaderProvider.createAuthorizationHeader(adminAccessToken);
 
         log.info("adminid: {}, currentPassword: {}, newPassword: {}", id, currentPassword, newPassword);
@@ -325,7 +324,8 @@ public class AdminAcceptanceTest extends AcceptanceTest {
         String password = EXIST_ADMIN_PASSWORD;
 
         /* When */
-        Map<String, Object> headers = AuthHeaderProvider.createEmptyHeader();
+        String adminAccessToken = jwtUtils.generateAccessToken(EXIST_ADMIN_ID, Role.ADMIN);
+        Map<String, Object> headers = AuthHeaderProvider.createAuthorizationHeader(adminAccessToken);
 
         Response response = AdminSteps.sendDeleteAdmin(headers, new AdminDeleteRequest(id, password));
         log.info("response: {}", response.asString());
@@ -345,21 +345,27 @@ public class AdminAcceptanceTest extends AcceptanceTest {
         assertEquals("Invalid admin username or password", loginApiResponse.message());
 
         /* Update Test -> fail */
-        Response updateResponse = AdminSteps.sendUpdateAdmin(headers, new AdminUpdateRequest(id, password, NEW_ADMIN_PASSWORD));
+        String adminAccessTokenForUpdate = jwtUtils.generateAccessToken(EXIST_ADMIN_ID, Role.ADMIN);
+        Map<String, Object> updateHeaders = AuthHeaderProvider.createAuthorizationHeader(adminAccessTokenForUpdate);
+        Response updateResponse = AdminSteps.sendUpdateAdmin(updateHeaders, new AdminUpdateRequest(id, password, NEW_ADMIN_PASSWORD));
         ApiResponse<AdminUpdateResponse> updateApiResponse = updateResponse.as(new TypeRef<ApiResponse<AdminUpdateResponse>>() {});
 
         checkUnauthorized(updateResponse.statusCode(), updateApiResponse.code());
         assertEquals("Invalid admin current password", updateApiResponse.message());
 
         /* Delete Test -> fail */
-        Response deleteResponse = AdminSteps.sendDeleteAdmin(headers, new AdminDeleteRequest(id, password));
+        String adminAccessTokenForDelete = jwtUtils.generateAccessToken(EXIST_ADMIN_ID, Role.ADMIN);
+        Map<String, Object> deleteHeaders = AuthHeaderProvider.createAuthorizationHeader(adminAccessTokenForDelete);
+        Response deleteResponse = AdminSteps.sendDeleteAdmin(deleteHeaders, new AdminDeleteRequest(id, password));
         ApiResponse<AdminDeleteResponse> deleteApiResponse = deleteResponse.as(new TypeRef<ApiResponse<AdminDeleteResponse>>() {});
         
         checkUnauthorized(deleteResponse.statusCode(), deleteApiResponse.code());
         assertEquals("Invalid admin id or password", deleteApiResponse.message());
 
         /* Signup Test -> fail */
-        Response signupResponse = AdminSteps.sendSignupAdmin(headers, new AdminSignupRequest(username, password));
+        String adminAccessTokenForSignup = jwtUtils.generateAccessToken(EXIST_ADMIN_ID, Role.ADMIN);
+        Map<String, Object> signupHeaders = AuthHeaderProvider.createAuthorizationHeader(adminAccessTokenForSignup);
+        Response signupResponse = AdminSteps.sendSignupAdmin(signupHeaders, new AdminSignupRequest(username, password));
         ApiResponse<AdminSignupResponse> signupApiResponse = signupResponse.as(new TypeRef<ApiResponse<AdminSignupResponse>>() {});
 
         checkBadRequest(signupResponse.statusCode(), signupApiResponse.code());
@@ -373,7 +379,7 @@ public class AdminAcceptanceTest extends AcceptanceTest {
         // id and password are provided as parameters
 
         /* When */
-        String adminAccessToken = "adminAccessToken";
+        String adminAccessToken = jwtUtils.generateAccessToken(EXIST_ADMIN_ID, Role.ADMIN);
         Map<String, Object> headers = AuthHeaderProvider.createAuthorizationHeader(adminAccessToken);
 
         Response response = AdminSteps.sendDeleteAdmin(headers, new AdminDeleteRequest(id, password));

@@ -9,13 +9,13 @@ public class SecurityConstants {
     );
 
     public static final List<String> OPEN_ACCESS_URLS = List.of(
-        "/admin/login",
-        "/admin/update",
-        "/admin/delete"
+        "/admin/login"
     );
 
     public static final List<String> ADMIN_URLS = List.of(
-        "/admin/signup"
+        "/admin/signup",
+        "/admin/update",
+        "/admin/delete"
     );
 
     public static final String USER_NAME_CLAIM = "username";

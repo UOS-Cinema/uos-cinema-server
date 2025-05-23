@@ -23,7 +23,7 @@ import java.util.Optional;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class AuthService implements
+public class AdminService implements
         SignupAdminUsecase,
         LoginAdminUsecase,
         UpdateAdminUsecase,

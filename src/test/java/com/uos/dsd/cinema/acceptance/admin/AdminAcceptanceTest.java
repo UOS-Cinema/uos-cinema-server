@@ -12,7 +12,10 @@ import com.uos.dsd.cinema.adaptor.in.web.admin.response.AdminDeleteResponse;
 import com.uos.dsd.cinema.adaptor.in.web.admin.response.AdminLoginResponse;
 import com.uos.dsd.cinema.adaptor.in.web.admin.response.AdminSignupResponse;
 import com.uos.dsd.cinema.adaptor.in.web.admin.response.AdminUpdateResponse;
+import com.uos.dsd.cinema.common.exception.code.CommonResultCode;
 import com.uos.dsd.cinema.common.response.ApiResponse;
+import com.uos.dsd.cinema.domain.exception.IllegalPasswordException;
+import com.uos.dsd.cinema.domain.exception.IllegalUsernameException;
 import com.uos.dsd.cinema.utils.AuthHeaderProvider;
 
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -114,10 +117,10 @@ public class AdminAcceptanceTest extends AcceptanceTest {
         /* Then */
         // status code: 400
         assertEquals(400, response.statusCode());
-        // code: COM001
-        assertEquals("COM001", apiResponse.code());
-        // message: Invalid name format
-        assertEquals("아이디는 6자 이상 20자 이하이며, 영문자와 숫자만 포함해야 합니다.", apiResponse.message());
+        // code: CommonResultCode.BAD_REQUEST
+        assertEquals(CommonResultCode.BAD_REQUEST.getCode(), apiResponse.code());
+        // message: IllegalUsernameException
+        assertEquals(IllegalUsernameException.MESSAGE, apiResponse.message());
     }
 
     @ParameterizedTest
@@ -141,10 +144,10 @@ public class AdminAcceptanceTest extends AcceptanceTest {
         /* Then */
         // status code: 400
         assertEquals(400, response.statusCode());
-        // code: COM001
-        assertEquals("COM001", apiResponse.code());
-        // message: Invalid password format
-        assertEquals("비밀번호는 8자 이상 20자 이하이며, 영문자, 숫자, 특수문자를 포함해야 합니다.", apiResponse.message());
+        // code: CommonResultCode.BAD_REQUEST
+        assertEquals(CommonResultCode.BAD_REQUEST.getCode(), apiResponse.code());
+        // message: IllegalPasswordException
+        assertEquals(IllegalPasswordException.MESSAGE, apiResponse.message());
     }
 
     @Test
@@ -284,10 +287,10 @@ public class AdminAcceptanceTest extends AcceptanceTest {
         /* Then */
         // status code: 400
         assertEquals(400, response.statusCode());
-        // code: COM001
-        assertEquals("COM001", apiResponse.code());
-        // message: Invalid password format
-        assertEquals("비밀번호는 8자 이상 20자 이하이며, 영문자, 숫자, 특수문자를 포함해야 합니다.", apiResponse.message());
+        // code: CommonResultCode.BAD_REQUEST
+        assertEquals(CommonResultCode.BAD_REQUEST.getCode(), apiResponse.code());
+        // message: IllegalPasswordException
+        assertEquals(IllegalPasswordException.MESSAGE, apiResponse.message());
     }
 
     @Test

@@ -18,6 +18,7 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
         return http
             .csrf(AbstractHttpConfigurer::disable)
             .formLogin(AbstractHttpConfigurer::disable)
@@ -26,8 +27,8 @@ public class SecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
             .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                .requestMatchers(SecurityConstants.OPEN_ACCESS_URLS.toArray(String[]::new))
-                .permitAll()
+                .requestMatchers(SecurityConstants.OPEN_ACCESS_URLS.toArray(String[]::new)).permitAll()
+                .requestMatchers(SecurityConstants.ADMIN_URLS.toArray(String[]::new)).permitAll() // TODO: admin 권한 확인으로 변경 필요
             .anyRequest()
                 .authenticated())
 
@@ -36,6 +37,7 @@ public class SecurityConfig {
 
     @Bean
     WebSecurityCustomizer webSecurityCustomizer() {
+        
         return web -> web.ignoring()
             .requestMatchers(SecurityConstants.BYPASS_URLS.toArray(String[]::new));
     }

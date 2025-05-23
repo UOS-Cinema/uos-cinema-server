@@ -47,16 +47,16 @@ public class AuthController {
     @PutMapping("/admin/update")
     public ApiResponse<AdminUpdateResponse> update(@RequestBody AdminUpdateRequest request) {
 
-        log.info("update request: {}", request.adminId());
-        updateAdminUsecase.update(new UpdateAdminCommand(request.adminId(), request.currentPassword(), request.newPassword()));
-        return ApiResponse.success(new AdminUpdateResponse(request.adminId()));
+        log.info("update request: {}", request.id());
+        updateAdminUsecase.update(new UpdateAdminCommand(request.id(), request.currentPassword(), request.newPassword()));
+        return ApiResponse.success(new AdminUpdateResponse(request.id()));
     }
 
     @DeleteMapping("/admin/delete")
     public ApiResponse<AdminDeleteResponse> delete(@RequestBody AdminDeleteRequest request) {
 
-        log.info("delete request: {}", request.adminId());
-        deleteAdminUsecase.delete(new DeleteAdminCommand(request.adminId(), request.password()));
-        return ApiResponse.success(new AdminDeleteResponse(request.adminId()));
+        log.info("delete request: {}", request.id());
+        deleteAdminUsecase.delete(new DeleteAdminCommand(request.id(), request.password()));
+        return ApiResponse.success(new AdminDeleteResponse(request.id()));
     }
 }

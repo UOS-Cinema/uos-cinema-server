@@ -51,7 +51,7 @@ public class AuthService implements
 
     @Override
     public void update(UpdateAdminCommand command) {
-        Optional<Admin> admin = adminRepository.findByIdAndDeletedAtIsNull(command.adminId());
+        Optional<Admin> admin = adminRepository.findByIdAndDeletedAtIsNull(command.id());
         if (admin.isEmpty() || !admin.get().isPasswordMatched(command.currentPassword())) {
             throw new UnauthorizedException(CommonResultCode.UNAUTHORIZED, "Invalid admin current password");
         }
@@ -60,7 +60,7 @@ public class AuthService implements
 
     @Override
     public void delete(DeleteAdminCommand command) {
-        Optional<Admin> admin = adminRepository.findByIdAndDeletedAtIsNull(command.adminId());
+        Optional<Admin> admin = adminRepository.findByIdAndDeletedAtIsNull(command.id());
         if (admin.isEmpty() || !admin.get().isPasswordMatched(command.password())) {
             throw new UnauthorizedException(CommonResultCode.UNAUTHORIZED, "Invalid admin password");
         }

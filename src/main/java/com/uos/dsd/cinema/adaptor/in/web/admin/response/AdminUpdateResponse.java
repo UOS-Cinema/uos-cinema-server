@@ -1,3 +1,3 @@
 package com.uos.dsd.cinema.adaptor.in.web.admin.response;
 
-public record AdminUpdateResponse(Long adminId) { } 
+public record AdminUpdateResponse(Long id) { } 

@@ -18,6 +18,8 @@ import com.uos.dsd.cinema.domain.theater.enums.LayoutElement;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import lombok.RequiredArgsConstructor;
@@ -30,8 +32,11 @@ import java.util.List;
 @DisplayNameGeneration(ReplaceUnderscores.class)
 public class TheaterServiceTest {
 
-    private final TheaterService theaterService;
-    private final TheaterRepository theaterRepository;
+    @InjectMocks
+    private TheaterService theaterService;
+
+    @Mock
+    private TheaterRepository theaterRepository;
 
     private final Long theaterNumber = TheaterFixture.getTheaterNumber();
     private final String theaterName = TheaterFixture.getTheaterName();

@@ -3,6 +3,8 @@ package com.uos.dsd.cinema.integration;
 import com.uos.dsd.cinema.utils.DBInitializer;
 import com.uos.dsd.cinema.utils.DBInitializeStrategy;
 import com.uos.dsd.cinema.utils.H2DBInitializeStrategy;
+import com.uos.dsd.cinema.application.registry.ScreenTypeRegistry;
+import com.uos.dsd.cinema.application.port.out.screen_type.ScreenTypeRepository;
 
 import org.springframework.context.annotation.Import;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.ApplicationEventPublisher;
 
 import org.junit.jupiter.api.AfterEach;
 
@@ -31,6 +34,15 @@ public abstract class IntegrationTest {
 
     @Autowired
     protected DBInitializer dbInitializer;
+
+    @Autowired
+    protected ApplicationEventPublisher eventPublisher;
+
+    @Autowired
+    protected ScreenTypeRegistry screenTypeRegistry;
+
+    @Autowired
+    protected ScreenTypeRepository screenTypeRepository;
 
     protected Logger log = LoggerFactory.getLogger(IntegrationTest.class);
 

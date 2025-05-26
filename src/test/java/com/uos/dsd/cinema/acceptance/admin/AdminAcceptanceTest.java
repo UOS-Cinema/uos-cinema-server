@@ -253,7 +253,7 @@ public class AdminAcceptanceTest extends AcceptanceTest {
         assertEquals(Role.ADMIN, accessTokenClaim.role());
         assertEquals(TokenType.ACCESS, accessTokenClaim.tokenType());
         // check cookie refreshToken
-        String refreshToken = loginResponse.getCookie("refreshToken");
+        String refreshToken = loginResponse.getCookie(SecurityConstants.REISSUE_COOKIE_NAME);
         JwtClaim refreshTokenClaim = jwtUtils.getJwtClaim(refreshToken);
         assertEquals(id, refreshTokenClaim.id());
         assertEquals(Role.ADMIN, refreshTokenClaim.role());

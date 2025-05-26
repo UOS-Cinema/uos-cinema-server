@@ -7,8 +7,8 @@ import com.uos.dsd.cinema.common.exception.code.CommonResultCode;
 import com.uos.dsd.cinema.common.exception.http.BadRequestException;
 import com.uos.dsd.cinema.common.exception.http.UnauthorizedException;
 import com.uos.dsd.cinema.common.exception.http.ForbiddenException;
-import com.uos.dsd.cinema.domain.admin.model.Admin;
 import com.uos.dsd.cinema.core.security.CustomUserDetails;
+import com.uos.dsd.cinema.domain.admin.Admin;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.context.SecurityContextHolder;

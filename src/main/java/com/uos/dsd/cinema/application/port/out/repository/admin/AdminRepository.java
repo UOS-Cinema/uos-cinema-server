@@ -2,7 +2,7 @@ package com.uos.dsd.cinema.application.port.out.repository.admin;
 
 import java.util.Optional;
 
-import com.uos.dsd.cinema.domain.admin.model.Admin;
+import com.uos.dsd.cinema.domain.admin.Admin;
 
 public interface AdminRepository {
 

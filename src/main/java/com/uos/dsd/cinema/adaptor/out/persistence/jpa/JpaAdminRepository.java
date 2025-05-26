@@ -1,7 +1,7 @@
 package com.uos.dsd.cinema.adaptor.out.persistence.jpa;
 
 import com.uos.dsd.cinema.application.port.out.repository.admin.AdminRepository;
-import com.uos.dsd.cinema.domain.admin.model.Admin;
+import com.uos.dsd.cinema.domain.admin.Admin;
 
 import java.util.Optional;
 

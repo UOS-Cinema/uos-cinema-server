@@ -10,8 +10,6 @@ import com.uos.dsd.cinema.common.utils.CookieUtil;
 import com.uos.dsd.cinema.core.jwt.JwtClaim;
 import com.uos.dsd.cinema.core.jwt.JwtUtils;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -35,7 +33,7 @@ public class AuthController {
         String refreshToken = extractRefreshTokenFromCookies(request);
         JwtClaim jwtClaim = jwtUtils.getJwtClaim(refreshToken);
         Long id = jwtClaim.id();
-        CookieUtil.deleteCookie(response, REISSUE_COOKIE_NAME, "/");
+        CookieUtil.deleteCookie(response, REISSUE_COOKIE_NAME, "/refresh-token");
 
         log.info("logout success, id: {}", id);       
         return ApiResponse.success(new LogoutResponse(id));
@@ -55,7 +53,7 @@ public class AuthController {
 
             String newAccessToken = jwtUtils.generateAccessToken(id, role);
             String newRefreshToken = jwtUtils.generateRefreshToken(id, role);
-            CookieUtil.addHttpOnlyCookie(response, REISSUE_COOKIE_NAME, newRefreshToken, jwtUtils.getRefreshTokenExpirationMs(), "/");
+            CookieUtil.addHttpOnlyCookie(response, REISSUE_COOKIE_NAME, newRefreshToken, jwtUtils.getRefreshTokenExpirationMs(), "/refresh-token");
 
             log.info("refresh token success, id: {}, role: {}", id, role);
             return ApiResponse.success(new RefreshTokenResponse(newAccessToken));

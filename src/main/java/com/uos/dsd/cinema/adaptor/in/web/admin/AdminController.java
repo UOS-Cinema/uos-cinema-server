@@ -7,6 +7,7 @@ import com.uos.dsd.cinema.application.port.in.admin.usecase.*;
 import com.uos.dsd.cinema.common.response.ApiResponse;
 import com.uos.dsd.cinema.common.utils.CookieUtil;
 import com.uos.dsd.cinema.core.jwt.JwtUtils;
+import com.uos.dsd.cinema.core.security.SecurityConstants;
 import com.uos.dsd.cinema.core.security.SecurityConstants.Role;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -47,7 +48,7 @@ public class AdminController {
         
         String accessToken = jwtUtils.generateAccessToken(id, Role.ADMIN);
         String refreshToken = jwtUtils.generateRefreshToken(id, Role.ADMIN);
-        CookieUtil.addHttpOnlyCookie(response, "refreshToken", refreshToken, jwtUtils.getRefreshTokenExpirationMs(), "/refresh-token");
+        CookieUtil.addHttpOnlyCookie(response, SecurityConstants.REISSUE_COOKIE_NAME, refreshToken, jwtUtils.getRefreshTokenExpirationMs(), "/refresh-token");
 
         log.info("login success, id: {}", id);
         return ApiResponse.success(new AdminLoginResponse(accessToken));

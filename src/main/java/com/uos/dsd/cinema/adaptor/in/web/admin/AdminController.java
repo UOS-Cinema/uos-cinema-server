@@ -47,7 +47,7 @@ public class AdminController {
         
         String accessToken = jwtUtils.generateAccessToken(id, Role.ADMIN);
         String refreshToken = jwtUtils.generateRefreshToken(id, Role.ADMIN);
-        CookieUtil.addHttpOnlyCookie(response, "refreshToken", refreshToken, jwtUtils.getRefreshTokenExpirationMs(), "/");
+        CookieUtil.addHttpOnlyCookie(response, "refreshToken", refreshToken, jwtUtils.getRefreshTokenExpirationMs(), "/refresh-token");
 
         log.info("login success, id: {}", id);
         return ApiResponse.success(new AdminLoginResponse(accessToken));

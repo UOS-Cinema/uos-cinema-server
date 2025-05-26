@@ -5,6 +5,9 @@ import com.uos.dsd.cinema.adaptor.in.web.admin.response.*;
 import com.uos.dsd.cinema.application.port.in.admin.command.*;
 import com.uos.dsd.cinema.application.port.in.admin.usecase.*;
 import com.uos.dsd.cinema.common.response.ApiResponse;
+import com.uos.dsd.cinema.common.utils.CookieUtil;
+import com.uos.dsd.cinema.core.jwt.JwtUtils;
+import com.uos.dsd.cinema.core.security.SecurityConstants.Role;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,16 +18,20 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import jakarta.servlet.http.HttpServletResponse;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-public class AuthController {
-    
+public class AdminController {
+
     private final SignupAdminUsecase signupAdminUsecase;
     private final LoginAdminUsecase loginAdminUsecase;
     private final UpdateAdminUsecase updateAdminUsecase;
     private final DeleteAdminUsecase deleteAdminUsecase;
-    
+
+    private final JwtUtils jwtUtils;
+
     @PostMapping("/admin/signup")
     public ApiResponse<AdminSignupResponse> signup(@RequestBody AdminSignupRequest request) {
 
@@ -34,14 +41,16 @@ public class AuthController {
     }
 
     @PostMapping("/admin/login")
-    public ApiResponse<AdminLoginResponse> login(@RequestBody AdminLoginRequest request) {
+    public ApiResponse<AdminLoginResponse> login(@RequestBody AdminLoginRequest request, HttpServletResponse response) {
 
-        log.info("login request: {}", request.username());
-        Long adminId = loginAdminUsecase.login(new LoginAdminCommand(request.username(), request.password()));
+        Long id = loginAdminUsecase.login(new LoginAdminCommand(request.username(), request.password()));
+        
+        String accessToken = jwtUtils.generateAccessToken(id, Role.ADMIN);
+        String refreshToken = jwtUtils.generateRefreshToken(id, Role.ADMIN);
+        CookieUtil.addHttpOnlyCookie(response, "refreshToken", refreshToken, jwtUtils.getRefreshTokenExpirationMs(), "/refresh-token");
 
-        // TODO: Generate JWT token and return it in the response
-
-        return ApiResponse.success(new AdminLoginResponse(adminId.toString()));
+        log.info("login success, id: {}", id);
+        return ApiResponse.success(new AdminLoginResponse(accessToken));
     }
 
     @PutMapping("/admin/update")

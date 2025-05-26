@@ -11,11 +11,6 @@ public class AuthHeaderProvider {
                 SecurityConstants.AUTH_SCHEME_PREFIX + accessToken);
     }
 
-    public static Map<String, Object> createReissueHeader(String refreshToken) {
-        return Map.of(SecurityConstants.REISSUE_HEADER,
-                SecurityConstants.AUTH_SCHEME_PREFIX + refreshToken);
-    }
-
     public static Map<String, Object> createEmptyHeader() {
         return Map.of();
     }

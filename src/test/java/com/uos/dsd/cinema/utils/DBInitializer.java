@@ -71,7 +71,7 @@ public class DBInitializer {
 
         try {
             ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
-            Resource[] resources = resolver.getResources("classpath:db/*.sql");
+            Resource[] resources = resolver.getResources("file:src/test/resources/db/*.sql");
 
             dataScripts.addAll(Arrays.asList(resources));
 

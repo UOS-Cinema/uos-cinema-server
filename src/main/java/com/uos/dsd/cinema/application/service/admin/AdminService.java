@@ -6,9 +6,12 @@ import com.uos.dsd.cinema.application.port.out.repository.admin.AdminRepository;
 import com.uos.dsd.cinema.common.exception.code.CommonResultCode;
 import com.uos.dsd.cinema.common.exception.http.BadRequestException;
 import com.uos.dsd.cinema.common.exception.http.UnauthorizedException;
+import com.uos.dsd.cinema.common.exception.http.ForbiddenException;
 import com.uos.dsd.cinema.domain.admin.model.Admin;
+import com.uos.dsd.cinema.core.security.CustomUserDetails;
 
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -20,7 +23,7 @@ import java.util.Optional;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class AuthService implements
+public class AdminService implements
         SignupAdminUsecase,
         LoginAdminUsecase,
         UpdateAdminUsecase,
@@ -51,6 +54,13 @@ public class AuthService implements
 
     @Override
     public void update(UpdateAdminCommand command) {
+
+        CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long requesterId = userDetails.getId();
+        if (!requesterId.equals(command.id())) {
+            throw new ForbiddenException(CommonResultCode.FORBIDDEN, "You can only update your own account");
+        }
+        
         Optional<Admin> admin = adminRepository.findByIdAndDeletedAtIsNull(command.id());
         if (admin.isEmpty() || !admin.get().isPasswordMatched(command.currentPassword())) {
             throw new UnauthorizedException(CommonResultCode.UNAUTHORIZED, "Invalid admin current password");
@@ -60,6 +70,13 @@ public class AuthService implements
 
     @Override
     public void delete(DeleteAdminCommand command) {
+
+        CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long requesterId = userDetails.getId();
+        if (!requesterId.equals(command.id())) {
+            throw new ForbiddenException(CommonResultCode.FORBIDDEN, "You can only delete your own account");
+        }
+        
         Optional<Admin> admin = adminRepository.findByIdAndDeletedAtIsNull(command.id());
         if (admin.isEmpty() || !admin.get().isPasswordMatched(command.password())) {
             throw new UnauthorizedException(CommonResultCode.UNAUTHORIZED, "Invalid admin id or password");

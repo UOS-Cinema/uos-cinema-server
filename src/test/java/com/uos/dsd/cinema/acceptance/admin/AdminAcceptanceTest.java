@@ -36,16 +36,16 @@ import java.util.stream.Stream;
 @DisplayNameGeneration(ReplaceUnderscores.class)
 public class AdminAcceptanceTest extends AcceptanceTest {
 
-    private static final Long EXIST_ADMIN_ID = 1L;
+    private static final Long EXIST_ADMIN_ID = -1L;
     private static final String EXIST_ADMIN_USERNAME = "administrator";
     private static final String EXIST_ADMIN_PASSWORD = "password123!";
     private static final String WRONG_ADMIN_PASSWORD = "wrongpw123!";
 
-    private static final Long DELETED_ADMIN_ID = 2L;
+    private static final Long DELETED_ADMIN_ID = -2L;
     private static final String DELETED_ADMIN_USERNAME = "deletedAdministrator";
     private static final String DELETED_ADMIN_PASSWORD = "password123!";
 
-    private static final Long NOT_EXIST_ADMIN_ID = 999L;
+    private static final Long NOT_EXIST_ADMIN_ID = 0L;
     private static final String NOT_EXIST_ADMIN_USERNAME = "notexistAdmin";
     private static final String NOT_EXIST_ADMIN_PASSWORD = "notexistpw123!";
 

@@ -59,6 +59,7 @@ public class OracleDBInitializeStrategy implements DBInitializeStrategy {
     @Override
     public void truncateTables(List<String> tableNames) {
 
+        // TODO: 테이블 초기화 시 sequence 초기화 필요
         log.info("[OracleDBInitializeStrategy] truncateTables");
         try (Connection connection = dataSource.getConnection()) {
             for (String tableName : tableNames) {

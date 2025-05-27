@@ -35,7 +35,7 @@ public abstract class Customer {
     private UserType userType;
 
     @CreatedDate
-    @Column(updatable = false, nullable = false)
+    @Column(updatable = false)
     protected LocalDateTime createdAt;
     
     protected Customer(UserType userType) {

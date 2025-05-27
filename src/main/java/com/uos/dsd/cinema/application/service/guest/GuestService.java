@@ -20,7 +20,7 @@ public class GuestService implements LoginGuestUsecase {
     
     @Transactional
     @Override
-    public Guest login(LoginGuestCommand command) {
+    public Long login(LoginGuestCommand command) {
 
         // Guest 존재 시 반환
         List<Guest> guests = guestRepository.findAllByNameAndPhoneAndBirthDate(
@@ -33,7 +33,7 @@ public class GuestService implements LoginGuestUsecase {
             .findFirst()
             .orElse(null);
         if (foundGuest != null) {
-            return foundGuest;
+            return foundGuest.getId();
         }
 
         // Guest 미존재 시, 새로 생성 후 반환
@@ -43,7 +43,7 @@ public class GuestService implements LoginGuestUsecase {
             command.birthDate(),
             command.password()
         );
-        return guestRepository.save(newGuest);
+        return guestRepository.save(newGuest).getId();
     }
     
     @Transactional

@@ -54,12 +54,6 @@ public class AdminService implements
 
     @Override
     public void update(UpdateAdminCommand command) {
-
-        CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Long requesterId = userDetails.getId();
-        if (!requesterId.equals(command.id())) {
-            throw new ForbiddenException(CommonResultCode.FORBIDDEN, "You can only update your own account");
-        }
         
         Optional<Admin> admin = adminRepository.findByIdAndDeletedAtIsNull(command.id());
         if (admin.isEmpty() || !admin.get().isPasswordMatched(command.currentPassword())) {
@@ -70,12 +64,6 @@ public class AdminService implements
 
     @Override
     public void delete(DeleteAdminCommand command) {
-
-        CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Long requesterId = userDetails.getId();
-        if (!requesterId.equals(command.id())) {
-            throw new ForbiddenException(CommonResultCode.FORBIDDEN, "You can only delete your own account");
-        }
         
         Optional<Admin> admin = adminRepository.findByIdAndDeletedAtIsNull(command.id());
         if (admin.isEmpty() || !admin.get().isPasswordMatched(command.password())) {

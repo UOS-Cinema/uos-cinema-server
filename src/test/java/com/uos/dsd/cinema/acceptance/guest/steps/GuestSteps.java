@@ -12,6 +12,7 @@ import java.util.Map;
 public class GuestSteps {
 
     private static final String GUEST_LOGIN_URL = "/guests/login";
+    private static final String GUEST_GET_INFO_URL = "/guests/{id}";
 
     public static Response sendLoginGuest(
             Map<String, Object> headers,
@@ -23,6 +24,19 @@ public class GuestSteps {
                 .body(request)
             .when()
                 .post(GUEST_LOGIN_URL)
+            .then().log().all()
+                .extract()
+                .response();
+    }
+
+    public static Response sendGetGuestInfo(
+            Map<String, Object> headers,
+            Long id) {
+
+        return given().log().all()
+                .headers(headers)
+                .when()
+                .get(GUEST_GET_INFO_URL, id)
             .then().log().all()
                 .extract()
                 .response();

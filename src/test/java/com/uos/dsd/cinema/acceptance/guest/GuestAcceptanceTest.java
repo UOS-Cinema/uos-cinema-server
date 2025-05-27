@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import com.uos.dsd.cinema.acceptance.AcceptanceTest;
 import com.uos.dsd.cinema.acceptance.guest.steps.GuestSteps;
 import com.uos.dsd.cinema.adaptor.in.web.guest.request.GuestLoginRequest;
+import com.uos.dsd.cinema.adaptor.in.web.guest.response.GetGuestInfoResponse;
 import com.uos.dsd.cinema.adaptor.in.web.guest.response.GuestLoginResponse;
 import com.uos.dsd.cinema.common.exception.code.CommonResultCode;
 import com.uos.dsd.cinema.common.response.ApiResponse;
@@ -239,6 +240,72 @@ public class GuestAcceptanceTest extends AcceptanceTest {
         checkBadRequest(response.statusCode(), apiResponse.code());
         assertEquals(IllegalPasswordException.MESSAGE, apiResponse.message());
     }
+
+    @Test
+    public void getGuestInfo() {
+
+        /* Given */
+        Long id = EXIST_GUEST_ID;
+        String name = EXIST_GUEST_NAME;
+        String phone = EXIST_GUEST_PHONE;
+        LocalDate birthDate = EXIST_GUEST_BIRTH_DATE;
+
+        /* When */
+        String accessToken = jwtUtils.generateAccessToken(id, Role.GUEST);
+        Map<String, Object> headers = AuthHeaderProvider.createAuthorizationHeader(accessToken);
+
+        Response response = GuestSteps.sendGetGuestInfo(headers, id);
+        log.info("response: {}", response.asString());
+        ApiResponse<GetGuestInfoResponse> apiResponse = response.as(new TypeRef<ApiResponse<GetGuestInfoResponse>>() {});
+        log.info("ApiResponse: {}", apiResponse);
+
+        /* Then */
+        checkSuccess(response.statusCode(), apiResponse.code());
+        assertEquals(name, apiResponse.data().name());
+        assertEquals(phone, apiResponse.data().phone());
+        assertEquals(birthDate, apiResponse.data().birthDate());
+    }
+
+    @Test
+    public void getGuestInfoWithOtherGuest() {
+
+        /* Given */
+        Long id = EXIST_GUEST_ID;
+
+        /* When */
+        String accessToken = jwtUtils.generateAccessToken(id+1, Role.GUEST);
+        Map<String, Object> headers = AuthHeaderProvider.createAuthorizationHeader(accessToken);
+
+        Response response = GuestSteps.sendGetGuestInfo(headers, id);
+        log.info("response: {}", response.asString());
+        ApiResponse<GetGuestInfoResponse> apiResponse = response.as(new TypeRef<ApiResponse<GetGuestInfoResponse>>() {});
+        log.info("ApiResponse: {}", apiResponse);
+
+        /* Then */
+        checkForbidden(response.statusCode(), apiResponse.code());
+        assertEquals("You can only get your own info", apiResponse.message());
+    }
+
+    @Test
+    public void getGuestInfoWithInvalidToken() {
+
+        /* Given */
+        Long id = EXIST_GUEST_ID;
+
+        /* When */
+        String accessToken = "invalidToken";
+        Map<String, Object> headers = AuthHeaderProvider.createAuthorizationHeader(accessToken);
+
+        Response response = GuestSteps.sendGetGuestInfo(headers, id);
+        log.info("response: {}", response.asString());
+        ApiResponse<GetGuestInfoResponse> apiResponse = response.as(new TypeRef<ApiResponse<GetGuestInfoResponse>>() {});
+        log.info("ApiResponse: {}", apiResponse);
+
+        /* Then */
+        checkUnauthorized(response.statusCode(), apiResponse.code());
+        assertEquals("Full authentication is required to access this resource", apiResponse.message());
+    }
+
 
     void checkSuccess(int statusCode, String code) {
         assertEquals(200, statusCode);

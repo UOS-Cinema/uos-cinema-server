@@ -2,6 +2,7 @@ package com.uos.dsd.cinema.application.port.out.repository.guest;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import com.uos.dsd.cinema.domain.guest.Guest;
 
@@ -12,6 +13,8 @@ public interface GuestRepository {
         String phone,
         LocalDate birthDate
     );
+
+    Optional<Guest> findById(Long id);
 
     Guest save(Guest guest);
     

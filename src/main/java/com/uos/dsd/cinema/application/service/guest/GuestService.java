@@ -1,6 +1,9 @@
 package com.uos.dsd.cinema.application.service.guest;
 
+import com.uos.dsd.cinema.application.port.in.guest.command.GetGuestInfoCommand;
 import com.uos.dsd.cinema.application.port.in.guest.command.LoginGuestCommand;
+import com.uos.dsd.cinema.application.port.in.guest.response.GuestInfo;
+import com.uos.dsd.cinema.application.port.in.guest.usecase.GetGuestInfoUsecase;
 import com.uos.dsd.cinema.application.port.in.guest.usecase.LoginGuestUsecase;
 import com.uos.dsd.cinema.application.port.out.repository.guest.GuestRepository;
 import com.uos.dsd.cinema.domain.guest.Guest;
@@ -14,7 +17,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class GuestService implements LoginGuestUsecase {
+public class GuestService implements LoginGuestUsecase, GetGuestInfoUsecase {
     
     private final GuestRepository guestRepository;
     
@@ -44,6 +47,13 @@ public class GuestService implements LoginGuestUsecase {
             command.password()
         );
         return guestRepository.save(newGuest).getId();
+    }
+    
+    @Transactional(readOnly = true)
+    @Override
+    public GuestInfo getGuestInfo(GetGuestInfoCommand command) {
+        return GuestInfo.from(guestRepository.findById(command.guestId())
+            .orElseThrow(() -> new IllegalArgumentException("Guest not found with id: " + command.guestId())));
     }
     
     @Transactional

@@ -1,15 +1,25 @@
 package com.uos.dsd.cinema.adaptor.in.web.guest;
 
 import com.uos.dsd.cinema.adaptor.in.web.guest.request.GuestLoginRequest;
+import com.uos.dsd.cinema.adaptor.in.web.guest.response.GetGuestInfoResponse;
 import com.uos.dsd.cinema.adaptor.in.web.guest.response.GuestLoginResponse;
+import com.uos.dsd.cinema.application.port.in.guest.command.GetGuestInfoCommand;
 import com.uos.dsd.cinema.application.port.in.guest.command.LoginGuestCommand;
+import com.uos.dsd.cinema.application.port.in.guest.response.GuestInfo;
+import com.uos.dsd.cinema.application.port.in.guest.usecase.GetGuestInfoUsecase;
 import com.uos.dsd.cinema.application.port.in.guest.usecase.LoginGuestUsecase;
+import com.uos.dsd.cinema.common.exception.code.CommonResultCode;
+import com.uos.dsd.cinema.common.exception.http.ForbiddenException;
 import com.uos.dsd.cinema.common.response.ApiResponse;
 import com.uos.dsd.cinema.common.utils.CookieUtil;
 import com.uos.dsd.cinema.core.jwt.JwtUtils;
+import com.uos.dsd.cinema.core.security.CustomUserDetails;
 import com.uos.dsd.cinema.core.security.SecurityConstants;
 import com.uos.dsd.cinema.core.security.SecurityConstants.Role;
 
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +36,7 @@ import lombok.extern.slf4j.Slf4j;
 public class GuestController {
 
     private final LoginGuestUsecase loginGuestUsecase;
+    private final GetGuestInfoUsecase getGuestInfoUsecase;
     private final JwtUtils jwtUtils;
 
     @PostMapping("/login")
@@ -45,5 +56,26 @@ public class GuestController {
 
         log.info("login success, id: {}", id);
         return ApiResponse.success(new GuestLoginResponse(accessToken));
+    }
+
+    @GetMapping("/{id}")
+    public ApiResponse<GetGuestInfoResponse> getGuestInfo(@PathVariable("id") Long id) {
+
+        CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long requesterId = userDetails.getId();
+        if (!requesterId.equals(id)) {
+            throw new ForbiddenException(CommonResultCode.FORBIDDEN, "You can only get your own info");
+        }
+
+        GuestInfo guest = getGuestInfoUsecase.getGuestInfo(new GetGuestInfoCommand(id));
+
+        GetGuestInfoResponse response = new GetGuestInfoResponse(
+            guest.name(),
+            guest.phone(),
+            guest.birthDate()
+        );
+
+        log.info("get guest info success, id: {}", id);
+        return ApiResponse.success(response);
     }
 }

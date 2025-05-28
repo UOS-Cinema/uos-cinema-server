@@ -15,6 +15,7 @@ import com.uos.dsd.cinema.core.security.SecurityConstants.Role;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,10 +31,10 @@ import jakarta.servlet.http.HttpServletResponse;
 @RequiredArgsConstructor
 public class AdminController {
 
-    private final SignupAdminUsecase signupAdminUsecase;
-    private final LoginAdminUsecase loginAdminUsecase;
-    private final UpdateAdminUsecase updateAdminUsecase;
-    private final DeleteAdminUsecase deleteAdminUsecase;
+    private final AdminSignupUsecase signupAdminUsecase;
+    private final AdminLoginUsecase loginAdminUsecase;
+    private final AdminUpdateUsecase updateAdminUsecase;
+    private final AdminDeleteUsecase deleteAdminUsecase;
 
     private final JwtUtils jwtUtils;
 
@@ -41,14 +42,14 @@ public class AdminController {
     public ApiResponse<AdminSignupResponse> signup(@RequestBody AdminSignupRequest request) {
 
         log.info("signup request: {}", request.username());
-        signupAdminUsecase.signup(new SignupAdminCommand(request.username(), request.password()));
+        signupAdminUsecase.signup(new AdminSignupCommand(request.username(), request.password()));
         return ApiResponse.success(new AdminSignupResponse(request.username()));
     }
 
     @PostMapping("/admin/login")
     public ApiResponse<AdminLoginResponse> login(@RequestBody AdminLoginRequest request, HttpServletResponse response) {
 
-        Long id = loginAdminUsecase.login(new LoginAdminCommand(request.username(), request.password()));
+        Long id = loginAdminUsecase.login(new AdminLoginCommand(request.username(), request.password()));
         
         String accessToken = jwtUtils.generateAccessToken(id, Role.ADMIN);
         String refreshToken = jwtUtils.generateRefreshToken(id, Role.ADMIN);
@@ -58,33 +59,33 @@ public class AdminController {
         return ApiResponse.success(new AdminLoginResponse(accessToken));
     }
 
-    @PutMapping("/admin/update")
-    public ApiResponse<AdminUpdateResponse> update(@RequestBody AdminUpdateRequest request) {
+    @PutMapping("/admin/{id}")
+    public ApiResponse<AdminUpdateResponse> update(@PathVariable("id") Long id, @RequestBody AdminUpdateRequest request) {
 
-        log.info("update request: {}", request.id());
+        log.info("update request: {}", id);
 
         CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long requesterId = userDetails.getId();
-        if (!requesterId.equals(request.id())) {
+        if (!requesterId.equals(id)) {
             throw new ForbiddenException(CommonResultCode.FORBIDDEN, "You can only update your own account");
         }
 
-        updateAdminUsecase.update(new UpdateAdminCommand(request.id(), request.currentPassword(), request.newPassword()));
-        return ApiResponse.success(new AdminUpdateResponse(request.id()));
+        updateAdminUsecase.update(new AdminUpdateCommand(id, request.currentPassword(), request.newPassword()));
+        return ApiResponse.success(new AdminUpdateResponse(id));
     }
 
-    @DeleteMapping("/admin/delete")
-    public ApiResponse<AdminDeleteResponse> delete(@RequestBody AdminDeleteRequest request) {
+    @DeleteMapping("/admin/{id}")
+    public ApiResponse<AdminDeleteResponse> delete(@PathVariable("id") Long id, @RequestBody AdminDeleteRequest request) {
 
-        log.info("delete request: {}", request.id());
+        log.info("delete request: {}", id);
 
         CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long requesterId = userDetails.getId();
-        if (!requesterId.equals(request.id())) {
+        if (!requesterId.equals(id)) {
             throw new ForbiddenException(CommonResultCode.FORBIDDEN, "You can only delete your own account");
         }
 
-        deleteAdminUsecase.delete(new DeleteAdminCommand(request.id(), request.password()));
-        return ApiResponse.success(new AdminDeleteResponse(request.id()));
+        deleteAdminUsecase.delete(new AdminDeleteCommand(id, request.password()));
+        return ApiResponse.success(new AdminDeleteResponse(id));
     }
 }

@@ -231,7 +231,7 @@ public class AdminAcceptanceTest extends AcceptanceTest {
         String adminAccessToken = jwtUtils.generateAccessToken(id, Role.ADMIN);
         Map<String, Object> headers = AuthHeaderProvider.createAuthorizationHeader(adminAccessToken);
 
-        Response response = AdminSteps.sendUpdateAdmin(headers, new AdminUpdateRequest(id, currentPassword, newPassword));
+        Response response = AdminSteps.sendUpdateAdmin(headers, id, new AdminUpdateRequest(currentPassword, newPassword));
         log.info("response: {}", response.asString());
         ApiResponse<AdminUpdateResponse> apiResponse = response.as(new TypeRef<ApiResponse<AdminUpdateResponse>>() {});
         log.info("ApiResponse: {}", apiResponse);
@@ -271,7 +271,7 @@ public class AdminAcceptanceTest extends AcceptanceTest {
         String adminAccessToken = "invalidToken";
         Map<String, Object> headers = AuthHeaderProvider.createAuthorizationHeader(adminAccessToken);
 
-        Response response = AdminSteps.sendUpdateAdmin(headers, new AdminUpdateRequest(id, currentPassword, newPassword));
+        Response response = AdminSteps.sendUpdateAdmin(headers, id, new AdminUpdateRequest(currentPassword, newPassword));
         log.info("response: {}", response.asString());
         ApiResponse<AdminUpdateResponse> apiResponse = response.as(new TypeRef<ApiResponse<AdminUpdateResponse>>() {});
         log.info("ApiResponse: {}", apiResponse);
@@ -293,7 +293,7 @@ public class AdminAcceptanceTest extends AcceptanceTest {
         String adminAccessToken = jwtUtils.generateAccessToken(requesterId, Role.ADMIN);
         Map<String, Object> headers = AuthHeaderProvider.createAuthorizationHeader(adminAccessToken);
 
-        Response response = AdminSteps.sendUpdateAdmin(headers, new AdminUpdateRequest(id, currentPassword, newPassword));
+        Response response = AdminSteps.sendUpdateAdmin(headers, id, new AdminUpdateRequest(currentPassword, newPassword));
         log.info("response: {}", response.asString());
         ApiResponse<AdminUpdateResponse> apiResponse = response.as(new TypeRef<ApiResponse<AdminUpdateResponse>>() {});
 
@@ -324,7 +324,7 @@ public class AdminAcceptanceTest extends AcceptanceTest {
         String adminAccessToken = jwtUtils.generateAccessToken(id, Role.ADMIN);
         Map<String, Object> headers = AuthHeaderProvider.createAuthorizationHeader(adminAccessToken);
 
-        Response response = AdminSteps.sendUpdateAdmin(headers, new AdminUpdateRequest(id, currentPassword, newPassword));
+        Response response = AdminSteps.sendUpdateAdmin(headers, id, new AdminUpdateRequest(currentPassword, newPassword));
         log.info("response: {}", response.asString());
         ApiResponse<AdminUpdateResponse> apiResponse = response.as(new TypeRef<ApiResponse<AdminUpdateResponse>>() {});
         log.info("ApiResponse: {}", apiResponse);
@@ -348,7 +348,7 @@ public class AdminAcceptanceTest extends AcceptanceTest {
 
         log.info("adminid: {}, currentPassword: {}, newPassword: {}", id, currentPassword, newPassword);
 
-        Response response = AdminSteps.sendUpdateAdmin(headers, new AdminUpdateRequest(id, currentPassword, newPassword));
+        Response response = AdminSteps.sendUpdateAdmin(headers, id, new AdminUpdateRequest(currentPassword, newPassword));
         log.info("response: {}", response.asString());
         ApiResponse<AdminUpdateResponse> apiResponse = response.as(new TypeRef<ApiResponse<AdminUpdateResponse>>() {});
         log.info("ApiResponse: {}", apiResponse);
@@ -369,7 +369,7 @@ public class AdminAcceptanceTest extends AcceptanceTest {
         String adminAccessToken = jwtUtils.generateAccessToken(id, Role.ADMIN);
         Map<String, Object> headers = AuthHeaderProvider.createAuthorizationHeader(adminAccessToken);
 
-        Response response = AdminSteps.sendDeleteAdmin(headers, new AdminDeleteRequest(id, password));
+        Response response = AdminSteps.sendDeleteAdmin(headers, id, new AdminDeleteRequest(password));
         log.info("response: {}", response.asString());
         ApiResponse<AdminDeleteResponse> apiResponse = response.as(new TypeRef<ApiResponse<AdminDeleteResponse>>() {});
         log.info("ApiResponse: {}", apiResponse);
@@ -389,7 +389,7 @@ public class AdminAcceptanceTest extends AcceptanceTest {
         /* Update Test -> fail */
         String adminAccessTokenForUpdate = jwtUtils.generateAccessToken(id, Role.ADMIN);
         Map<String, Object> updateHeaders = AuthHeaderProvider.createAuthorizationHeader(adminAccessTokenForUpdate);
-        Response updateResponse = AdminSteps.sendUpdateAdmin(updateHeaders, new AdminUpdateRequest(id, password, NEW_ADMIN_PASSWORD));
+        Response updateResponse = AdminSteps.sendUpdateAdmin(updateHeaders, id, new AdminUpdateRequest(password, NEW_ADMIN_PASSWORD));
         ApiResponse<AdminUpdateResponse> updateApiResponse = updateResponse.as(new TypeRef<ApiResponse<AdminUpdateResponse>>() {});
 
         checkUnauthorized(updateResponse.statusCode(), updateApiResponse.code());
@@ -398,7 +398,7 @@ public class AdminAcceptanceTest extends AcceptanceTest {
         /* Delete Test -> fail */
         String adminAccessTokenForDelete = jwtUtils.generateAccessToken(id, Role.ADMIN);
         Map<String, Object> deleteHeaders = AuthHeaderProvider.createAuthorizationHeader(adminAccessTokenForDelete);
-        Response deleteResponse = AdminSteps.sendDeleteAdmin(deleteHeaders, new AdminDeleteRequest(id, password));
+        Response deleteResponse = AdminSteps.sendDeleteAdmin(deleteHeaders, id, new AdminDeleteRequest(password));
         ApiResponse<AdminDeleteResponse> deleteApiResponse = deleteResponse.as(new TypeRef<ApiResponse<AdminDeleteResponse>>() {});
         
         checkUnauthorized(deleteResponse.statusCode(), deleteApiResponse.code());
@@ -424,7 +424,7 @@ public class AdminAcceptanceTest extends AcceptanceTest {
         String adminAccessToken = "invalidToken";
         Map<String, Object> headers = AuthHeaderProvider.createAuthorizationHeader(adminAccessToken);
 
-        Response response = AdminSteps.sendDeleteAdmin(headers, new AdminDeleteRequest(id, password));
+        Response response = AdminSteps.sendDeleteAdmin(headers, id, new AdminDeleteRequest(password));
         log.info("response: {}", response.asString());
         ApiResponse<AdminDeleteResponse> apiResponse = response.as(new TypeRef<ApiResponse<AdminDeleteResponse>>() {});
 
@@ -444,7 +444,7 @@ public class AdminAcceptanceTest extends AcceptanceTest {
         String adminAccessToken = jwtUtils.generateAccessToken(requesterId, Role.ADMIN);
         Map<String, Object> headers = AuthHeaderProvider.createAuthorizationHeader(adminAccessToken);
 
-        Response response = AdminSteps.sendDeleteAdmin(headers, new AdminDeleteRequest(id, password));
+        Response response = AdminSteps.sendDeleteAdmin(headers, id, new AdminDeleteRequest(password));
         log.info("response: {}", response.asString());
         ApiResponse<AdminDeleteResponse> apiResponse = response.as(new TypeRef<ApiResponse<AdminDeleteResponse>>() {});
 
@@ -463,7 +463,7 @@ public class AdminAcceptanceTest extends AcceptanceTest {
         String adminAccessToken = jwtUtils.generateAccessToken(id, Role.ADMIN);
         Map<String, Object> headers = AuthHeaderProvider.createAuthorizationHeader(adminAccessToken);
 
-        Response response = AdminSteps.sendDeleteAdmin(headers, new AdminDeleteRequest(id, password));
+        Response response = AdminSteps.sendDeleteAdmin(headers, id, new AdminDeleteRequest(password));
         log.info("response: {}", response.asString());
         ApiResponse<AdminDeleteResponse> apiResponse = response.as(new TypeRef<ApiResponse<AdminDeleteResponse>>() {});
 

@@ -16,8 +16,8 @@ public class AdminSteps {
 
     private static final String ADMIN_SIGNUP_URL = "/admin/signup";
     private static final String ADMIN_LOGIN_URL = "/admin/login";
-    private static final String ADMIN_UPDATE_URL = "/admin/update";
-    private static final String ADMIN_DELETE_URL = "/admin/delete";
+    private static final String ADMIN_UPDATE_URL = "/admin/{id}";
+    private static final String ADMIN_DELETE_URL = "/admin/{id}";
 
     public static Response sendSignupAdmin(
             Map<String, Object> headers,
@@ -51,6 +51,7 @@ public class AdminSteps {
     
     public static Response sendUpdateAdmin(
             Map<String, Object> headers,
+            Long id,
             AdminUpdateRequest request) {
 
         return given().log().all()
@@ -58,7 +59,7 @@ public class AdminSteps {
                 .contentType(ContentType.JSON)
                 .body(request)
             .when()
-                .put(ADMIN_UPDATE_URL)
+                .put(ADMIN_UPDATE_URL.replace("{id}", id.toString()))
             .then().log().all()
                 .extract()
                 .response();
@@ -66,6 +67,7 @@ public class AdminSteps {
     
     public static Response sendDeleteAdmin(
             Map<String, Object> headers,
+            Long id,
             AdminDeleteRequest request) {
 
         return given().log().all()
@@ -73,7 +75,7 @@ public class AdminSteps {
                 .contentType(ContentType.JSON)
                 .body(request)
             .when()
-                .delete(ADMIN_DELETE_URL)
+                .delete(ADMIN_DELETE_URL.replace("{id}", id.toString()))
             .then().log().all()
                 .extract()
                 .response();

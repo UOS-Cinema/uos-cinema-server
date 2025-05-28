@@ -3,6 +3,8 @@ package com.uos.dsd.cinema.adaptor.out.storage;
 import com.uos.dsd.cinema.application.port.out.storage.Storage;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -10,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -37,21 +40,14 @@ public class FileSystemStorage implements Storage {
         if (file.isEmpty()) {
             throw new IllegalArgumentException("Cannot upload empty file");
         }
-        
-        String originalFilename = file.getOriginalFilename();
-        if (originalFilename == null || originalFilename.trim().isEmpty()) {
-            throw new IllegalArgumentException("Filename cannot be null or empty");
-        }
 
-        // 안전한 파일명 생성
-        String cleanFilename = StringUtils.cleanPath(originalFilename);
-        if (cleanFilename.contains("..")) {
-            throw new IllegalArgumentException("Filename contains invalid path sequence: " + cleanFilename);
-        }
-        
+        String cleanPath = getCleanPath(path);
+
         // 절대경로로 변환
-        Path targetLocation = this.rootPath.resolve(path).resolve(cleanFilename);
+        Path targetLocation = this.rootPath.resolve(cleanPath);
         targetLocation = targetLocation.toAbsolutePath().normalize();
+        log.info("targetLocation: {}", targetLocation);
+        log.info("rootPath: {}", this.rootPath);
         if (!targetLocation.startsWith(this.rootPath)) {
             throw new IllegalArgumentException("Cannot store file outside current directory");
         }
@@ -61,15 +57,41 @@ public class FileSystemStorage implements Storage {
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
             log.info("Uploaded file: {}", targetLocation);
         } catch (IOException e) {
-            throw new RuntimeException("Failed to upload file: " + cleanFilename, e);
+            throw new RuntimeException("Failed to upload file: " + cleanPath, e);
+        }
+    }
+
+    @Override
+    public Resource download(String path) {
+        
+        String cleanPath = getCleanPath(path);
+
+        // 절대경로로 변환
+        Path targetLocation = this.rootPath.resolve(cleanPath).toAbsolutePath().normalize();
+        if (!targetLocation.startsWith(this.rootPath)) {
+            throw new IllegalArgumentException("Cannot access file outside current directory");
+        }
+
+        try {
+            Resource resource = new UrlResource(targetLocation.toUri());
+            if (resource.exists() && resource.isReadable()) {
+                log.info("Downloaded file: {}", targetLocation);
+                return resource;
+            } else {
+                throw new RuntimeException("File not found or not readable: " + cleanPath);
+            }
+        } catch (MalformedURLException e) {
+            throw new RuntimeException("Failed to create resource for file: " + cleanPath, e);
         }
     }
 
     @Override
     public void delete(String path) {
 
+        String cleanPath = getCleanPath(path);
+
         // 절대경로로 변환
-        Path targetLocation = this.rootPath.resolve(path).toAbsolutePath().normalize();
+        Path targetLocation = this.rootPath.resolve(cleanPath).toAbsolutePath().normalize();
         if (!targetLocation.startsWith(this.rootPath)) {
             throw new IllegalArgumentException("Cannot delete file outside current directory");
         }
@@ -78,7 +100,17 @@ public class FileSystemStorage implements Storage {
             boolean deleted = Files.deleteIfExists(targetLocation);
             log.info("Deleted file: {} {}", targetLocation, deleted ? "successfully" : "failed");
         } catch (IOException e) {
-            throw new RuntimeException("Failed to delete file: " + path, e);
+            throw new RuntimeException("Failed to delete file: " + cleanPath, e);
         }
+    }
+
+    private String getCleanPath(String path) {
+
+        String cleanPath = StringUtils.cleanPath(path);
+        if (cleanPath.contains("..")) {
+            throw new IllegalArgumentException("Filename contains invalid path sequence: " + cleanPath);
+        }
+
+        return cleanPath;
     }
 }

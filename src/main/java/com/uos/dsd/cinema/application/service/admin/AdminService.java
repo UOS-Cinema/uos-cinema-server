@@ -6,12 +6,9 @@ import com.uos.dsd.cinema.application.port.out.repository.admin.AdminRepository;
 import com.uos.dsd.cinema.common.exception.code.CommonResultCode;
 import com.uos.dsd.cinema.common.exception.http.BadRequestException;
 import com.uos.dsd.cinema.common.exception.http.UnauthorizedException;
-import com.uos.dsd.cinema.common.exception.http.ForbiddenException;
-import com.uos.dsd.cinema.core.security.CustomUserDetails;
 import com.uos.dsd.cinema.domain.admin.Admin;
 
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -24,15 +21,15 @@ import java.util.Optional;
 @Transactional
 @RequiredArgsConstructor
 public class AdminService implements
-        SignupAdminUsecase,
-        LoginAdminUsecase,
-        UpdateAdminUsecase,
-        DeleteAdminUsecase {
+        AdminSignupUsecase,
+        AdminLoginUsecase,
+        AdminUpdateUsecase,
+        AdminDeleteUsecase {
 
     private final AdminRepository adminRepository;
 
     @Override
-    public Long signup(SignupAdminCommand command) {
+    public Long signup(AdminSignupCommand command) {
 
         Admin admin = new Admin(command.username(), command.password());
         try {
@@ -43,7 +40,7 @@ public class AdminService implements
     }
 
     @Override
-    public Long login(LoginAdminCommand command) {
+    public Long login(AdminLoginCommand command) {
 
         Optional<Admin> admin = adminRepository.findByUsernameAndDeletedAtIsNull(command.username());
         if (admin.isEmpty() || !admin.get().isPasswordMatched(command.password())) {
@@ -53,7 +50,7 @@ public class AdminService implements
     }
 
     @Override
-    public void update(UpdateAdminCommand command) {
+    public void update(AdminUpdateCommand command) {
         
         Optional<Admin> admin = adminRepository.findByIdAndDeletedAtIsNull(command.id());
         if (admin.isEmpty() || !admin.get().isPasswordMatched(command.currentPassword())) {
@@ -63,7 +60,7 @@ public class AdminService implements
     }
 
     @Override
-    public void delete(DeleteAdminCommand command) {
+    public void delete(AdminDeleteCommand command) {
         
         Optional<Admin> admin = adminRepository.findByIdAndDeletedAtIsNull(command.id());
         if (admin.isEmpty() || !admin.get().isPasswordMatched(command.password())) {

@@ -15,12 +15,16 @@ public class SecurityConstants {
     public static final List<String> ADMIN_URLS = List.of(
         "/admin/signup",
         "/admin/update",
-        "/admin/delete"
+        "/admin/delete",
+        "/hello/auth"
     );
 
     public static final String USER_NAME_CLAIM = "username";
     public static final String ROLE_CLAIM = "role";
     public static final String TOKEN_TYPE_CLAIM = "tokenType";
+
+    public static final String USER_ID_ATTRIBUTE = "USER_ID";
+    public static final String USER_ROLE_ATTRIBUTE = "USER_ROLE";
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
     public static final String REISSUE_COOKIE_NAME = "RefreshToken";

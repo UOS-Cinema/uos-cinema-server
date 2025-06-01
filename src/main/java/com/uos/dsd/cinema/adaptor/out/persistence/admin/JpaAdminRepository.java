@@ -7,7 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
 
-public interface AdminJpaRepository extends CrudRepository<Admin, Long>, AdminRepository {
+public interface JpaAdminRepository extends CrudRepository<Admin, Long>, AdminRepository {
 
     Optional<Admin> findByUsernameAndDeletedAtIsNull(String username);
 

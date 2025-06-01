@@ -14,10 +14,10 @@ import java.util.Map;
 
 public class AdminSteps {
 
-    private static final String ADMIN_SIGNUP_URL = "/admin/signup";
-    private static final String ADMIN_LOGIN_URL = "/admin/login";
-    private static final String ADMIN_UPDATE_URL = "/admin/{id}";
-    private static final String ADMIN_DELETE_URL = "/admin/{id}";
+    private static final String ADMIN_SIGNUP_URL = "/admins/signup";
+    private static final String ADMIN_LOGIN_URL = "/admins/login";
+    private static final String ADMIN_UPDATE_URL = "/admins/{id}";
+    private static final String ADMIN_DELETE_URL = "/admins/{id}";
 
     public static Response sendSignupAdmin(
             Map<String, Object> headers,

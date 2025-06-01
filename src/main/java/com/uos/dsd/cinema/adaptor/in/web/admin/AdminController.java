@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @Slf4j
 @RestController
+@RequestMapping("/admins")
 @RequiredArgsConstructor
 public class AdminController {
 
@@ -38,7 +40,7 @@ public class AdminController {
 
     private final JwtUtils jwtUtils;
 
-    @PostMapping("/admin/signup")
+    @PostMapping("/signup")
     public ApiResponse<AdminSignupResponse> signup(@RequestBody AdminSignupRequest request) {
 
         log.info("signup request: {}", request.username());
@@ -46,7 +48,7 @@ public class AdminController {
         return ApiResponse.success(new AdminSignupResponse(request.username()));
     }
 
-    @PostMapping("/admin/login")
+    @PostMapping("/login")
     public ApiResponse<AdminLoginResponse> login(@RequestBody AdminLoginRequest request, HttpServletResponse response) {
 
         Long id = loginAdminUsecase.login(new AdminLoginCommand(request.username(), request.password()));
@@ -59,7 +61,7 @@ public class AdminController {
         return ApiResponse.success(new AdminLoginResponse(accessToken));
     }
 
-    @PutMapping("/admin/{id}")
+    @PutMapping("/{id}")
     public ApiResponse<AdminUpdateResponse> update(@PathVariable("id") Long id, @RequestBody AdminUpdateRequest request) {
 
         log.info("update request: {}", id);
@@ -74,7 +76,7 @@ public class AdminController {
         return ApiResponse.success(new AdminUpdateResponse(id));
     }
 
-    @DeleteMapping("/admin/{id}")
+    @DeleteMapping("/{id}")
     public ApiResponse<AdminDeleteResponse> delete(@PathVariable("id") Long id, @RequestBody AdminDeleteRequest request) {
 
         log.info("delete request: {}", id);

@@ -1,4 +1,4 @@
-package com.uos.dsd.cinema.adaptor.out.persistence.jpa;
+package com.uos.dsd.cinema.adaptor.out.persistence.admin.jpa;
 
 import com.uos.dsd.cinema.application.port.out.repository.admin.AdminRepository;
 import com.uos.dsd.cinema.domain.admin.Admin;

@@ -54,7 +54,7 @@ public class Screening extends Base {
     @Column(insertable = false, updatable = false)
     private LocalDateTime endTime;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "movie_id", insertable = false, updatable = false)
     private Movie movie;
 

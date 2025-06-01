@@ -16,6 +16,7 @@ public enum ScreeningExceptionCode implements ResultCode{
     DELETED_MOVIE("SCR005", "Movie is deleted"),
     IN_PAST_START_TIME("SCR006", "Start time can be created for the future"),
     SCREEN_TYPE_NOT_SUPPORTED_MOVIE("SCR007", "Screen type is not supported for the movie"),
+    ONLY_ADMIN_CAN_ACCESS("SCR008", "Only admin can access"),
     ;
 
     private final String code;

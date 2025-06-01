@@ -8,12 +8,11 @@ import com.uos.dsd.cinema.common.exception.code.CommonResultCode;
 import com.uos.dsd.cinema.common.exception.http.ForbiddenException;
 import com.uos.dsd.cinema.common.response.ApiResponse;
 import com.uos.dsd.cinema.common.utils.CookieUtil;
+import com.uos.dsd.cinema.core.annotation.UserId;
 import com.uos.dsd.cinema.core.jwt.JwtUtils;
-import com.uos.dsd.cinema.core.security.CustomUserDetails;
 import com.uos.dsd.cinema.core.security.SecurityConstants;
 import com.uos.dsd.cinema.core.security.SecurityConstants.Role;
 
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -62,12 +61,13 @@ public class AdminController {
     }
 
     @PutMapping("/{id}")
-    public ApiResponse<AdminUpdateResponse> update(@PathVariable("id") Long id, @RequestBody AdminUpdateRequest request) {
+    public ApiResponse<AdminUpdateResponse> update(
+        @UserId Long requesterId,    
+        @PathVariable("id") Long id,
+        @RequestBody AdminUpdateRequest request) {
 
         log.info("update request: {}", id);
 
-        CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Long requesterId = userDetails.getId();
         if (!requesterId.equals(id)) {
             throw new ForbiddenException(CommonResultCode.FORBIDDEN, "You can only update your own account");
         }
@@ -77,12 +77,13 @@ public class AdminController {
     }
 
     @DeleteMapping("/{id}")
-    public ApiResponse<AdminDeleteResponse> delete(@PathVariable("id") Long id, @RequestBody AdminDeleteRequest request) {
+    public ApiResponse<AdminDeleteResponse> delete(
+        @UserId Long requesterId,
+        @PathVariable("id") Long id,
+        @RequestBody AdminDeleteRequest request) {
 
         log.info("delete request: {}", id);
 
-        CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Long requesterId = userDetails.getId();
         if (!requesterId.equals(id)) {
             throw new ForbiddenException(CommonResultCode.FORBIDDEN, "You can only delete your own account");
         }

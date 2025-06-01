@@ -1,4 +1,8 @@
 spring:
+  server:
+    host: localhost
+    port: 8080
+
   application:
     name: cinema
 
@@ -33,3 +37,5 @@ jwt:
 storage:
   root:
     path: ./storage
+  url:
+    prefix: files

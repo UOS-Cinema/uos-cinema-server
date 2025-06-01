@@ -3,8 +3,6 @@ package com.uos.dsd.cinema.adaptor.out.storage;
 import com.uos.dsd.cinema.application.port.out.storage.Storage;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -12,7 +10,6 @@ import org.springframework.web.multipart.MultipartFile;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -22,11 +19,21 @@ import java.nio.file.StandardCopyOption;
 @Component
 public class FileSystemStorage implements Storage {
 
+    private final String host;
+    private final String port;
     private final Path rootPath;
+    private final String urlPrefix;
 
-    public FileSystemStorage(@Value("${storage.root.path}") String uploadPath) {
+    public FileSystemStorage(
+        @Value("${spring.server.host}") String host,
+        @Value("${spring.server.port}") String port,
+        @Value("${storage.url.prefix}") String urlPrefix,
+        @Value("${storage.root.path}") String rootPath) {
 
-        this.rootPath = Paths.get(uploadPath).toAbsolutePath().normalize();
+        this.host = host;
+        this.port = port;
+        this.urlPrefix = urlPrefix;
+        this.rootPath = Paths.get(rootPath).toAbsolutePath().normalize();
         try {
             Files.createDirectories(this.rootPath);
         } catch (IOException e) {
@@ -41,13 +48,9 @@ public class FileSystemStorage implements Storage {
             throw new IllegalArgumentException("Cannot upload empty file");
         }
 
-        String cleanPath = getCleanPath(path);
-
         // 절대경로로 변환
-        Path targetLocation = this.rootPath.resolve(cleanPath);
-        targetLocation = targetLocation.toAbsolutePath().normalize();
-        log.info("targetLocation: {}", targetLocation);
-        log.info("rootPath: {}", this.rootPath);
+        String cleanPath = getCleanPath(path);
+        Path targetLocation = this.rootPath.resolve(cleanPath).toAbsolutePath().normalize();
         if (!targetLocation.startsWith(this.rootPath)) {
             throw new IllegalArgumentException("Cannot store file outside current directory");
         }
@@ -62,35 +65,16 @@ public class FileSystemStorage implements Storage {
     }
 
     @Override
-    public Resource download(String path) {
+    public String getUrl(String path) {
         
-        String cleanPath = getCleanPath(path);
-
-        // 절대경로로 변환
-        Path targetLocation = this.rootPath.resolve(cleanPath).toAbsolutePath().normalize();
-        if (!targetLocation.startsWith(this.rootPath)) {
-            throw new IllegalArgumentException("Cannot access file outside current directory");
-        }
-
-        try {
-            Resource resource = new UrlResource(targetLocation.toUri());
-            if (resource.exists() && resource.isReadable()) {
-                log.info("Downloaded file: {}", targetLocation);
-                return resource;
-            } else {
-                throw new RuntimeException("File not found or not readable: " + cleanPath);
-            }
-        } catch (MalformedURLException e) {
-            throw new RuntimeException("Failed to create resource for file: " + cleanPath, e);
-        }
+        return "http://" + host + ":" + port + "/" + urlPrefix + "/" + path;
     }
 
     @Override
     public void delete(String path) {
 
-        String cleanPath = getCleanPath(path);
-
         // 절대경로로 변환
+        String cleanPath = getCleanPath(path);
         Path targetLocation = this.rootPath.resolve(cleanPath).toAbsolutePath().normalize();
         if (!targetLocation.startsWith(this.rootPath)) {
             throw new IllegalArgumentException("Cannot delete file outside current directory");
@@ -110,7 +94,6 @@ public class FileSystemStorage implements Storage {
         if (cleanPath.contains("..")) {
             throw new IllegalArgumentException("Filename contains invalid path sequence: " + cleanPath);
         }
-
         return cleanPath;
     }
 }

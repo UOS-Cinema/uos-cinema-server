@@ -1,4 +1,4 @@
-package com.uos.dsd.cinema.domain.customer.guest;
+package com.uos.dsd.cinema.domain.customer.guest.command;
 
 import com.uos.dsd.cinema.common.utils.PasswordUtil;
 import com.uos.dsd.cinema.domain.common.constraint.PasswordConstraint;
@@ -77,4 +77,4 @@ public class Guest extends Customer {
         String hashedPassword = PasswordUtil.hashPasswordWithSalt(password, salt);
         return this.password.equals(hashedPassword);
     }
-}
+} 

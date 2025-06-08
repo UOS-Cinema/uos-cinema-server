@@ -1,12 +1,9 @@
-package com.uos.dsd.cinema.application.service.customer.guest;
+package com.uos.dsd.cinema.application.service.customer.guest.command;
 
 import com.uos.dsd.cinema.application.port.in.customer.guest.command.login.LoginGuestCommand;
 import com.uos.dsd.cinema.application.port.in.customer.guest.command.login.LoginGuestUsecase;
-import com.uos.dsd.cinema.application.port.in.customer.guest.query.get.GetGuestInfoQuery;
-import com.uos.dsd.cinema.application.port.in.customer.guest.query.get.GetGuestInfoUsecase;
-import com.uos.dsd.cinema.application.port.in.customer.guest.query.get.GuestInfoResponse;
-import com.uos.dsd.cinema.application.port.out.customer.guest.GuestRepository;
-import com.uos.dsd.cinema.domain.customer.guest.Guest;
+import com.uos.dsd.cinema.application.port.out.customer.guest.command.GuestCommandRepository;
+import com.uos.dsd.cinema.domain.customer.guest.command.Guest;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,9 +14,9 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class GuestService implements LoginGuestUsecase, GetGuestInfoUsecase {
+public class GuestCommandService implements LoginGuestUsecase {
     
-    private final GuestRepository guestRepository;
+    private final GuestCommandRepository guestRepository;
     
     @Transactional
     @Override
@@ -49,15 +46,9 @@ public class GuestService implements LoginGuestUsecase, GetGuestInfoUsecase {
         return guestRepository.save(newGuest).getId();
     }
     
-    @Transactional(readOnly = true)
-    @Override
-    public GuestInfoResponse getGuestInfo(GetGuestInfoQuery query) {
-        return GuestInfoResponse.from(guestRepository.findById(query.guestId())
-            .orElseThrow(() -> new IllegalArgumentException("Guest not found with id: " + query.guestId())));
-    }
-    
     @Transactional
     public void deleteGuest(Guest guest) {
+        
         guestRepository.delete(guest);
     }
 } 

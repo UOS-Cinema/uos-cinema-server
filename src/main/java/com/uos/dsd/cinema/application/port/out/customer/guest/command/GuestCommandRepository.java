@@ -1,20 +1,17 @@
-package com.uos.dsd.cinema.application.port.out.customer.guest;
+package com.uos.dsd.cinema.application.port.out.customer.guest.command;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
-import com.uos.dsd.cinema.domain.customer.guest.Guest;
+import com.uos.dsd.cinema.domain.customer.guest.command.Guest;
 
-public interface GuestRepository {
+public interface GuestCommandRepository {
     
     List<Guest> findAllByNameAndPhoneAndBirthDate(
         String name,
         String phone,
         LocalDate birthDate
     );
-
-    Optional<Guest> findById(Long id);
 
     Guest save(Guest guest);
     

@@ -8,5 +8,7 @@ public interface Storage {
 
     String getUrl(String path);
 
+    boolean exists(String path);
+
     void delete(String path);
 }

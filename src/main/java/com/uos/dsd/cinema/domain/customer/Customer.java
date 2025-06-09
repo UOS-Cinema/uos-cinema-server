@@ -13,18 +13,15 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Table;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "customers")
-@Inheritance(strategy = InheritanceType.JOINED)
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public abstract class Customer {
+public class Customer {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,7 +35,7 @@ public abstract class Customer {
     @Column(updatable = false)
     protected LocalDateTime createdAt;
     
-    protected Customer(UserType userType) {
+    public Customer(UserType userType) {
 
         if (userType == null) {
             throw new IllegalArgumentException("User type is required");

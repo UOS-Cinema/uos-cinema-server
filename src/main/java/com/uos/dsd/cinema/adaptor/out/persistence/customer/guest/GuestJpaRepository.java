@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface JpaGuestRepository extends CrudRepository<Guest, Long>, GuestRepository {
+public interface GuestJpaRepository extends CrudRepository<Guest, Long>, GuestRepository {
 
     @Override
     List<Guest> findAllByNameAndPhoneAndBirthDate(String name, String phone, LocalDate birthDate);

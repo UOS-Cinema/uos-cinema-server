@@ -14,6 +14,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -63,6 +65,12 @@ public class FileSystemStorage implements Storage {
     public String getUrl(String path) {
         
         return "http://" + domain + ":" + port + "/" + urlPrefix + "/" + path;
+    }
+
+    @Override
+    public List<String> getUrls(List<String> paths) {
+
+        return paths.stream().map(this::getUrl).collect(Collectors.toList());
     }
 
     @Override

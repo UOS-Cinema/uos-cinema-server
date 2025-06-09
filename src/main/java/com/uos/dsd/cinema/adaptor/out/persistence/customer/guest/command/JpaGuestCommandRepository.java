@@ -7,7 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import com.uos.dsd.cinema.application.port.out.customer.guest.command.GuestCommandRepository;
-import com.uos.dsd.cinema.domain.customer.guest.command.Guest;
+import com.uos.dsd.cinema.domain.customer.guest.Guest;
 
 @Repository
 public interface JpaGuestCommandRepository extends CrudRepository<Guest, Long>, GuestCommandRepository {

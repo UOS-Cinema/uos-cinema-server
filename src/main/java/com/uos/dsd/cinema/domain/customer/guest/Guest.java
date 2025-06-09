@@ -1,12 +1,12 @@
-package com.uos.dsd.cinema.domain.customer.guest.command;
+package com.uos.dsd.cinema.domain.customer.guest;
 
 import com.uos.dsd.cinema.common.utils.PasswordUtil;
 import com.uos.dsd.cinema.domain.common.constraint.PasswordConstraint;
 import com.uos.dsd.cinema.domain.customer.Customer;
 import com.uos.dsd.cinema.domain.customer.UserType;
-import com.uos.dsd.cinema.domain.customer.constraint.BirthDateConstraint;
-import com.uos.dsd.cinema.domain.customer.constraint.NameConstraint;
-import com.uos.dsd.cinema.domain.customer.constraint.PhoneConstraint;
+import com.uos.dsd.cinema.domain.customer.common.constraint.BirthDateConstraint;
+import com.uos.dsd.cinema.domain.customer.common.constraint.NameConstraint;
+import com.uos.dsd.cinema.domain.customer.common.constraint.PhoneConstraint;
 
 import lombok.AccessLevel;
 import lombok.Getter;

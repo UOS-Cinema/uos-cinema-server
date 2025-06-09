@@ -1,6 +1,6 @@
-package com.uos.dsd.cinema.domain.customer.constraint;
+package com.uos.dsd.cinema.domain.customer.common.constraint;
 
-import com.uos.dsd.cinema.domain.customer.exception.IllegalPhoneException;
+import com.uos.dsd.cinema.domain.customer.common.exception.IllegalPhoneException;
 
 public class PhoneConstraint {
 

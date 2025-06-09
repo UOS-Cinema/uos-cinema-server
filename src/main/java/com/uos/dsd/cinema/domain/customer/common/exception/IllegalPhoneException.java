@@ -1,4 +1,4 @@
-package com.uos.dsd.cinema.domain.customer.exception;
+package com.uos.dsd.cinema.domain.customer.common.exception;
 
 public class IllegalPhoneException extends IllegalArgumentException {
 

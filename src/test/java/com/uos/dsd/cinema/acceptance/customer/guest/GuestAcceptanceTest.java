@@ -16,9 +16,9 @@ import com.uos.dsd.cinema.core.security.SecurityConstants;
 import com.uos.dsd.cinema.core.security.SecurityConstants.Role;
 import com.uos.dsd.cinema.core.security.SecurityConstants.TokenType;
 import com.uos.dsd.cinema.domain.common.exception.IllegalPasswordException;
-import com.uos.dsd.cinema.domain.customer.exception.IllegalBirthDateException;
-import com.uos.dsd.cinema.domain.customer.exception.IllegalNameException;
-import com.uos.dsd.cinema.domain.customer.exception.IllegalPhoneException;
+import com.uos.dsd.cinema.domain.customer.common.exception.IllegalBirthDateException;
+import com.uos.dsd.cinema.domain.customer.common.exception.IllegalNameException;
+import com.uos.dsd.cinema.domain.customer.common.exception.IllegalPhoneException;
 import com.uos.dsd.cinema.utils.AuthHeaderProvider;
 
 import org.junit.jupiter.api.DisplayNameGeneration;

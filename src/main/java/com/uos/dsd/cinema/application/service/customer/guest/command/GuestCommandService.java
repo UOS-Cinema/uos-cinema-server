@@ -3,7 +3,7 @@ package com.uos.dsd.cinema.application.service.customer.guest.command;
 import com.uos.dsd.cinema.application.port.in.customer.guest.command.login.LoginGuestCommand;
 import com.uos.dsd.cinema.application.port.in.customer.guest.command.login.LoginGuestUsecase;
 import com.uos.dsd.cinema.application.port.out.customer.guest.command.GuestCommandRepository;
-import com.uos.dsd.cinema.domain.customer.guest.command.Guest;
+import com.uos.dsd.cinema.domain.customer.guest.Guest;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

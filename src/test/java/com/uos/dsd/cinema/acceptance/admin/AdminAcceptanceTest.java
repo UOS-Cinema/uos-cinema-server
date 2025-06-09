@@ -4,17 +4,23 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.uos.dsd.cinema.acceptance.AcceptanceTest;
 import com.uos.dsd.cinema.acceptance.admin.steps.AdminSteps;
-import com.uos.dsd.cinema.adaptor.in.web.admin.request.*;
-import com.uos.dsd.cinema.adaptor.in.web.admin.response.*;
+import com.uos.dsd.cinema.adaptor.in.web.admin.request.AdminDeleteRequest;
+import com.uos.dsd.cinema.adaptor.in.web.admin.request.AdminLoginRequest;
+import com.uos.dsd.cinema.adaptor.in.web.admin.request.AdminSignupRequest;
+import com.uos.dsd.cinema.adaptor.in.web.admin.request.AdminUpdateRequest;
+import com.uos.dsd.cinema.adaptor.in.web.admin.response.AdminDeleteResponse;
+import com.uos.dsd.cinema.adaptor.in.web.admin.response.AdminLoginResponse;
+import com.uos.dsd.cinema.adaptor.in.web.admin.response.AdminSignupResponse;
+import com.uos.dsd.cinema.adaptor.in.web.admin.response.AdminUpdateResponse;
 import com.uos.dsd.cinema.common.exception.code.CommonResultCode;
 import com.uos.dsd.cinema.common.response.ApiResponse;
-import com.uos.dsd.cinema.domain.exception.IllegalPasswordException;
-import com.uos.dsd.cinema.domain.exception.IllegalUsernameException;
 import com.uos.dsd.cinema.core.jwt.JwtClaim;
 import com.uos.dsd.cinema.core.jwt.JwtUtils;
 import com.uos.dsd.cinema.core.security.SecurityConstants;
 import com.uos.dsd.cinema.core.security.SecurityConstants.Role;
 import com.uos.dsd.cinema.core.security.SecurityConstants.TokenType;
+import com.uos.dsd.cinema.domain.common.exception.IllegalPasswordException;
+import com.uos.dsd.cinema.domain.common.exception.IllegalUsernameException;
 import com.uos.dsd.cinema.utils.AuthHeaderProvider;
 
 import org.junit.jupiter.api.DisplayNameGeneration;

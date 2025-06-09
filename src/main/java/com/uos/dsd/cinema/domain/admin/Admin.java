@@ -2,8 +2,8 @@ package com.uos.dsd.cinema.domain.admin;
 
 import com.uos.dsd.cinema.common.model.Base;
 import com.uos.dsd.cinema.common.utils.PasswordUtil;
-import com.uos.dsd.cinema.domain.constraint.PasswordConstraint;
-import com.uos.dsd.cinema.domain.constraint.UsernameConstraint;
+import com.uos.dsd.cinema.domain.common.constraint.PasswordConstraint;
+import com.uos.dsd.cinema.domain.common.constraint.UsernameConstraint;
 
 import lombok.AccessLevel;
 import lombok.Getter;

@@ -3,11 +3,11 @@ package com.uos.dsd.cinema.adaptor.in.web.customer.guest;
 import com.uos.dsd.cinema.adaptor.in.web.customer.guest.request.GuestLoginRequest;
 import com.uos.dsd.cinema.adaptor.in.web.customer.guest.response.GetGuestInfoResponse;
 import com.uos.dsd.cinema.adaptor.in.web.customer.guest.response.GuestLoginResponse;
-import com.uos.dsd.cinema.application.port.in.customer.guest.command.login.LoginGuestCommand;
-import com.uos.dsd.cinema.application.port.in.customer.guest.command.login.LoginGuestUsecase;
-import com.uos.dsd.cinema.application.port.in.customer.guest.query.get.GetGuestInfoQuery;
-import com.uos.dsd.cinema.application.port.in.customer.guest.query.get.GetGuestInfoUsecase;
-import com.uos.dsd.cinema.application.port.in.customer.guest.query.get.GuestInfoResponse;
+import com.uos.dsd.cinema.application.port.in.customer.guest.command.LoginGuestCommand;
+import com.uos.dsd.cinema.application.port.in.customer.guest.query.GetGuestInfoQuery;
+import com.uos.dsd.cinema.application.port.in.customer.guest.response.GuestInfoResponse;
+import com.uos.dsd.cinema.application.port.in.customer.guest.usecase.GetGuestInfoUsecase;
+import com.uos.dsd.cinema.application.port.in.customer.guest.usecase.LoginGuestUsecase;
 import com.uos.dsd.cinema.common.exception.code.CommonResultCode;
 import com.uos.dsd.cinema.common.exception.http.ForbiddenException;
 import com.uos.dsd.cinema.common.response.ApiResponse;
@@ -24,9 +24,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import jakarta.servlet.http.HttpServletResponse;
 
 @Slf4j
 @RestController

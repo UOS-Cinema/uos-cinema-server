@@ -105,7 +105,7 @@ public class GuestAcceptanceTest extends AcceptanceTest {
 
     @ParameterizedTest
     @MethodSource("provideNotExistGuest")
-    public void login_new_guest(String name, String phone, LocalDate birthDate, String password) {
+    public void loginNewGuest(String name, String phone, LocalDate birthDate, String password) {
 
         /* Given */
         // provide by method source

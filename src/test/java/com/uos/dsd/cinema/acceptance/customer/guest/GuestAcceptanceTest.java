@@ -46,7 +46,13 @@ public class GuestAcceptanceTest extends AcceptanceTest {
     private static final LocalDate EXIST_GUEST_BIRTH_DATE = LocalDate.of(1990, 1, 1);
     private static final String EXIST_GUEST_PASSWORD = "password123!";
 
-    private static final String NOT_EXIST_GUEST_NAME = "두번째 테스트계정";
+    private static final Long EXIST_GUEST_ID_2 = -2L;
+    private static final String EXIST_GUEST_NAME_2 = "두번째테스트계정";
+    private static final String EXIST_GUEST_PHONE_2 = "01099999999";
+    private static final LocalDate EXIST_GUEST_BIRTH_DATE_2 = LocalDate.of(1995, 12, 25);
+    private static final String EXIST_GUEST_PASSWORD_2 = "password123!";
+
+    private static final String NOT_EXIST_GUEST_NAME = "새로운 테스트계정";
     private static final String NOT_EXIST_GUEST_PHONE = "01099999999";
     private static final LocalDate NOT_EXIST_GUEST_BIRTH_DATE = LocalDate.of(1995, 12, 25);
     private static final String NOT_EXIST_GUEST_PASSWORD = "newpassword123!";
@@ -251,7 +257,7 @@ public class GuestAcceptanceTest extends AcceptanceTest {
         LocalDate birthDate = EXIST_GUEST_BIRTH_DATE;
 
         /* When */
-        String accessToken = jwtUtils.generateAccessToken(id, Role.GUEST);
+        String accessToken = getAccessToken(name, phone, birthDate, EXIST_GUEST_PASSWORD);
         Map<String, Object> headers = AuthHeaderProvider.createAuthorizationHeader(accessToken);
 
         Response response = GuestSteps.sendGetGuestInfo(headers, id);
@@ -271,9 +277,13 @@ public class GuestAcceptanceTest extends AcceptanceTest {
 
         /* Given */
         Long id = EXIST_GUEST_ID;
+        String name = EXIST_GUEST_NAME_2;
+        String phone = EXIST_GUEST_PHONE_2;
+        LocalDate birthDate = EXIST_GUEST_BIRTH_DATE_2;
+        String password = EXIST_GUEST_PASSWORD_2;
 
         /* When */
-        String accessToken = jwtUtils.generateAccessToken(id+1, Role.GUEST);
+        String accessToken = getAccessToken(name, phone, birthDate, password);
         Map<String, Object> headers = AuthHeaderProvider.createAuthorizationHeader(accessToken);
 
         Response response = GuestSteps.sendGetGuestInfo(headers, id);
@@ -325,5 +335,24 @@ public class GuestAcceptanceTest extends AcceptanceTest {
     void checkForbidden(int statusCode, String code) {
         assertEquals(403, statusCode);
         assertEquals(CommonResultCode.FORBIDDEN.getCode(), code);
+    }
+
+    /**
+     * Login and return accessToken
+     */
+    String getAccessToken(String name, String phone, LocalDate birthDate, String password) {
+        
+        // login
+        Map<String, Object> headers = AuthHeaderProvider.createEmptyHeader();
+        Response response = GuestSteps.sendLoginGuest(headers,
+                new GuestLoginRequest(name, phone, birthDate, password));
+        log.info("response: {}", response.asString());
+        ApiResponse<GuestLoginResponse> apiResponse = response.as(new TypeRef<ApiResponse<GuestLoginResponse>>() {
+        });
+        log.info("ApiResponse: {}", apiResponse);
+        
+        // return accessToken
+        String accessToken = apiResponse.data().accessToken();
+        return accessToken;
     }
 }

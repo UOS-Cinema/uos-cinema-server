@@ -1,8 +1,4 @@
 spring:
-  server:
-    host: localhost
-    port: 8080
-
   application:
     name: cinema
 
@@ -34,8 +30,6 @@ jwt:
   accessTokenExpirationMs: ENC(372jdGhP8cHUJS8T9HKKqA/RAA0hVFNljoPhoxY+FqT/PyAmAiNYmrjipG4TAm6o)
   refreshTokenExpirationMs: ENC(k6jL/gcI6YUnJpKmsad6Zb+BfwbrmzhqqJJmEhKK9iLgbv6z7wknBBdeeEthmm3s)
 
-storage:
-  root:
-    path: ./storage
-  url:
-    prefix: files
+server:
+  host: localhost
+  port: 8080

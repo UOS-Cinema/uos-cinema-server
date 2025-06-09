@@ -1,15 +1,21 @@
 package com.uos.dsd.cinema.core.security;
 
+import com.uos.dsd.cinema.common.constant.StorageConstants;
+
+import org.springframework.stereotype.Component;
+
 import java.util.List;
 
+@Component
 public class SecurityConstants {
-    
+
     public static final List<String> BYPASS_URLS = List.of(
         "/hello"
     );
 
     public static final List<String> OPEN_ACCESS_URLS = List.of(
-        "/admins/login"
+        "/admins/login",
+        "/" + StorageConstants.STORAGE_URL_PREFIX + "/**"
     );
 
     public static final List<String> ADMIN_URLS = List.of(

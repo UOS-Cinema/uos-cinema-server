@@ -1,10 +1,10 @@
 package com.uos.dsd.cinema.adaptor.out.storage;
 
 import com.uos.dsd.cinema.application.port.out.storage.Storage;
+import com.uos.dsd.cinema.common.constant.StorageConstants;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.extern.slf4j.Slf4j;
@@ -19,21 +19,17 @@ import java.nio.file.StandardCopyOption;
 @Component
 public class FileSystemStorage implements Storage {
 
-    private final String host;
+    private final String domain;
     private final String port;
-    private final Path rootPath;
-    private final String urlPrefix;
+    private final Path rootPath = Paths.get(StorageConstants.STORAGE_ROOT_PATH).toAbsolutePath().normalize();
+    private final String urlPrefix = StorageConstants.STORAGE_URL_PREFIX;
 
     public FileSystemStorage(
-        @Value("${spring.server.host}") String host,
-        @Value("${spring.server.port}") String port,
-        @Value("${storage.url.prefix}") String urlPrefix,
-        @Value("${storage.root.path}") String rootPath) {
+        @Value("${server.host}") String domain,
+        @Value("${server.port}") String port) {
 
-        this.host = host;
+        this.domain = domain;
         this.port = port;
-        this.urlPrefix = urlPrefix;
-        this.rootPath = Paths.get(rootPath).toAbsolutePath().normalize();
         try {
             Files.createDirectories(this.rootPath);
         } catch (IOException e) {
@@ -49,8 +45,7 @@ public class FileSystemStorage implements Storage {
         }
 
         // 절대경로로 변환
-        String cleanPath = getCleanPath(path);
-        Path targetLocation = this.rootPath.resolve(cleanPath).toAbsolutePath().normalize();
+        Path targetLocation = this.rootPath.resolve(path).toAbsolutePath().normalize();
         if (!targetLocation.startsWith(this.rootPath)) {
             throw new IllegalArgumentException("Cannot store file outside current directory");
         }
@@ -60,22 +55,27 @@ public class FileSystemStorage implements Storage {
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
             log.info("Uploaded file: {}", targetLocation);
         } catch (IOException e) {
-            throw new RuntimeException("Failed to upload file: " + cleanPath, e);
+            throw new RuntimeException("Failed to upload file: " + path, e);
         }
     }
 
     @Override
     public String getUrl(String path) {
         
-        return "http://" + host + ":" + port + "/" + urlPrefix + "/" + path;
+        return "http://" + domain + ":" + port + "/" + urlPrefix + "/" + path;
+    }
+
+    @Override
+    public boolean exists(String path) {
+
+        return Files.exists(this.rootPath.resolve(path).toAbsolutePath().normalize());
     }
 
     @Override
     public void delete(String path) {
 
         // 절대경로로 변환
-        String cleanPath = getCleanPath(path);
-        Path targetLocation = this.rootPath.resolve(cleanPath).toAbsolutePath().normalize();
+        Path targetLocation = this.rootPath.resolve(path).toAbsolutePath().normalize();
         if (!targetLocation.startsWith(this.rootPath)) {
             throw new IllegalArgumentException("Cannot delete file outside current directory");
         }
@@ -84,16 +84,7 @@ public class FileSystemStorage implements Storage {
             boolean deleted = Files.deleteIfExists(targetLocation);
             log.info("Deleted file: {} {}", targetLocation, deleted ? "successfully" : "failed");
         } catch (IOException e) {
-            throw new RuntimeException("Failed to delete file: " + cleanPath, e);
+            throw new RuntimeException("Failed to delete file: " + path, e);
         }
-    }
-
-    private String getCleanPath(String path) {
-
-        String cleanPath = StringUtils.cleanPath(path);
-        if (cleanPath.contains("..")) {
-            throw new IllegalArgumentException("Filename contains invalid path sequence: " + cleanPath);
-        }
-        return cleanPath;
     }
 }

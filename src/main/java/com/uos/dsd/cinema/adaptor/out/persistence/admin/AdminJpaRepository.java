@@ -1,13 +1,13 @@
-package com.uos.dsd.cinema.adaptor.out.persistence.admin.jpa;
+package com.uos.dsd.cinema.adaptor.out.persistence.admin;
 
 import com.uos.dsd.cinema.application.port.out.repository.admin.AdminRepository;
 import com.uos.dsd.cinema.domain.admin.Admin;
 
-import java.util.Optional;
-
 import org.springframework.data.repository.CrudRepository;
 
-public interface JpaAdminRepository extends CrudRepository<Admin, Long>, AdminRepository {
+import java.util.Optional;
+
+public interface AdminJpaRepository extends CrudRepository<Admin, Long>, AdminRepository {
 
     Optional<Admin> findByUsernameAndDeletedAtIsNull(String username);
 

@@ -1,4 +1,4 @@
-package com.uos.dsd.cinema.application.port.in.customer.guest.query.get;
+package com.uos.dsd.cinema.application.port.in.customer.guest.response;
 
 import com.uos.dsd.cinema.domain.customer.guest.Guest;
 

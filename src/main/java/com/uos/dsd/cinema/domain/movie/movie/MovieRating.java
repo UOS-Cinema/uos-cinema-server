@@ -1,4 +1,4 @@
-package com.uos.dsd.cinema.domain.movie;
+package com.uos.dsd.cinema.domain.movie.movie;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

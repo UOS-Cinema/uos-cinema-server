@@ -1,4 +1,4 @@
-package com.uos.dsd.cinema.domain.actor;
+package com.uos.dsd.cinema.domain.movie.actor;
 
 import com.uos.dsd.cinema.common.model.Base;
 

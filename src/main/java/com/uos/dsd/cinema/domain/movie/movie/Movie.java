@@ -1,4 +1,4 @@
-package com.uos.dsd.cinema.domain.movie;
+package com.uos.dsd.cinema.domain.movie.movie;
 
 import com.uos.dsd.cinema.common.model.Base;
 

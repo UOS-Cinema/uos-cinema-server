@@ -1,4 +1,4 @@
-package com.uos.dsd.cinema.domain.movie;
+package com.uos.dsd.cinema.domain.movie.movie;
 
 import com.uos.dsd.cinema.common.model.Base;
 
@@ -12,16 +12,16 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "movie_screen_types")
+@Table(name = "movie_genres")
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class MovieScreenType extends Base {
+public class MovieGenre extends Base {
 
     @EmbeddedId
-    private MovieScreenTypeId id;
+    private MovieGenreId id;
 
-    public MovieScreenType(Movie movie, String screenType) {
-        this.id = new MovieScreenTypeId(movie, screenType);
+    public MovieGenre(Movie movie, String genreName) {
+        this.id = new MovieGenreId(movie, genreName);
     }
-}
+} 

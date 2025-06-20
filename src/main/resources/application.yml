@@ -3,9 +3,9 @@ spring:
     name: cinema
 
   datasource:
-    url: jdbc:oracle:thin:@oracle:1521/CINEMA
-    username: cinema
-    password: cinema
+    url: ${SPRING_DATASOURCE_URL:ENC(/M2hEe79yHtAzPUbLOgpfI3w4VJ/EKj4FHfakRfTkNFvR729PV3SfnU3/GJtCaLlMr620LtGurK5TTy7MEeZ/qE2mXXVnmLB8Y9XP05az3k=)}
+    username: ${SPRING_DATASOURCE_USERNAME:ENC(fcpsWaj+w8F4DbdbCiDOQH8+Lryd2VSCgjNiHg+rTy2H2uo1/Stk6oXlBBcHOsUT)}
+    password: ${SPRING_DATASOURCE_PASSWORD:ENC(P2MuRIwh5SN1aT6DiQQrHr6CLdprOxRywOkkn9kA+m7AoaBcDDudtVPp0FNQl1cKGb4uH0YqXV/9Xh4EewSOTg==)}
     driver-class-name: oracle.jdbc.OracleDriver
 
   jpa:
@@ -26,9 +26,9 @@ jasypt:
     string-output-type: base64
 
 jwt:
-  secretKey: ENC(e7ndeI+tpOJOGFRbIFgT6t8gKGJwsZcNGSqi1ErlAu2z9JeJ36Jm/642rc/3jG3Di8eJ8o7Aa752tirB4JM0IPOSx7CYpuNwQQXE7361zBY=)
-  accessTokenExpirationMs: ENC(372jdGhP8cHUJS8T9HKKqA/RAA0hVFNljoPhoxY+FqT/PyAmAiNYmrjipG4TAm6o)
-  refreshTokenExpirationMs: ENC(k6jL/gcI6YUnJpKmsad6Zb+BfwbrmzhqqJJmEhKK9iLgbv6z7wknBBdeeEthmm3s)
+  secretKey: ${JWT_SECRET_KEY:ENC(JbohwUOPO8ZJ2VZxNVEayPVBrfVME0VpLbnATIq7rw5jaOpmfxU7NvpB+hbzrkjROUPlYGTfmBrBj4CZRPaVPzDqxdHGRmEjhSLd/R0b6/pQWzyHttJQYzLAsH2AjUfO)}
+  accessTokenExpirationMs: ${JWT_ACCESS_TOKEN_EXPIRATION_MS:ENC(ReHHfs6Ux8nhCuZpWHZEjjNgc7zNpGdRxu9dU5W2Wi9qAAznNPw8hPa6kt6xrJly)}
+  refreshTokenExpirationMs: ${JWT_REFRESH_TOKEN_EXPIRATION_MS:ENC(71mzjSrTlhBgHDJ7i0lc9cOxpXw0819Q9nqI7//ckPmc+p4BUQcZLpxnpx5uC32l)}
 
 server:
   host: localhost

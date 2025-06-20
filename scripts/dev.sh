@@ -6,12 +6,36 @@ ROOT=`pwd`
 cleanup() {
   echo -e "\rCleaning up..."
   pkill -P $$ || true
-  docker-compose -f $ROOT/scripts/docker-compose.yaml down --volumes 2>&1 > /dev/null || true
+  docker-compose -f $ROOT/scripts/docker-compose.yaml down --volumes --remove-orphans 2>&1 > /dev/null || true
   echo "Done."
   exit 0
 }
 
 trap cleanup SIGINT SIGTERM
+
+
+# Setting environment variables
+export ORACLE_PASSWORD=cinema
+export APP_USER=cinema
+export APP_USER_PASSWORD=cinema
+
+export CINEMA_JASYPT_KEY=cinema
+
+export JWT_SECRET_KEY=hzwg44y7qN0DPwsj2PnNlonXSXApDIe/85Tzjh+eM98=
+export JWT_ACCESS_TOKEN_EXPIRATION_MS=600000
+export JWT_REFRESH_TOKEN_EXPIRATION_MS=86400000
+
+export SPRING_DATASOURCE_URL=jdbc:oracle:thin:@oracle:1521/FREEPDB1
+export SPRING_DATASOURCE_USERNAME=${APP_USER}
+export SPRING_DATASOURCE_PASSWORD=${APP_USER_PASSWORD}
+
+export SERVER_HOST=localhost
+export SERVER_PORT=8080
+
+export SPRING_SQL_INIT_MODE=always
+export SPRING_SQL_INIT_PLATFORM=oracle
+export SPRING_SQL_INIT_SCHEMA_LOCATIONS=classpath:db/migration/V1__init.sql
+export SPRING_SQL_INIT_DATA_LOCATIONS=classpath:db/data.sql
 
 # Start the containers using docker-compose
 echo "Building backend..."

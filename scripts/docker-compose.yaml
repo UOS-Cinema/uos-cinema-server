@@ -5,11 +5,11 @@ services:
     ports:
       - "1521:1521"
     environment:
-      - ORACLE_PASSWORD=oracle
-      - APP_USER=cinema
-      - APP_USER_PASSWORD=cinema
+      - ORACLE_PASSWORD
+      - APP_USER
+      - APP_USER_PASSWORD
     healthcheck:
-      test: ["CMD", "bash", "-c", "echo 'SELECT 1 FROM dual;' | sqlplus -s system/oracle@localhost/XEPDB1"]
+      test: ["CMD-SHELL", "echo 'SELECT 1 FROM dual;' | sqlplus -s $APP_USER/$APP_USER_PASSWORD@localhost/FREEPDB1"]
       interval: 10s
       timeout: 5s
       retries: 30
@@ -25,18 +25,28 @@ services:
     depends_on:
       oracle:
         condition: service_healthy
+        restart: true
     environment:
-      - CINEMA_JASYPT_KEY=XwZ#]=r9nErAe*)M!1!yi,Wxz*Ga^Fa~
-      - SPRING_DATASOURCE_URL=jdbc:oracle:thin:@oracle:1521/FREEPDB1
-      - SPRING_DATASOURCE_USERNAME=cinema
-      - SPRING_DATASOURCE_PASSWORD=cinema
-      - SPRING_DATASOURCE_DRIVER_CLASS_NAME=oracle.jdbc.OracleDriver
-      - SERVER_PORT=8080
-      - SERVER_HOST=localhost
-      - SPRING_SQL_INIT_MODE=always
-      - SPRING_SQL_INIT_PLATFORM=oracle
-      - SPRING_SQL_INIT_SCHEMA_LOCATIONS=classpath:db/migration/V1__init.sql
-      - SPRING_SQL_INIT_DATA_LOCATIONS=classpath:db/data.sql
+      - CINEMA_JASYPT_KEY
+      - JWT_SECRET_KEY
+      - JWT_ACCESS_TOKEN_EXPIRATION_MS
+      - JWT_REFRESH_TOKEN_EXPIRATION_MS
+      - SPRING_DATASOURCE_URL
+      - SPRING_DATASOURCE_USERNAME
+      - SPRING_DATASOURCE_PASSWORD
+      - SERVER_PORT
+      - SERVER_HOST
+      - SPRING_SQL_INIT_MODE
+      - SPRING_SQL_INIT_PLATFORM
+      - SPRING_SQL_INIT_SCHEMA_LOCATIONS
+      - SPRING_SQL_INIT_DATA_LOCATIONS
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/actuator/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
     networks:
       - app-network
 

@@ -8,13 +8,14 @@ import com.uos.dsd.cinema.core.security.SecurityConstants;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 
 @EnableWebSecurity
 @Configuration
@@ -42,9 +43,21 @@ public class SecurityConfig {
             .sessionManagement(sessionManagement -> sessionManagement
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(authorizeRequests -> authorizeRequests
+                // 완전 공개 엔드포인트
                 .requestMatchers(SecurityConstants.OPEN_ACCESS_URLS.toArray(String[]::new)).permitAll()
+                
+                // HTTP 메서드별 관리자 권한 체크
+                .requestMatchers(HttpMethod.POST, SecurityConstants.ADMIN_POST_URLS.toArray(String[]::new)).hasRole(SecurityConstants.Role.ADMIN.name())
+                .requestMatchers(HttpMethod.PUT, SecurityConstants.ADMIN_PUT_URLS.toArray(String[]::new)).hasRole(SecurityConstants.Role.ADMIN.name())
+                .requestMatchers(HttpMethod.DELETE, SecurityConstants.ADMIN_DELETE_URLS.toArray(String[]::new)).hasRole(SecurityConstants.Role.ADMIN.name())
+                
+                // 기존 관리자 권한 엔드포인트
                 .requestMatchers(SecurityConstants.ADMIN_URLS.toArray(String[]::new)).hasRole(SecurityConstants.Role.ADMIN.name())
+                
+                // 게스트 권한 엔드포인트  
                 .requestMatchers(SecurityConstants.GUEST_URLS.toArray(String[]::new)).hasRole(SecurityConstants.Role.GUEST.name())
+                
+                // 나머지는 인증 필요
                 .anyRequest().authenticated())
             .exceptionHandling(exception -> exception
                     .authenticationEntryPoint(jwtAuthenticationEntryPoint)

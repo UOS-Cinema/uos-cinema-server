@@ -1,6 +1,8 @@
-package com.uos.dsd.cinema.domain.movie.movie;
+package com.uos.dsd.cinema.domain.movie;
 
 import com.uos.dsd.cinema.common.model.Base;
+import com.uos.dsd.cinema.domain.movie.enums.CastingType;
+import com.uos.dsd.cinema.domain.movie.enums.MovieRating;
 
 import lombok.AccessLevel;
 import lombok.Getter;

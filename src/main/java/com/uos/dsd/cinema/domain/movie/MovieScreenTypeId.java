@@ -1,4 +1,4 @@
-package com.uos.dsd.cinema.domain.movie.movie;
+package com.uos.dsd.cinema.domain.movie;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -16,11 +16,11 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-public class MovieGenreId implements Serializable {
+public class MovieScreenTypeId implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "movie_id")
     private Movie movie;
 
-    private String genreName;
+    private String screenType;
 } 

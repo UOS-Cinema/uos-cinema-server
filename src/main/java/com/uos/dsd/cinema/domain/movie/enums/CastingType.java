@@ -1,4 +1,4 @@
-package com.uos.dsd.cinema.domain.movie.movie;
+package com.uos.dsd.cinema.domain.movie.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

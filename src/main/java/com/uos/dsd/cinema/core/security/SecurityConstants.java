@@ -16,7 +16,12 @@ public class SecurityConstants {
     public static final List<String> OPEN_ACCESS_URLS = List.of(
         "/admins/login",
         "/guests/login",
-        "/" + StorageConstants.STORAGE_URL_PREFIX + "/**"
+        "/" + StorageConstants.STORAGE_URL_PREFIX + "/**",
+        // Swagger UI 접근을 위한 엔드포인트들
+        "/swagger-ui/**",
+        "/v3/api-docs/**",
+        "/swagger-resources/**",
+        "/webjars/**"
     );
 
     public static final List<String> GUEST_URLS = List.of(

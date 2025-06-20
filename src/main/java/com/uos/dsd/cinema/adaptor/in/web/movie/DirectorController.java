@@ -25,6 +25,7 @@ public class DirectorController {
     public ApiResponse<MovieListResponse> getMoviesByDirector(
             @PathVariable Long id,
             @ModelAttribute DirectorMovieSearchRequest request) {
+                
         // TODO: 감독별 영화 검색 서비스 호출
         MovieListResponse mockResponse = new MovieListResponse(
             List.of(1L, 2L, 3L), 3, request.page(), 1

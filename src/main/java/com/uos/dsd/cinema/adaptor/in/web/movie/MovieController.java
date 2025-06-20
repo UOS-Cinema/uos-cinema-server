@@ -35,7 +35,7 @@ public class MovieController {
 
     @PostMapping
     public ApiResponse<Long> createMovie(@RequestBody MovieCreateRequest request) {
-        // TODO: admin 권한은 SecurityConstants ADMIN_URLS에서 URL 기반으로 검증됨
+
         // TODO: 영화 생성 서비스 호출
         return ApiResponse.success(1L); // Mock response
     }
@@ -44,20 +44,21 @@ public class MovieController {
     public ApiResponse<Long> updateMovie(
             @PathVariable Long id, 
             @RequestBody MovieUpdateRequest request) {
-        // TODO: admin 권한은 SecurityConstants ADMIN_URLS에서 URL 기반으로 검증됨
+
         // TODO: 영화 수정 서비스 호출
         return ApiResponse.success(id); // Mock response
     }
 
     @DeleteMapping("/{id}")
     public ApiResponse<Void> deleteMovie(@PathVariable Long id) {
-        // TODO: admin 권한은 SecurityConstants ADMIN_URLS에서 URL 기반으로 검증됨
+
         // TODO: 영화 삭제 서비스 호출
         return ApiResponse.success();
     }
 
     @GetMapping("/{id}")
     public ApiResponse<MovieDetailResponse> getMovieDetail(@PathVariable Long id) {
+
         // TODO: 영화 상세 조회 서비스 호출
         MovieDetailResponse mockResponse = new MovieDetailResponse(
             id, "Mock Title", "Mock Synopsis", 120L, MovieRating.FIFTEEN, 
@@ -71,6 +72,7 @@ public class MovieController {
 
     @GetMapping("/{id}/simple")
     public ApiResponse<MovieSimpleResponse> getMovieSimple(@PathVariable Long id) {
+
         // TODO: 영화 간단 조회 서비스 호출
         MovieSimpleResponse mockResponse = new MovieSimpleResponse(
             id, "Mock Title", "poster.jpg", LocalDate.now()
@@ -80,6 +82,7 @@ public class MovieController {
 
     @GetMapping("/search")
     public ApiResponse<MovieListResponse> searchMovies(@ModelAttribute MovieSearchRequest request) {
+
         // TODO: 영화 검색 서비스 호출
         MovieListResponse mockResponse = new MovieListResponse(
             List.of(1L, 2L, 3L), 3, request.page(), 1
@@ -89,6 +92,7 @@ public class MovieController {
 
     @GetMapping("/now-playing")
     public ApiResponse<MovieListResponse> getNowPlayingMovies(@ModelAttribute MovieListRequest request) {
+
         // TODO: 현재 상영중인 영화 조회 서비스 호출
         MovieListResponse mockResponse = new MovieListResponse(
             List.of(1L, 2L, 3L), 3, request.page(), 1
@@ -98,6 +102,7 @@ public class MovieController {
 
     @GetMapping("/upcoming")
     public ApiResponse<MovieListResponse> getUpcomingMovies(@ModelAttribute MovieListRequest request) {
+
         // TODO: 상영 예정 영화 조회 서비스 호출
         MovieListResponse mockResponse = new MovieListResponse(
             List.of(4L, 5L, 6L), 3, request.page(), 1

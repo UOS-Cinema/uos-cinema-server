@@ -26,6 +26,7 @@ public class ActorController {
     public ApiResponse<ActorMovieResponse> getMoviesByActor(
             @PathVariable Long id,
             @ModelAttribute ActorMovieSearchRequest request) {
+                
         // TODO: 배우별 영화 검색 서비스 호출
         ActorMovieResponse mockResponse = new ActorMovieResponse(
             List.of(

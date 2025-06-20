@@ -97,36 +97,13 @@ public class MovieSteps {
             Map<String, Object> headers,
             MovieSearchRequest request) {
 
-        var requestSpecification = given().log().all()
-                .headers(headers);
-
-        // Only add non-null query parameters
-        if (request.query() != null) {
-            requestSpecification.queryParam("query", request.query());
-        }
-        if (request.startDate() != null) {
-            requestSpecification.queryParam("startDate", request.startDate().toString());
-        }
-        if (request.endDate() != null) {
-            requestSpecification.queryParam("endDate", request.endDate().toString());
-        }
-        if (request.genres() != null && !request.genres().isEmpty()) {
-            requestSpecification.queryParam("genres", String.join(",", request.genres()));
-        }
-        if (request.sortBy() != null) {
-            requestSpecification.queryParam("sortBy", request.sortBy());
-        }
-        if (request.page() != null) {
-            requestSpecification.queryParam("page", request.page());
-        }
-        if (request.size() != null) {
-            requestSpecification.queryParam("size", request.size());
-        }
-
-        return requestSpecification
-                .when()
+        return given().log().all()
+                .headers(headers)
+                .contentType(ContentType.JSON)
+                .body(request)
+            .when()
                 .get(MOVIE_SEARCH_URL)
-                .then()
+            .then()
                 .log().all()
                 .extract()
                 .response();
@@ -138,8 +115,8 @@ public class MovieSteps {
 
         return given().log().all()
                 .headers(headers)
-                .queryParam("page", request.page())
-                .queryParam("size", request.size())
+                .contentType(ContentType.JSON)
+                .body(request)
             .when()
                 .get(MOVIE_NOW_PLAYING_URL)
             .then().log().all()
@@ -153,8 +130,8 @@ public class MovieSteps {
 
         return given().log().all()
                 .headers(headers)
-                .queryParam("page", request.page())
-                .queryParam("size", request.size())
+                .contentType(ContentType.JSON)
+                .body(request)
             .when()
                 .get(MOVIE_UPCOMING_URL)
             .then().log().all()

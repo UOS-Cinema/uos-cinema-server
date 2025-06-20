@@ -11,13 +11,13 @@ public record MovieSearchRequest(
     LocalDate endDate,
     List<String> genres,
     List<String> screenTypes,
-    String sortBy,
+    MovieSortType sortBy,
     Integer page,
     Integer size
 ) {
     public MovieSearchRequest {
         // 기본값 설정
-        if (sortBy == null) sortBy = MovieSortType.POPULARITY.getValue();
+        if (sortBy == null) sortBy = MovieSortType.POPULARITY;
         if (page == null) page = 0;
         if (size == null) size = 20;
         
@@ -25,10 +25,5 @@ public record MovieSearchRequest(
         LocalDate now = LocalDate.now();
         if (startDate == null) startDate = now.minusMonths(1);
         if (endDate == null) endDate = now.plusDays(7);
-        
-        // 정렬 기준 검증
-        if (!MovieSortType.isValidValue(sortBy)) {
-            throw new IllegalArgumentException("유효하지 않은 정렬 기준입니다: " + sortBy);
-        }
     }
 } 

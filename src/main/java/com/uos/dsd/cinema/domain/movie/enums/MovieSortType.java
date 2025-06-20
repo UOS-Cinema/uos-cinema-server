@@ -7,8 +7,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum MovieSortType {
 
-    RELEASE_DATE("release_date"),
-    POPULARITY("popularity");
+    RELEASE_DATE("개봉일순"),
+    POPULARITY("인기순");
 
     private final String value;
 

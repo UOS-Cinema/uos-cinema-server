@@ -5,8 +5,8 @@ import com.uos.dsd.cinema.adaptor.in.web.director.response.DirectorMovieListResp
 import com.uos.dsd.cinema.common.response.ApiResponse;
 
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,7 +24,7 @@ public class DirectorController {
     @GetMapping("/{id}/movies")
     public ApiResponse<DirectorMovieListResponse> getMoviesByDirector(
             @PathVariable("id") Long id,
-            @ModelAttribute DirectorMovieSearchRequest request) {
+            @RequestBody DirectorMovieSearchRequest request) {
                 
         // TODO: 감독별 영화 검색 서비스 호출
         DirectorMovieListResponse mockResponse = new DirectorMovieListResponse(

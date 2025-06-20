@@ -23,7 +23,7 @@ public class DirectorController {
 
     @GetMapping("/{id}/movies")
     public ApiResponse<MovieListResponse> getMoviesByDirector(
-            @PathVariable Long id,
+            @PathVariable("id") Long id,
             @ModelAttribute DirectorMovieSearchRequest request) {
                 
         // TODO: 감독별 영화 검색 서비스 호출

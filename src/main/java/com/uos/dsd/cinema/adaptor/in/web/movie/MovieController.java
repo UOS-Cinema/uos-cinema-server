@@ -42,7 +42,7 @@ public class MovieController {
 
     @PutMapping("/{id}")
     public ApiResponse<Long> updateMovie(
-            @PathVariable Long id, 
+            @PathVariable("id") Long id, 
             @RequestBody MovieUpdateRequest request) {
 
         // TODO: 영화 수정 서비스 호출
@@ -50,14 +50,14 @@ public class MovieController {
     }
 
     @DeleteMapping("/{id}")
-    public ApiResponse<Void> deleteMovie(@PathVariable Long id) {
+    public ApiResponse<Void> deleteMovie(@PathVariable("id") Long id) {
 
         // TODO: 영화 삭제 서비스 호출
         return ApiResponse.success();
     }
 
     @GetMapping("/{id}")
-    public ApiResponse<MovieDetailResponse> getMovieDetail(@PathVariable Long id) {
+    public ApiResponse<MovieDetailResponse> getMovieDetail(@PathVariable("id") Long id) {
 
         // TODO: 영화 상세 조회 서비스 호출
         MovieDetailResponse mockResponse = new MovieDetailResponse(
@@ -71,7 +71,7 @@ public class MovieController {
     }
 
     @GetMapping("/{id}/simple")
-    public ApiResponse<MovieSimpleResponse> getMovieSimple(@PathVariable Long id) {
+    public ApiResponse<MovieSimpleResponse> getMovieSimple(@PathVariable("id") Long id) {
 
         // TODO: 영화 간단 조회 서비스 호출
         MovieSimpleResponse mockResponse = new MovieSimpleResponse(

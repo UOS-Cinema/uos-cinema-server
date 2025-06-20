@@ -24,7 +24,7 @@ public class ActorController {
 
     @GetMapping("/{id}/movies")
     public ApiResponse<ActorMovieResponse> getMoviesByActor(
-            @PathVariable Long id,
+            @PathVariable("id") Long id,
             @ModelAttribute ActorMovieSearchRequest request) {
                 
         // TODO: 배우별 영화 검색 서비스 호출

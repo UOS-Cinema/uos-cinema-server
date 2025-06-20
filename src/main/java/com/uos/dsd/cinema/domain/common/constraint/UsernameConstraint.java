@@ -1,6 +1,6 @@
-package com.uos.dsd.cinema.domain.constraint;
+package com.uos.dsd.cinema.domain.common.constraint;
 
-import com.uos.dsd.cinema.domain.exception.IllegalUsernameException;
+import com.uos.dsd.cinema.domain.common.exception.IllegalUsernameException;
 
 public class UsernameConstraint {
 

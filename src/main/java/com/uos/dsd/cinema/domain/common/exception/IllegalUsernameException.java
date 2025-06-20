@@ -1,4 +1,4 @@
-package com.uos.dsd.cinema.domain.exception;
+package com.uos.dsd.cinema.domain.common.exception;
 
 public class IllegalUsernameException extends IllegalArgumentException {
 

@@ -1,6 +1,6 @@
-package com.uos.dsd.cinema.domain.constraint;
+package com.uos.dsd.cinema.domain.common.constraint;
 
-import com.uos.dsd.cinema.domain.exception.IllegalPasswordException;
+import com.uos.dsd.cinema.domain.common.exception.IllegalPasswordException;
 
 public class PasswordConstraint {
 

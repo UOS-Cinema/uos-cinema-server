@@ -43,21 +43,28 @@ public class SecurityConfig {
             .sessionManagement(sessionManagement -> sessionManagement
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                // 완전 공개 엔드포인트
-                .requestMatchers(SecurityConstants.OPEN_ACCESS_URLS.toArray(String[]::new)).permitAll()
+
+                // 모든 권한 허용
+                .requestMatchers(SecurityConstants.PUBLIC_URLS.toArray(String[]::new)).permitAll()
+                .requestMatchers(HttpMethod.GET, SecurityConstants.PUBLIC_GET_URLS.toArray(String[]::new)).permitAll()
+                .requestMatchers(HttpMethod.POST, SecurityConstants.PUBLIC_POST_URLS.toArray(String[]::new)).permitAll()
+                .requestMatchers(HttpMethod.PUT, SecurityConstants.PUBLIC_PUT_URLS.toArray(String[]::new)).permitAll()
+                .requestMatchers(HttpMethod.DELETE, SecurityConstants.PUBLIC_DELETE_URLS.toArray(String[]::new)).permitAll()
                 
-                // HTTP 메서드별 관리자 권한 체크
+                // GUEST 권한
+                .requestMatchers(SecurityConstants.GUEST_URLS.toArray(String[]::new)).hasRole(SecurityConstants.Role.GUEST.name())
+                .requestMatchers(HttpMethod.GET, SecurityConstants.GUEST_GET_URLS.toArray(String[]::new)).hasRole(SecurityConstants.Role.GUEST.name())
+                .requestMatchers(HttpMethod.POST, SecurityConstants.GUEST_POST_URLS.toArray(String[]::new)).hasRole(SecurityConstants.Role.GUEST.name())
+                .requestMatchers(HttpMethod.PUT, SecurityConstants.GUEST_PUT_URLS.toArray(String[]::new)).hasRole(SecurityConstants.Role.GUEST.name())
+                .requestMatchers(HttpMethod.DELETE, SecurityConstants.GUEST_DELETE_URLS.toArray(String[]::new)).hasRole(SecurityConstants.Role.GUEST.name())
+                
+                // ADMIN 권한
+                .requestMatchers(SecurityConstants.ADMIN_URLS.toArray(String[]::new)).hasRole(SecurityConstants.Role.ADMIN.name())
+                .requestMatchers(HttpMethod.GET, SecurityConstants.ADMIN_GET_URLS.toArray(String[]::new)).hasRole(SecurityConstants.Role.ADMIN.name())
                 .requestMatchers(HttpMethod.POST, SecurityConstants.ADMIN_POST_URLS.toArray(String[]::new)).hasRole(SecurityConstants.Role.ADMIN.name())
                 .requestMatchers(HttpMethod.PUT, SecurityConstants.ADMIN_PUT_URLS.toArray(String[]::new)).hasRole(SecurityConstants.Role.ADMIN.name())
                 .requestMatchers(HttpMethod.DELETE, SecurityConstants.ADMIN_DELETE_URLS.toArray(String[]::new)).hasRole(SecurityConstants.Role.ADMIN.name())
-                
-                // 기존 관리자 권한 엔드포인트
-                .requestMatchers(SecurityConstants.ADMIN_URLS.toArray(String[]::new)).hasRole(SecurityConstants.Role.ADMIN.name())
-                
-                // 게스트 권한 엔드포인트  
-                .requestMatchers(SecurityConstants.GUEST_URLS.toArray(String[]::new)).hasRole(SecurityConstants.Role.GUEST.name())
-                
-                // 나머지는 인증 필요
+
                 .anyRequest().authenticated())
             .exceptionHandling(exception -> exception
                     .authenticationEntryPoint(jwtAuthenticationEntryPoint)

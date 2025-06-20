@@ -17,8 +17,8 @@ import com.uos.dsd.cinema.adaptor.in.web.movie.response.MovieListResponse;
 import com.uos.dsd.cinema.adaptor.in.web.movie.response.MovieSimpleResponse;
 import com.uos.dsd.cinema.common.exception.code.CommonResultCode;
 import com.uos.dsd.cinema.common.response.ApiResponse;
-import com.uos.dsd.cinema.domain.movie.movie.CastingType;
-import com.uos.dsd.cinema.domain.movie.movie.MovieRating;
+import com.uos.dsd.cinema.domain.movie.enums.CastingType;
+import com.uos.dsd.cinema.domain.movie.enums.MovieRating;
 import com.uos.dsd.cinema.utils.AuthHeaderProvider;
 
 import org.junit.jupiter.api.DisplayNameGeneration;

@@ -41,18 +41,6 @@ CREATE TABLE theater_screen_types (
     FOREIGN KEY (screen_type) REFERENCES screen_types(type)
 );
 
--- 어드민
-CREATE SEQUENCE admin_seq START WITH 1 INCREMENT BY 1;
-
-CREATE TABLE admins (
-    id INT DEFAULT NEXT VALUE FOR admin_seq PRIMARY KEY,
-    username VARCHAR(20) UNIQUE NOT NULL,
-    password CHAR(64) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    deleted_at TIMESTAMP
-);
-
 -- 장르
 CREATE TABLE genres (
     name         VARCHAR(50),
@@ -94,4 +82,39 @@ CREATE TABLE card_companies (
     deleted_at      TIMESTAMP,
 
     PRIMARY KEY (name)
+);
+
+-- 어드민
+CREATE SEQUENCE admin_seq START WITH 1 INCREMENT BY 1;
+
+CREATE TABLE admins (
+    id INT DEFAULT NEXT VALUE FOR admin_seq,
+    username VARCHAR(20) UNIQUE NOT NULL,
+    password CHAR(64) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted_at TIMESTAMP,
+
+    PRIMARY_KEY (id)
+);
+
+CREATE SEQUENCE customer_seq START WITH 1 INCREMENT BY 1;
+
+CREATE TABLE customers (
+    id INT DEFAULT NEXT VALUE FOR customer_seq,
+    user_type VARCHAR(20) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    PRIMARY_KEY (id)
+);
+
+CREATE TABLE guests (
+    customer_id INT,
+    name VARCHAR(50) NOT NULL,
+    phone VARCHAR(20) NOT NULL,
+    birth_date DATE NOT NULL,
+    password CHAR(64) NOT NULL,
+
+    PRIMARY KEY (customer_id),
+    FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE CASCADE
 );

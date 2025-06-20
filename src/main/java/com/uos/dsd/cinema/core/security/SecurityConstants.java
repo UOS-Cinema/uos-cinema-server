@@ -15,7 +15,12 @@ public class SecurityConstants {
 
     public static final List<String> OPEN_ACCESS_URLS = List.of(
         "/admins/login",
+        "/guests/login",
         "/" + StorageConstants.STORAGE_URL_PREFIX + "/**"
+    );
+
+    public static final List<String> GUEST_URLS = List.of(
+        "/guests/{id}"
     );
 
     public static final List<String> ADMIN_URLS = List.of(

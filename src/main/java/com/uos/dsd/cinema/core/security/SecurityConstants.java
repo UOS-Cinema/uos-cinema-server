@@ -35,7 +35,9 @@ public class SecurityConstants {
         "/actors/*/movies",     // 배우별 영화
         "/directors/*/movies",  // 감독별 영화
         "/movies/*",            // 영화 상세 조회
-        "/movies/*/simple"      // 영화 간단 조회
+        "/movies/*/simple",     // 영화 간단 조회
+        "/actors/search",       // 배우 검색
+        "/actors"               // 배우 리스트 조회
     );
 
     // 모든 권한 허용 - POST 요청만
@@ -89,21 +91,24 @@ public class SecurityConstants {
     public static final List<String> ADMIN_POST_URLS = List.of(
         "/admins/signup",       // 관리자 회원가입
         "/movies",              // 영화 생성
-        "/theaters"             // 극장 생성
+        "/theaters",            // 극장 생성
+        "/actors"               // 배우 생성
     );
 
     // ADMIN 권한만 허용 - PUT 요청만
     public static final List<String> ADMIN_PUT_URLS = List.of(
         "/admins/update",       // 관리자 정보 수정
         "/movies/*",            // 영화 수정
-        "/theaters/*"           // 극장 수정
+        "/theaters/*",          // 극장 수정
+        "/actors/*"             // 배우 수정
     );
 
     // ADMIN 권한만 허용 - DELETE 요청만
     public static final List<String> ADMIN_DELETE_URLS = List.of(
         "/admins/delete",       // 관리자 계정 삭제
         "/movies/*",            // 영화 삭제
-        "/theaters/*"           // 극장 삭제
+        "/theaters/*",          // 극장 삭제
+        "/actors/*"             // 배우 삭제
     );
 
     public static final String USER_NAME_CLAIM = "username";

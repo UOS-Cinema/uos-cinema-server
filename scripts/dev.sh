@@ -14,6 +14,10 @@ cleanup() {
 trap cleanup SIGINT SIGTERM
 
 # Start the containers using docker-compose
+echo "Building backend..."
+./gradlew bootJar
+echo "Done."
+
 echo "🚀 Starting database and backend..."
 docker-compose -f $ROOT/scripts/docker-compose.yaml up -d --build
 echo "✅ Database and backend started."

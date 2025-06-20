@@ -1,7 +1,7 @@
-package com.uos.dsd.cinema.adaptor.in.web.movie;
+package com.uos.dsd.cinema.adaptor.in.web.actor;
 
-import com.uos.dsd.cinema.adaptor.in.web.movie.request.ActorMovieSearchRequest;
-import com.uos.dsd.cinema.adaptor.in.web.movie.response.ActorMovieResponse;
+import com.uos.dsd.cinema.adaptor.in.web.actor.request.ActorMovieSearchRequest;
+import com.uos.dsd.cinema.adaptor.in.web.actor.response.ActorMovieResponse;
 import com.uos.dsd.cinema.common.response.ApiResponse;
 import com.uos.dsd.cinema.domain.movie.enums.CastingType;
 

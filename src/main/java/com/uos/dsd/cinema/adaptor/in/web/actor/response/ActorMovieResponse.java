@@ -1,4 +1,4 @@
-package com.uos.dsd.cinema.adaptor.in.web.movie.response;
+package com.uos.dsd.cinema.adaptor.in.web.actor.response;
 
 import com.uos.dsd.cinema.domain.movie.enums.CastingType;
 

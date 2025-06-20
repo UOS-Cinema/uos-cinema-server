@@ -1,7 +1,7 @@
-package com.uos.dsd.cinema.adaptor.in.web.movie;
+package com.uos.dsd.cinema.adaptor.in.web.director;
 
-import com.uos.dsd.cinema.adaptor.in.web.movie.request.DirectorMovieSearchRequest;
-import com.uos.dsd.cinema.adaptor.in.web.movie.response.MovieListResponse;
+import com.uos.dsd.cinema.adaptor.in.web.director.request.DirectorMovieSearchRequest;
+import com.uos.dsd.cinema.adaptor.in.web.director.response.DirectorMovieListResponse;
 import com.uos.dsd.cinema.common.response.ApiResponse;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,12 +22,12 @@ public class DirectorController {
     // TODO: 서비스 의존성 주입 예정
 
     @GetMapping("/{id}/movies")
-    public ApiResponse<MovieListResponse> getMoviesByDirector(
+    public ApiResponse<DirectorMovieListResponse> getMoviesByDirector(
             @PathVariable("id") Long id,
             @ModelAttribute DirectorMovieSearchRequest request) {
                 
         // TODO: 감독별 영화 검색 서비스 호출
-        MovieListResponse mockResponse = new MovieListResponse(
+        DirectorMovieListResponse mockResponse = new DirectorMovieListResponse(
             List.of(1L, 2L, 3L), 3, request.page(), 1
         );
         return ApiResponse.success(mockResponse);

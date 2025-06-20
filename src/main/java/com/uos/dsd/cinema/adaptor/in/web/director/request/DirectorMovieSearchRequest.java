@@ -1,4 +1,4 @@
-package com.uos.dsd.cinema.adaptor.in.web.movie.request;
+package com.uos.dsd.cinema.adaptor.in.web.director.request;
 
 import com.uos.dsd.cinema.domain.movie.enums.MovieSortType;
 

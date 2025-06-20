@@ -1,4 +1,4 @@
-package com.uos.dsd.cinema.adaptor.in.web.movie.request;
+package com.uos.dsd.cinema.adaptor.in.web.actor.request;
 
 import com.uos.dsd.cinema.domain.movie.enums.MovieSortType;
 
@@ -15,6 +15,7 @@ public record ActorMovieSearchRequest(
     Integer size
 ) {
     public ActorMovieSearchRequest {
+
         // 기본값 설정
         if (sortBy == null) sortBy = MovieSortType.POPULARITY.getValue();
         if (page == null) page = 0;

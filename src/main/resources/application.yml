@@ -29,3 +29,7 @@ jwt:
   secretKey: ENC(e7ndeI+tpOJOGFRbIFgT6t8gKGJwsZcNGSqi1ErlAu2z9JeJ36Jm/642rc/3jG3Di8eJ8o7Aa752tirB4JM0IPOSx7CYpuNwQQXE7361zBY=)
   accessTokenExpirationMs: ENC(372jdGhP8cHUJS8T9HKKqA/RAA0hVFNljoPhoxY+FqT/PyAmAiNYmrjipG4TAm6o)
   refreshTokenExpirationMs: ENC(k6jL/gcI6YUnJpKmsad6Zb+BfwbrmzhqqJJmEhKK9iLgbv6z7wknBBdeeEthmm3s)
+
+server:
+  host: localhost
+  port: 8080

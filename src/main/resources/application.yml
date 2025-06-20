@@ -3,10 +3,10 @@ spring:
     name: cinema
 
   datasource:
-    url: jdbc:h2:mem:testdb;MODE=Oracle;
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
+    url: jdbc:oracle:thin:@oracle:1521/CINEMA
+    username: cinema
+    password: cinema
+    driver-class-name: oracle.jdbc.OracleDriver
 
   jpa:
     hibernate:

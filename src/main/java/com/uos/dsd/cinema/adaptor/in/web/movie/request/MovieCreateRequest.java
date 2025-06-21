@@ -3,63 +3,60 @@ package com.uos.dsd.cinema.adaptor.in.web.movie.request;
 import com.uos.dsd.cinema.domain.movie.enums.CastingType;
 import com.uos.dsd.cinema.domain.movie.enums.MovieRating;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public record MovieCreateRequest(
+    @NotBlank(message = "title은 필수입니다.")
     String title,
+
     String synopsis,
+
+    @NotNull(message = "runningTime은 필수입니다.")
     Long runningTime,
+
+    @NotNull(message = "rating은 필수입니다.")
     MovieRating rating,
+
     String posterUrls,
+
+    @NotNull(message = "releaseDate은 필수입니다.")
     LocalDate releaseDate,
+
+    @NotBlank(message = "distributorName은 필수입니다.")
     String distributorName,
+
+    @NotNull(message = "directorId는 필수입니다.")
     Long directorId,
+
     List<String> screenTypes,
+
+    @Valid
     List<ActorCastingRequest> actors,
+
     List<String> genres
 ) {
     
     public MovieCreateRequest {
-        if (title == null || title.trim().isEmpty()) {
-            throw new IllegalArgumentException("title은 필수입니다.");
-        }
-        if (runningTime == null) {
-            throw new IllegalArgumentException("runningTime은 필수입니다.");
-        }
-        if (rating == null) {
-            throw new IllegalArgumentException("rating은 필수입니다.");
-        }
-        if (releaseDate == null) {
-            throw new IllegalArgumentException("releaseDate은 필수입니다.");
-        }
-        if (distributorName == null || distributorName.trim().isEmpty()) {
-            throw new IllegalArgumentException("distributorName은 필수입니다.");
-        }
-        if (directorId == null) {
-            throw new IllegalArgumentException("directorId는 필수입니다.");
-        }
         if (screenTypes == null) screenTypes = new ArrayList<>();
         if (actors == null) actors = new ArrayList<>();
         if (genres == null) genres = new ArrayList<>();
     }
 
     public record ActorCastingRequest(
+        @NotNull(message = "actorId는 필수입니다.")
         Long actorId,
+
+        @NotBlank(message = "role은 필수입니다.")
         String role,
+
+        @NotNull(message = "castingType은 필수입니다.")
         CastingType castingType
     ) {
-        public ActorCastingRequest {
-            if (actorId == null) {
-                throw new IllegalArgumentException("actorId는 필수입니다.");
-            }
-            if (role == null || role.trim().isEmpty()) {
-                throw new IllegalArgumentException("role은 필수입니다.");
-            }
-            if (castingType == null) {
-                throw new IllegalArgumentException("castingType은 필수입니다.");
-            }
-        }
     }
 } 

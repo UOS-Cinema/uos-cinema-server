@@ -257,7 +257,7 @@ CREATE TABLE reservations (
 
     -- snapshot
     seat_snapshot CLOB DEFAULT '[]' NOT NULL,
-    customer_type_snapshot CLOB DEFAULT '[]' NOT NULL,
+    customer_count_snapshot CLOB DEFAULT '[]' NOT NULL,
 
     PRIMARY KEY (id),
     FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE SET NULL,
@@ -266,13 +266,15 @@ CREATE TABLE reservations (
 
 -- 예매 좌석 테이블
 CREATE TABLE reservation_seats (
-    reservation_id NUMBER NOT NULL,
+    screening_id NUMBER NOT NULL,
     theater_id NUMBER NOT NULL,
     seat_number CHAR(3) NOT NULL,
+    reservation_id NUMBER NOT NULL,
 
-    PRIMARY KEY (reservation_id, theater_id, seat_number),
-    FOREIGN KEY (reservation_id) REFERENCES reservations(id) ON DELETE CASCADE,
-    FOREIGN KEY (theater_id, seat_number) REFERENCES theater_seats(theater_id, seat_number) ON DELETE CASCADE
+    PRIMARY KEY (screening_id, theater_id, seat_number),
+    FOREIGN KEY (screening_id) REFERENCES screenings(id) ON DELETE CASCADE,
+    FOREIGN KEY (theater_id, seat_number) REFERENCES theater_seats(theater_id, seat_number) ON DELETE CASCADE,
+    FOREIGN KEY (reservation_id) REFERENCES reservations(id) ON DELETE CASCADE
 );
 
 -- 예매 고객 유형별 인원 수 테이블

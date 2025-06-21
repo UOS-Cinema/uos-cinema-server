@@ -223,7 +223,8 @@ CREATE TABLE reservations (
     status VARCHAR(20) DEFAULT 'PROGRESS' NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     seat_snapshot CLOB NOT NULL,
-    customer_type_snapshot CLOB NOT NULL,
+    customer_count_snapshot CLOB NOT NULL,
+
     PRIMARY KEY (id),
     FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE SET NULL,
     FOREIGN KEY (screening_id) REFERENCES screenings(id) ON DELETE SET NULL
@@ -231,12 +232,15 @@ CREATE TABLE reservations (
 
 -- 예매 좌석 테이블
 CREATE TABLE reservation_seats (
-    reservation_id NUMBER NOT NULL,
+    screening_id NUMBER NOT NULL,
     theater_id NUMBER NOT NULL,
     seat_number VARCHAR(3) NOT NULL,
-    PRIMARY KEY (reservation_id, theater_id, seat_number),
-    FOREIGN KEY (reservation_id) REFERENCES reservations(id) ON DELETE CASCADE,
-    FOREIGN KEY (theater_id, seat_number) REFERENCES theater_seats(theater_id, seat_number) ON DELETE CASCADE
+    reservation_id NUMBER NOT NULL,
+
+    PRIMARY KEY (screening_id, theater_id, seat_number),
+    FOREIGN KEY (screening_id) REFERENCES screenings(id) ON DELETE CASCADE,
+    FOREIGN KEY (theater_id, seat_number) REFERENCES theater_seats(theater_id, seat_number) ON DELETE CASCADE,
+    FOREIGN KEY (reservation_id) REFERENCES reservations(id) ON DELETE CASCADE
 );
 
 -- 예매 고객 유형별 인원 수 테이블

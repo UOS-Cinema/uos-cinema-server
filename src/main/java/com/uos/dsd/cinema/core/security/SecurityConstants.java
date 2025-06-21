@@ -19,13 +19,15 @@ public class SecurityConstants {
 
         // 파일 저장소 접근을 위한 엔드포인트
         "/" + StorageConstants.STORAGE_URL_PREFIX + "/**",
-        
+        "/screenings",
+        "/screenings/{id}",
+        "/theaters",
+        "/theaters/{theaterNumber}",
         // Swagger UI 접근을 위한 엔드포인트들
         "/swagger-ui/**",
         "/v3/api-docs/**",
         "/swagger-resources/**",
-        "/webjars/**",
-        "/screenings/**"
+        "/webjars/**"
     );
 
     public static final List<String> GUEST_URLS = List.of(

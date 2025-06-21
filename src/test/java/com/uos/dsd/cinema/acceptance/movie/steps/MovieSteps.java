@@ -10,6 +10,7 @@ import com.uos.dsd.cinema.adaptor.in.web.movie.request.MovieUpdateRequest;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class MovieSteps {
@@ -97,10 +98,19 @@ public class MovieSteps {
             Map<String, Object> headers,
             MovieSearchRequest request) {
 
+        Map<String, Object> queryParams = new HashMap<>();
+        if (request.query() != null) queryParams.put("query", request.query());
+        if (request.startDate() != null) queryParams.put("startDate", request.startDate().toString());
+        if (request.endDate() != null) queryParams.put("endDate", request.endDate().toString());
+        if (request.genres() != null) queryParams.put("genres", request.genres());
+        if (request.screenTypes() != null) queryParams.put("screenTypes", request.screenTypes());
+        if (request.sortBy() != null) queryParams.put("sortBy", request.sortBy());
+        if (request.page() != null) queryParams.put("page", request.page());
+        if (request.size() != null) queryParams.put("size", request.size());
+
         return given().log().all()
                 .headers(headers)
-                .contentType(ContentType.JSON)
-                .body(request)
+                .queryParams(queryParams)
             .when()
                 .get(MOVIE_SEARCH_URL)
             .then()
@@ -113,10 +123,13 @@ public class MovieSteps {
             Map<String, Object> headers,
             MovieListRequest request) {
 
+        Map<String, Object> queryParams = new HashMap<>();
+        if (request.page() != null) queryParams.put("page", request.page());
+        if (request.size() != null) queryParams.put("size", request.size());
+
         return given().log().all()
                 .headers(headers)
-                .contentType(ContentType.JSON)
-                .body(request)
+                .queryParams(queryParams)
             .when()
                 .get(MOVIE_NOW_PLAYING_URL)
             .then().log().all()
@@ -128,10 +141,13 @@ public class MovieSteps {
             Map<String, Object> headers,
             MovieListRequest request) {
 
+        Map<String, Object> queryParams = new HashMap<>();
+        if (request.page() != null) queryParams.put("page", request.page());
+        if (request.size() != null) queryParams.put("size", request.size());
+
         return given().log().all()
                 .headers(headers)
-                .contentType(ContentType.JSON)
-                .body(request)
+                .queryParams(queryParams)
             .when()
                 .get(MOVIE_UPCOMING_URL)
             .then().log().all()

@@ -7,6 +7,7 @@ import com.uos.dsd.cinema.domain.genre.Genre;
 import com.uos.dsd.cinema.domain.movie.enums.CastingType;
 import com.uos.dsd.cinema.domain.movie.enums.MovieRating;
 import com.uos.dsd.cinema.domain.screen_type.ScreenType;
+import com.uos.dsd.cinema.core.converter.StringListConverter;
 
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;

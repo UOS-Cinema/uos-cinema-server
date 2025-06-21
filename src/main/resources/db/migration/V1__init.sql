@@ -183,7 +183,7 @@ CREATE TABLE movies (
 
     PRIMARY KEY (id),
     FOREIGN KEY (director_id) REFERENCES directors(id) ON DELETE SET NULL,
-    CONSTRAINT check_rating CHECK (rating IN ('ALL', '12', '15', '19'))
+    CONSTRAINT check_rating CHECK (rating IN ('ALL', 'TWELVE', 'FIFTEEN', 'EIGHTEEN'))
 );
 
 -- 영화 통계 테이블

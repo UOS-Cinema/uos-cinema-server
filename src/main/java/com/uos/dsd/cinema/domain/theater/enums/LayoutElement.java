@@ -12,7 +12,8 @@ public enum LayoutElement {
     NONE(0),
     SEAT(1),
     AISLE(2),
-    UNAVAILABLE(3);
+    UNAVAILABLE(3),
+    RESERVED(4);
 
     private final int code;
 

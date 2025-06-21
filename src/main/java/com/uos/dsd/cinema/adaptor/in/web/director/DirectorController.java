@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 
+import jakarta.validation.Valid;
+
 import java.util.List;
 
 @RestController
@@ -31,7 +33,7 @@ public class DirectorController {
     // TODO: 서비스 의존성 주입 예정
 
     @PostMapping
-    public ApiResponse<Long> createDirector(@RequestBody DirectorCreateRequest request) {
+    public ApiResponse<Long> createDirector(@Valid @RequestBody DirectorCreateRequest request) {
         
         // TODO: 감독 생성 서비스 호출
         // - 프로필 이미지를 스토리지에 저장
@@ -42,7 +44,7 @@ public class DirectorController {
     @PutMapping("/{id}")
     public ApiResponse<Long> updateDirector(
             @PathVariable("id") Long id,
-            @RequestBody DirectorUpdateRequest request) {
+            @Valid @RequestBody DirectorUpdateRequest request) {
         
         // TODO: 감독 수정 서비스 호출
         // - 감독 ID 존재 여부 검증
@@ -63,7 +65,7 @@ public class DirectorController {
 
     @GetMapping("/search")
     public ApiResponse<DirectorListResponse> searchDirectors(
-            @ModelAttribute DirectorSearchRequest request) {
+            @Valid @ModelAttribute DirectorSearchRequest request) {
         
         // TODO: 감독 검색 서비스 호출
         DirectorListResponse mockResponse = new DirectorListResponse(
@@ -78,7 +80,7 @@ public class DirectorController {
 
     @GetMapping
     public ApiResponse<DirectorListResponse> getDirectorList(
-            @ModelAttribute DirectorListRequest request) {
+            @Valid @ModelAttribute DirectorListRequest request) {
         
         // TODO: 감독 리스트 조회 서비스 호출 (감독명으로 정렬)
         DirectorListResponse mockResponse = new DirectorListResponse(
@@ -95,7 +97,7 @@ public class DirectorController {
     @GetMapping("/{id}/movies")
     public ApiResponse<DirectorMovieListResponse> getMoviesByDirector(
             @PathVariable("id") Long id,
-            @ModelAttribute DirectorMovieSearchRequest request) {
+            @Valid @ModelAttribute DirectorMovieSearchRequest request) {
                 
         // TODO: 감독별 영화 검색 서비스 호출
         DirectorMovieListResponse mockResponse = new DirectorMovieListResponse(

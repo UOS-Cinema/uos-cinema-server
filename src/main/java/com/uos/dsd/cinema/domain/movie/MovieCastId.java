@@ -4,23 +4,19 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Embeddable;
 
 import java.io.Serializable;
 
+@Embeddable
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode(of = {"movieId", "actorId"})
 public class MovieCastId implements Serializable {
 
-    @ManyToOne
-    @JoinColumn(name = "movie_id")
-    private Movie movie;
+    private Long movieId;
 
     private Long actorId;
 } 

@@ -1,16 +1,23 @@
 package com.uos.dsd.cinema.domain.movie;
 
+import com.uos.dsd.cinema.common.converter.StringListConverter;
 import com.uos.dsd.cinema.common.model.Base;
+import com.uos.dsd.cinema.domain.actor.Actor;
+import com.uos.dsd.cinema.domain.director.Director;
+import com.uos.dsd.cinema.domain.genre.Genre;
 import com.uos.dsd.cinema.domain.movie.enums.CastingType;
 import com.uos.dsd.cinema.domain.movie.enums.MovieRating;
+import com.uos.dsd.cinema.domain.screen_type.ScreenType;
 
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -18,7 +25,11 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.Lob;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -30,6 +41,7 @@ import java.util.List;
 @Table(name = "movies")
 @Getter
 @Setter
+@EqualsAndHashCode(of = "id", callSuper = false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Movie extends Base {
 
@@ -44,15 +56,16 @@ public class Movie extends Base {
     private String synopsis;
 
     @Column(nullable = false)
-    private Long runningTime;
+    private Integer runningTime;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private MovieRating rating;
 
     @Lob
-    @Column(columnDefinition = "CLOB")
-    private String posterUrls;
+    @Convert(converter = StringListConverter.class)
+    @Column(name = "poster_urls")
+    private List<String> posterUrls;
 
     @Column(nullable = false)
     private LocalDate releaseDate;
@@ -60,110 +73,75 @@ public class Movie extends Base {
     @Column(nullable = false)
     private String distributorName;
 
-    @Column(nullable = false)
-    private Long directorId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "director_id")
+    private Director director;
 
-    // 생명주기 관리
-    @OneToMany(mappedBy = "id.movie", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<MovieScreenType> movieScreenTypes;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "movie_screen_types",
+        joinColumns = @JoinColumn(name = "movie_id"),
+        inverseJoinColumns = @JoinColumn(name = "screen_type"))
+    private List<ScreenType> screenTypes;
 
-    // 생명주기 관리
-    @OneToMany(mappedBy = "id.movie", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "movie", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MovieCast> movieCasts;
 
-    // 생명주기 관리
-    @OneToMany(mappedBy = "id.movie", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<MovieGenre> movieGenres;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "movie_genres",
+        joinColumns = @JoinColumn(name = "movie_id"),
+        inverseJoinColumns = @JoinColumn(name = "genre_name"))
+    private List<Genre> genres;
 
     public Movie(String title,
             String synopsis,
-            Long runningTime,
+            Integer runningTime,
             MovieRating rating,
-            String posterUrls,
+            List<String> posterUrls,
             LocalDate releaseDate,
             String distributorName,
-            Long directorId,
-            List<String> screenTypeNames,
-            List<Long> actorIds,
+            Director director,
+            List<ScreenType> screenTypes,
+            List<Actor> actors,
             List<String> roles,
             List<CastingType> castingTypes,
-            List<String> genreNames) {
+            List<Genre> genres) {
 
         this.title = title;
         this.synopsis = synopsis;
         this.runningTime = runningTime;
         this.rating = rating;
-        this.setPosterUrls(posterUrls);
+        this.posterUrls = posterUrls;
         this.releaseDate = releaseDate;
         this.distributorName = distributorName;
-        this.directorId = directorId;
-        this.setMovieScreenTypes(screenTypeNames);
-        this.setMovieCasts(actorIds, roles, castingTypes);
-        this.setMovieGenres(genreNames);
+        this.director = director;
+        this.screenTypes = screenTypes;
+        this.setMovieCasts(actors, roles, castingTypes);
+        this.genres = genres;
     }
 
-    protected void setId(Long id) {
-        this.id = id;
-    }
+    public void setMovieCasts(List<Actor> actors, List<String> roles, List<CastingType> castingTypes) {
 
-    public void setPosterUrls(String posterUrls) {
-        
-        this.posterUrls = posterUrls;
-        if (this.posterUrls == null || this.posterUrls.isEmpty()) {
-            this.posterUrls = "{}";
+        if (actors == null || roles == null || castingTypes == null) {
+            throw new IllegalArgumentException("actors, roles, and castingTypes lists cannot be null.");
         }
-    }
 
-    public void setMovieScreenTypes(List<String> screenTypeNames) {
-        
-        this.movieScreenTypes = new ArrayList<>();
-        if (screenTypeNames == null || screenTypeNames.isEmpty()) {
-            return;
+        if (actors.size() != roles.size() || actors.size() != castingTypes.size()) {
+            throw new IllegalArgumentException("actors, roles, and castingTypes lists must have the same size.");
         }
         
-        this.movieScreenTypes = screenTypeNames.stream()
-                .map(screenTypeName -> new MovieScreenType(this, screenTypeName))
-                .toList();
-    }
-
-    public void setMovieCasts(List<Long> actorIds, List<String> roles, List<CastingType> castingTypes) {
-
         this.movieCasts = new ArrayList<>();
-
-        // 모두가 null인 경우는 문제가 없음
-        if (actorIds == null && roles == null && castingTypes == null) {
-            return;
+        for (int i = 0; i < actors.size(); i++) {
+            MovieCast movieCast = new MovieCast(this, actors.get(i), roles.get(i), castingTypes.get(i));
+            this.movieCasts.add(movieCast);
         }
-        // List의 크기가 다르면 예외 발생
-        if (actorIds == null || roles == null || castingTypes == null ||
-            actorIds.size() != roles.size() || actorIds.size() != castingTypes.size()) {
-            throw new IllegalArgumentException("Actor IDs, roles, and casting types must have the same size");
-        }
-
-        for (int i = 0; i < actorIds.size(); i++) {
-            this.movieCasts.add(new MovieCast(this, actorIds.get(i), roles.get(i), castingTypes.get(i)));
-        }
-    }
-
-    public void setMovieGenres(List<String> genreNames) {
-
-        this.movieGenres = new ArrayList<>();
-        if (genreNames == null || genreNames.isEmpty()) {
-            return;
-        }
-        
-        this.movieGenres = genreNames.stream()
-                .map(genreName -> new MovieGenre(this, genreName))
-                .toList();
     }
 
     public boolean isReleased(LocalDate date) {
-
         return this.releaseDate.isBefore(date);
     }
 
     public boolean isUpcoming(LocalDate date) {
-
         return this.releaseDate.isAfter(date);
     }
 }
+

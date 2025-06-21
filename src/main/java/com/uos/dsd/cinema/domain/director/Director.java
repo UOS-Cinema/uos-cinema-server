@@ -3,6 +3,7 @@ package com.uos.dsd.cinema.domain.director;
 import com.uos.dsd.cinema.common.model.Base;
 
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -16,6 +17,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "directors")
 @Getter
+@EqualsAndHashCode(of = "id", callSuper = false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Director extends Base {
 

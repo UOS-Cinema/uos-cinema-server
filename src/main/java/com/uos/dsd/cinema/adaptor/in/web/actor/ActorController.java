@@ -6,8 +6,8 @@ import com.uos.dsd.cinema.common.response.ApiResponse;
 import com.uos.dsd.cinema.domain.movie.enums.CastingType;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,7 +25,7 @@ public class ActorController {
     @GetMapping("/{id}/movies")
     public ApiResponse<ActorMovieResponse> getMoviesByActor(
             @PathVariable("id") Long id,
-            @RequestBody ActorMovieSearchRequest request) {
+            @ModelAttribute ActorMovieSearchRequest request) {
                 
         // TODO: 배우별 영화 검색 서비스 호출
         ActorMovieResponse mockResponse = new ActorMovieResponse(

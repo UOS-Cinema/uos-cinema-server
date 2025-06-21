@@ -13,6 +13,7 @@ import com.uos.dsd.cinema.domain.movie.enums.MovieRating;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -80,7 +81,7 @@ public class MovieController {
     }
 
     @GetMapping("/search")
-    public ApiResponse<MovieListResponse> searchMovies(@RequestBody MovieSearchRequest request) {
+    public ApiResponse<MovieListResponse> searchMovies(@ModelAttribute MovieSearchRequest request) {
 
         // TODO: 영화 검색 서비스 호출
         MovieListResponse mockResponse = new MovieListResponse(
@@ -90,7 +91,7 @@ public class MovieController {
     }
 
     @GetMapping("/now-playing")
-    public ApiResponse<MovieListResponse> getNowPlayingMovies(@RequestBody MovieListRequest request) {
+    public ApiResponse<MovieListResponse> getNowPlayingMovies(@ModelAttribute MovieListRequest request) {
 
         // TODO: 현재 상영중인 영화 조회 서비스 호출
         MovieListResponse mockResponse = new MovieListResponse(
@@ -100,7 +101,7 @@ public class MovieController {
     }
 
     @GetMapping("/upcoming")
-    public ApiResponse<MovieListResponse> getUpcomingMovies(@RequestBody MovieListRequest request) {
+    public ApiResponse<MovieListResponse> getUpcomingMovies(@ModelAttribute MovieListRequest request) {
 
         // TODO: 상영 예정 영화 조회 서비스 호출
         MovieListResponse mockResponse = new MovieListResponse(

@@ -13,7 +13,7 @@ import jakarta.persistence.Table;
 @Table(name = "screen_types")
 @Getter
 @ToString
-@EqualsAndHashCode
+@EqualsAndHashCode(of = "type")
 @NoArgsConstructor
 public class ScreenType {
 

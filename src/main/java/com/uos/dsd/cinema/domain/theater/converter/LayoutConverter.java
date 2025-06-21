@@ -5,6 +5,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 
@@ -16,6 +19,7 @@ import java.util.stream.Collectors;
 public class LayoutConverter implements AttributeConverter<List<List<LayoutElement>>, String> {
 
     private static final ObjectMapper mapper = new ObjectMapper();
+    private Logger log = LoggerFactory.getLogger(LayoutConverter.class);
 
     @Override
     public String convertToDatabaseColumn(List<List<LayoutElement>> layout) {
@@ -23,6 +27,7 @@ public class LayoutConverter implements AttributeConverter<List<List<LayoutEleme
         try {
             return mapper.writeValueAsString(convertToIntegerLayout(layout));
         } catch (JsonProcessingException e) {
+            log.error("Failed to serialize layout", e);
             throw new RuntimeException("Failed to serialize layout", e);
         }
     }
@@ -35,10 +40,11 @@ public class LayoutConverter implements AttributeConverter<List<List<LayoutEleme
                     mapper.getTypeFactory().constructCollectionType(List.class, Integer.class));
             return convertToLayoutElementLayout(mapper.readValue(dbData, type));
         } catch (IOException e) {
+            log.error("Failed to deserialize layout", e);
             throw new RuntimeException("Failed to deserialize layout", e);
         }
     }
-    
+
     private List<List<Integer>> convertToIntegerLayout(List<List<LayoutElement>> layout) {
 
         return layout.stream()

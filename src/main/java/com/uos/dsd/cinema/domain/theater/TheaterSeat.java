@@ -1,8 +1,7 @@
 package com.uos.dsd.cinema.domain.theater;
 
 import com.uos.dsd.cinema.common.model.Base;
-import com.uos.dsd.cinema.domain.theater.converter.BooleanYNConverter;
-
+import com.uos.dsd.cinema.core.converter.BooleanYNConverter;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

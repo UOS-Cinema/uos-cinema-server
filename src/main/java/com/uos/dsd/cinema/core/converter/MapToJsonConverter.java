@@ -1,4 +1,4 @@
-package com.uos.dsd.cinema.domain.reservation.converter;
+package com.uos.dsd.cinema.core.converter;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;

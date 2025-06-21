@@ -1,4 +1,4 @@
-package com.uos.dsd.cinema.domain.theater.converter;
+package com.uos.dsd.cinema.core.converter;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;

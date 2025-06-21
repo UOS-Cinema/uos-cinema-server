@@ -1,26 +1,24 @@
 package com.uos.dsd.cinema.adaptor.out.persistence.screening;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.time.LocalDateTime;
 
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Repository;
 
-import com.uos.dsd.cinema.application.port.out.screening.ScreeningRepository;
-import com.uos.dsd.cinema.application.port.out.screening.response.ScreeningResponse;
-import com.uos.dsd.cinema.application.port.out.theater.TheaterRepository;
+import com.uos.dsd.cinema.common.exception.http.NotFoundException;
+import com.uos.dsd.cinema.domain.screening.exception.ScreeningExceptionCode;
 import com.uos.dsd.cinema.domain.screening.Screening;
 import com.uos.dsd.cinema.domain.reservation.ReservationSeat;
-import com.uos.dsd.cinema.domain.theater.enums.LayoutElement;
+import com.uos.dsd.cinema.application.port.out.screening.ScreeningRepository;
 
 @Repository
 @RequiredArgsConstructor
 public class ScreeningRepositoryAdapter implements ScreeningRepository {
 
     private final ScreeningJpaRepository screeningJpaRepository;
-    private final TheaterRepository theaterRepository;
 
     @Override
     public Screening save(Screening screening) {
@@ -33,40 +31,44 @@ public class ScreeningRepositoryAdapter implements ScreeningRepository {
     }
 
     @Override
-    public ScreeningResponse get(Long id) {
-        return null;
+    public List<Screening> findAllAround(LocalDateTime startTime, LocalDateTime endTime) {
+        return screeningJpaRepository.findAllAround(startTime, endTime);
     }
 
     @Override
-    public List<List<LayoutElement>> getSeatingStatus(Long id) {
-        List<List<LayoutElement>> layout = theaterRepository.getSeatingStatus(id);
-        List<ReservationSeat> reservationSeats = screeningJpaRepository.getReservationSeats(id);
-
-        char row = 'A';
-        int column = 0;
-
-        for (int i = 0; i < layout.size(); i++) {
-            for (int j = 0; j < layout.get(i).size(); j++) {
-                if (layout.get(i).get(j) == LayoutElement.SEAT) {
-                    column++;
-                    String seatNumber = row + "" + column;
-                    if (reservationSeats.stream()
-                            .anyMatch(rs -> rs.getId().getSeatNumber().equals(seatNumber))) {
-                        layout.get(i).set(j, LayoutElement.RESERVED);
-                    }
-                }
-            }
-            if (column != 0) {
-                row++;
-                column = 0;
-            }
-        }
-        return layout;
+    public List<Screening> findAllByMovieAround(
+            Long movieId, 
+            LocalDateTime startTime, 
+            LocalDateTime endTime) {
+        return screeningJpaRepository.findAllByMovieAround(movieId, startTime, endTime);
     }
 
     @Override
-    public List<ScreeningResponse> getAllWith(Long movieId, Long theaterId, Date date) {
-        return null;
+    public List<Screening> findAllByTheaterAround(
+            Long theaterId, 
+            LocalDateTime startTime,
+            LocalDateTime endTime) {
+        return screeningJpaRepository.findAllByTheaterAround(theaterId, startTime, endTime);
+    }
+
+    @Override
+    public List<Screening> findAllByMovieAndTheaterAround(
+            Long movieId, 
+            Long theaterId,
+            LocalDateTime startTime, 
+            LocalDateTime endTime) {
+        return screeningJpaRepository.findAllByMovieAndTheaterAround(movieId, theaterId, startTime, endTime);
+    }
+
+    @Override
+    public Screening getWithMovieAndTheater(Long id) {
+        return screeningJpaRepository.findById(id)
+            .orElseThrow(() -> new NotFoundException(ScreeningExceptionCode.SCREENING_NOT_FOUND));
+    }
+
+    @Override
+    public List<ReservationSeat> getReservationSeats(Long screeningId) {
+        return screeningJpaRepository.getReservationSeats(screeningId);
     }
 
     @Override

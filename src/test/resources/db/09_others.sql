@@ -107,7 +107,7 @@ INSERT INTO movie_screen_types (movie_id, screen_type) VALUES
 INSERT INTO movie_genres (movie_id, genre_name) VALUES 
 (1, 'Drama'),
 (1, 'Thriller'),
-(2, 'Sci‑Fi'),
+(2, 'Sci-Fi'),
 (2, 'Thriller'),
 (3, 'Drama'),
 (3, 'Western'),

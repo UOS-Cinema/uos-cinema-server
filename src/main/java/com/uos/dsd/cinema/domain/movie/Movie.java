@@ -39,7 +39,7 @@ public class Movie extends Base {
 
     private String synopsis;
 
-    private String posterUrl;
+    private List<String> posterUrls;
 
     private int runningTime;
 
@@ -60,7 +60,7 @@ public class Movie extends Base {
 
     public Movie(String title,
                 String synopsis,
-                String posterUrl,
+                List<String> posterUrls,
                 int runningTime,
                 MovieRating rating,
                 LocalDate releaseDate,
@@ -70,7 +70,7 @@ public class Movie extends Base {
 
         this.title = title;
         this.synopsis = synopsis;
-        this.posterUrl = posterUrl;
+        this.posterUrls = posterUrls;
         this.runningTime = runningTime;
         this.rating = rating;
         this.releaseDate = releaseDate;

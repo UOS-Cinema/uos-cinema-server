@@ -4,6 +4,7 @@ import com.uos.dsd.cinema.common.exception.http.BadRequestException;
 import com.uos.dsd.cinema.common.exception.http.ForbiddenException;
 import com.uos.dsd.cinema.common.model.Base;
 import com.uos.dsd.cinema.domain.movie.Movie;
+import com.uos.dsd.cinema.domain.screening.constraint.ScreeningConstraint;
 import com.uos.dsd.cinema.domain.screening.exception.ScreeningExceptionCode;
 import com.uos.dsd.cinema.domain.screening.utils.RunningTimeUtil;
 import com.uos.dsd.cinema.domain.theater.Theater;
@@ -22,6 +23,9 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
 import jakarta.persistence.Column;
+import jakarta.persistence.Transient;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -30,28 +34,31 @@ import java.util.List;
 @Table(name = "screenings")
 @Getter
 @ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true, of = "id")
 @NoArgsConstructor
 public class Screening extends Base {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "movie_id")
+    @Column(name = "movie_id", nullable = false)
     private Long movieId;
 
-    @Column(name = "theater_id")
+    @Column(name = "theater_id", nullable = false)
     private Long theaterId;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "screen_type")
+    @JoinColumn(name = "screen_type", referencedColumnName = "type")
     private ScreenType screenType;
 
+    @Column(nullable = false)
     private LocalDateTime startTime;
 
+    @Column(nullable = false)
     private int duration;
 
-    @Column(insertable = false, updatable = false)
+    @Transient
     private LocalDateTime endTime;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -65,7 +72,7 @@ public class Screening extends Base {
     public Screening(
             Movie movie,
             Long theaterId, 
-            ScreenType screenType, 
+            String screenType, 
             LocalDateTime startTime,
             List<Screening> existingScreenings) {
 
@@ -84,9 +91,12 @@ public class Screening extends Base {
         this.movie = movie;
         this.movieId = movie.getId();
         this.theaterId = theaterId;
-        this.screenType = screenType;
+        this.screenType = ScreenType.reference(screenType);
         this.startTime = startTime;
         this.duration = calculateDuration(movie.getRunningTime());
+        if (ScreeningConstraint.isInvalidDuration(this.duration)) {
+            throw new BadRequestException(ScreeningExceptionCode.INVALID_DURATION);
+        }
         setEndTime();
     }
 
@@ -111,6 +121,9 @@ public class Screening extends Base {
             throw new BadRequestException(ScreeningExceptionCode.IN_PAST_START_TIME);
         }
 
+        if (existingScreenings.isEmpty()) {
+            return;
+        }
         for (Screening existingScreening : existingScreenings) {
             if (startTime.isBefore(existingScreening.getEndTime())
                     && this.endTime.isAfter(existingScreening.getStartTime())) {
@@ -119,12 +132,12 @@ public class Screening extends Base {
         }
     }
     
-    private void validateScreenType(Movie movie, ScreenType screenType) {
+    private void validateScreenType(Movie movie, String screenType) {
 
         if (screenType == null) {
             throw new IllegalArgumentException("Screen type cannot be null");
         }
-        if (!movie.getScreenTypes().contains((ScreenType) screenType)) {
+        if (!movie.getScreenTypes().contains((ScreenType) ScreenType.reference(screenType))) {
             throw new BadRequestException(
                     ScreeningExceptionCode.SCREEN_TYPE_NOT_SUPPORTED_MOVIE);
         }

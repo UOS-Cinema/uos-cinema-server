@@ -36,6 +36,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Slf4j
@@ -60,13 +61,13 @@ public class AdminController {
     }
 
     @PostMapping("/login")
-    public ApiResponse<AdminLoginResponse> login(@RequestBody AdminLoginRequest request, HttpServletResponse response) {
+    public ApiResponse<AdminLoginResponse> login(@RequestBody AdminLoginRequest request, HttpServletRequest httpRequest, HttpServletResponse response) {
 
         Long id = loginAdminUsecase.login(new AdminLoginCommand(request.username(), request.password()));
         
         String accessToken = jwtUtils.generateAccessToken(id, Role.ADMIN);
         String refreshToken = jwtUtils.generateRefreshToken(id, Role.ADMIN);
-        CookieUtil.addHttpOnlyCookie(response, SecurityConstants.REISSUE_COOKIE_NAME, refreshToken, jwtUtils.getRefreshTokenExpirationMs(), "/auth");
+        CookieUtil.addHttpOnlyCookie(response, SecurityConstants.REISSUE_COOKIE_NAME, refreshToken, jwtUtils.getRefreshTokenExpirationMs(), "/auth", httpRequest.isSecure());
 
         log.info("login success, id: {}", id);
         return ApiResponse.success(new AdminLoginResponse(accessToken));

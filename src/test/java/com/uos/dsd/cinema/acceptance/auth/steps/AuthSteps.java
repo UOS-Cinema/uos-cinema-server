@@ -8,8 +8,8 @@ import java.util.Map;
 
 public class AuthSteps {
 
-    private static final String LOGOUT_URL = "/logout";
-    private static final String REFRESH_TOKEN_URL = "/refresh-token";
+    private static final String LOGOUT_URL = "/auth/logout";
+    private static final String REFRESH_TOKEN_URL = "/auth/refresh-token";
 
     public static Response sendLogout(Map<String, Object> headers, Map<String, Object> cookies) {
 

@@ -25,7 +25,6 @@ services:
     depends_on:
       oracle:
         condition: service_healthy
-        restart: true
     environment:
       - CINEMA_JASYPT_KEY
       - JWT_SECRET_KEY
@@ -46,7 +45,6 @@ services:
       timeout: 10s
       retries: 3
       start_period: 40s
-    restart: unless-stopped
     networks:
       - app-network
 

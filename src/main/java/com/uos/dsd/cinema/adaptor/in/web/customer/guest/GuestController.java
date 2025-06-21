@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Slf4j
@@ -40,7 +41,7 @@ public class GuestController {
     private final JwtUtils jwtUtils;
 
     @PostMapping("/login")
-    public ApiResponse<GuestLoginResponse> login(@RequestBody GuestLoginRequest request, HttpServletResponse response) {
+    public ApiResponse<GuestLoginResponse> login(@RequestBody GuestLoginRequest request, HttpServletRequest httpRequest, HttpServletResponse response) {
 
         Long id = loginGuestUsecase.login(
                 new LoginGuestCommand(
@@ -52,7 +53,7 @@ public class GuestController {
         String accessToken = jwtUtils.generateAccessToken(id, Role.GUEST);
         String refreshToken = jwtUtils.generateRefreshToken(id, Role.GUEST);
         CookieUtil.addHttpOnlyCookie(response, SecurityConstants.REISSUE_COOKIE_NAME, refreshToken, 
-                jwtUtils.getRefreshTokenExpirationMs(), "/refresh-token");
+                jwtUtils.getRefreshTokenExpirationMs(), "/auth", httpRequest.isSecure());
 
         log.info("login success, id: {}", id);
         return ApiResponse.success(new GuestLoginResponse(accessToken));

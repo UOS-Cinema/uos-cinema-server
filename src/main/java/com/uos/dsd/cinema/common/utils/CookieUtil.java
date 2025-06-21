@@ -22,22 +22,24 @@ public class CookieUtil {
         return null;
     }
 
-    public static void addHttpOnlyCookie(HttpServletResponse response, String name, String value, long maxAgeSeconds, String path) {
+    public static void addHttpOnlyCookie(HttpServletResponse response, String name, String value, long maxAgeSeconds, String path, boolean isSecure) {
 
         ResponseCookie cookie = ResponseCookie.from(name, value)
             .httpOnly(true)
-            .secure(true)
+            .secure(isSecure)
             .path(path)
             .maxAge(maxAgeSeconds)
             .build();
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
     }
 
-    public static void deleteCookie(HttpServletResponse response, String name, String path) {
+    public static void deleteCookie(HttpServletResponse response, String name, String path, boolean isSecure) {
         
         ResponseCookie cookie = ResponseCookie.from(name, "")
             .path(path)
             .maxAge(0)
+            .secure(isSecure)
+            .httpOnly(true)
             .build();
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
     }

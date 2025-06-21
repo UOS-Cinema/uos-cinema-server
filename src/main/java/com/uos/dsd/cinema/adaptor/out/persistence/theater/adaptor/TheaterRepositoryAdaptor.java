@@ -4,6 +4,8 @@ import com.uos.dsd.cinema.adaptor.out.persistence.theater.jpa.TheaterJPAReposito
 import com.uos.dsd.cinema.application.port.out.theater.TheaterRepository;
 import com.uos.dsd.cinema.domain.theater.Theater;
 import com.uos.dsd.cinema.domain.theater.enums.LayoutElement;
+import com.uos.dsd.cinema.common.exception.http.NotFoundException;
+import com.uos.dsd.cinema.domain.theater.exception.TheaterExceptionCode;
 
 import org.springframework.stereotype.Repository;
 
@@ -40,6 +42,9 @@ public class TheaterRepositoryAdaptor implements TheaterRepository {
 
     @Override
     public List<List<LayoutElement>> getSeatingStatus(Long theaterNumber) {
-        return theaterJPARepository.getSeatingStatus(theaterNumber);
+        Theater theater = theaterJPARepository.findById(theaterNumber)
+                .orElseThrow(() -> new NotFoundException(TheaterExceptionCode.THEATER_NOT_FOUND));
+        return theater.getLayout();
+        // return theaterJPARepository.getSeatingStatus(theaterNumber);
     }
 }

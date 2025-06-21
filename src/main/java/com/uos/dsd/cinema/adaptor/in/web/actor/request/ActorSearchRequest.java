@@ -1,10 +1,11 @@
-package com.uos.dsd.cinema.adaptor.in.web.movie.request;
+package com.uos.dsd.cinema.adaptor.in.web.actor.request;
 
-public record MovieListRequest(
+public record ActorSearchRequest(
+    String query,
     Integer page,
     Integer size
 ) {
-    public MovieListRequest {
+    public ActorSearchRequest {
         if (page == null) page = 0;
         if (size == null) size = 20;
         if (size > 20) {

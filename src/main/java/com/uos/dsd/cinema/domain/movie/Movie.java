@@ -12,7 +12,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
-import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.EnumType;
@@ -33,8 +32,7 @@ import java.util.List;
 public class Movie extends Base {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "movie_seq")
-    @SequenceGenerator(name = "movie_seq", sequenceName = "movie_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String title;

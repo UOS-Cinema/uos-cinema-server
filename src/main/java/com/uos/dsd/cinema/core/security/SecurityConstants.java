@@ -24,41 +24,10 @@ public class SecurityConstants {
         "/swagger-ui/**",
         "/v3/api-docs/**",
         "/swagger-resources/**",
-        "/webjars/**"
+        "/webjars/**",
+        "/screenings/**"
     );
 
-    // 모든 권한 허용 - GET 요청만
-    public static final List<String> PUBLIC_GET_URLS = List.of(
-        "/movies/search",       // 영화 검색
-        "/movies/now-playing",  // 현재 상영중
-        "/movies/upcoming",     // 상영 예정
-        "/actors/*/movies",     // 배우별 영화
-        "/directors/*/movies",  // 감독별 영화
-        "/movies/*",            // 영화 상세 조회
-        "/movies/*/simple",     // 영화 간단 조회
-        "/actors/search",       // 배우 검색
-        "/actors",              // 배우 리스트 조회
-        "/directors/search",    // 감독 검색
-        "/directors"            // 감독 리스트 조회
-    );
-
-    // 모든 권한 허용 - POST 요청만
-    public static final List<String> PUBLIC_POST_URLS = List.of(
-        "/admins/login",        // 관리자 로그인
-        "/guests/login",        // 게스트 로그인
-        "/auth/logout",         // 로그아웃
-        "/auth/refresh-token"  // 리프레쉬 토큰 사용한 토큰 재발급
-    );
-
-    // 모든 권한 허용 - PUT 요청만
-    public static final List<String> PUBLIC_PUT_URLS = List.of(
-    );
-
-    // 모든 권한 허용 - DELETE 요청만
-    public static final List<String> PUBLIC_DELETE_URLS = List.of(
-    );
-
-    // GUEST 권한만 허용 - 모든 메서드
     public static final List<String> GUEST_URLS = List.of(
     );
 

@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 
+import jakarta.validation.Valid;
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -34,7 +36,7 @@ public class MovieController {
     // TODO: 서비스 의존성 주입 예정
 
     @PostMapping
-    public ApiResponse<Long> createMovie(@RequestBody MovieCreateRequest request) {
+    public ApiResponse<Long> createMovie(@Valid @RequestBody MovieCreateRequest request) {
 
         // TODO: 영화 생성 서비스 호출
         return ApiResponse.success(1L); // Mock response
@@ -43,7 +45,7 @@ public class MovieController {
     @PutMapping("/{id}")
     public ApiResponse<Long> updateMovie(
             @PathVariable("id") Long id, 
-            @RequestBody MovieUpdateRequest request) {
+            @Valid @RequestBody MovieUpdateRequest request) {
 
         // TODO: 영화 수정 서비스 호출
         return ApiResponse.success(id); // Mock response
@@ -81,7 +83,7 @@ public class MovieController {
     }
 
     @GetMapping("/search")
-    public ApiResponse<MovieListResponse> searchMovies(@ModelAttribute MovieSearchRequest request) {
+    public ApiResponse<MovieListResponse> searchMovies(@Valid @ModelAttribute MovieSearchRequest request) {
 
         // TODO: 영화 검색 서비스 호출
         MovieListResponse mockResponse = new MovieListResponse(
@@ -91,7 +93,7 @@ public class MovieController {
     }
 
     @GetMapping("/now-playing")
-    public ApiResponse<MovieListResponse> getNowPlayingMovies(@ModelAttribute MovieListRequest request) {
+    public ApiResponse<MovieListResponse> getNowPlayingMovies(@Valid @ModelAttribute MovieListRequest request) {
 
         // TODO: 현재 상영중인 영화 조회 서비스 호출
         MovieListResponse mockResponse = new MovieListResponse(
@@ -101,7 +103,7 @@ public class MovieController {
     }
 
     @GetMapping("/upcoming")
-    public ApiResponse<MovieListResponse> getUpcomingMovies(@ModelAttribute MovieListRequest request) {
+    public ApiResponse<MovieListResponse> getUpcomingMovies(@Valid @ModelAttribute MovieListRequest request) {
 
         // TODO: 상영 예정 영화 조회 서비스 호출
         MovieListResponse mockResponse = new MovieListResponse(

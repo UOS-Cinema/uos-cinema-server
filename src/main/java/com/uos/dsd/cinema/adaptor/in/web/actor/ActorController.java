@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 
+import jakarta.validation.Valid;
+
 import java.util.List;
 
 @RestController
@@ -32,7 +34,7 @@ public class ActorController {
     // TODO: 서비스 의존성 주입 예정
 
     @PostMapping
-    public ApiResponse<Long> createActor(@RequestBody ActorCreateRequest request) {
+    public ApiResponse<Long> createActor(@Valid @RequestBody ActorCreateRequest request) {
         
         // TODO: 배우 생성 서비스 호출
         // - 프로필 이미지를 스토리지에 저장
@@ -43,7 +45,7 @@ public class ActorController {
     @PutMapping("/{id}")
     public ApiResponse<Long> updateActor(
             @PathVariable("id") Long id,
-            @RequestBody ActorUpdateRequest request) {
+            @Valid @RequestBody ActorUpdateRequest request) {
         
         // TODO: 배우 수정 서비스 호출
         // - 배우 ID 존재 여부 검증
@@ -63,7 +65,7 @@ public class ActorController {
     }
 
     @GetMapping("/search")
-    public ApiResponse<ActorListResponse> searchActors(@ModelAttribute ActorSearchRequest request) {
+    public ApiResponse<ActorListResponse> searchActors(@Valid @ModelAttribute ActorSearchRequest request) {
         
         // TODO: 배우 검색 서비스 호출
         ActorListResponse mockResponse = new ActorListResponse(
@@ -77,7 +79,7 @@ public class ActorController {
     }
 
     @GetMapping
-    public ApiResponse<ActorListResponse> getActorList(@ModelAttribute ActorListRequest request) {
+    public ApiResponse<ActorListResponse> getActorList(@Valid @ModelAttribute ActorListRequest request) {
         
         // TODO: 배우 리스트 조회 서비스 호출 (배우명으로 정렬)
         ActorListResponse mockResponse = new ActorListResponse(
@@ -94,7 +96,7 @@ public class ActorController {
     @GetMapping("/{id}/movies")
     public ApiResponse<ActorMovieResponse> getMoviesByActor(
             @PathVariable("id") Long id,
-            @ModelAttribute ActorMovieSearchRequest request) {
+            @Valid @ModelAttribute ActorMovieSearchRequest request) {
                 
         // TODO: 배우별 영화 검색 서비스 호출
         ActorMovieResponse mockResponse = new ActorMovieResponse(

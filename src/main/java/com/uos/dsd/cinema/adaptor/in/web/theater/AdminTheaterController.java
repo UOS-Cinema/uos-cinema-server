@@ -23,8 +23,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/theaters/admin")
-public class TheaterAdminController {
+@RequestMapping("/admin/theaters")
+public class AdminTheaterController {
 
     private final CreateTheaterUseCase createTheaterUseCase;
     private final ModifyTheaterUseCase modifyTheaterUseCase;

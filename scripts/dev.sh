@@ -4,14 +4,14 @@ cd `dirname $0`/..
 ROOT=`pwd`
 
 cleanup() {
-  echo -e "\rCleaning up..."
+  echo -e "\r🧹Cleaning up..."
   pkill -P $$ || true
   docker-compose -f $ROOT/scripts/docker-compose.yaml down --volumes --remove-orphans 2>&1 > /dev/null || true
   echo "Done."
   exit 0
 }
 
-trap cleanup SIGINT SIGTERM
+trap cleanup SIGINT SIGTERM EXIT
 
 
 # Setting environment variables
@@ -55,9 +55,28 @@ echo "📊 Backend: http://localhost:8080"
 echo "🗄️ Oracle DB: localhost:1521"
 echo ""
 
-tail -f $ROOT/scripts/oracle.log $ROOT/scripts/backend.log
+# Follow logs to stdout
+tail -f "$ROOT/scripts/oracle.log" "$ROOT/scripts/backend.log" &
+TAIL_PID=$!
 
-# Sleep forever
+# Monitor container status
 while true; do
-  sleep 1
+  sleep 3
+
+  # Check if any of the key containers exited
+  if ! docker ps --filter "name=oracle" --filter "status=running" | grep oracle > /dev/null; then
+    echo "❌ Oracle container exited."
+    break
+  fi
+  if ! docker ps --filter "name=backend" --filter "status=running" | grep backend > /dev/null; then
+    echo "❌ Backend container exited."
+    break
+  fi
 done
+
+# spring container 종료됨 → docker-compose도 종료
+kill $COMPOSE_PID              # docker-compose up 프로세스 강제 종료
+wait $COMPOSE_PID              # 종료까지 대기 → EXIT → cleanup 실행
+
+kill $TAIL_PID 2>/dev/null || true
+wait $TAIL_PID 2>/dev/null || true

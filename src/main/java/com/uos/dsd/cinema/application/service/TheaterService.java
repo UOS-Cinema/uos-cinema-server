@@ -21,6 +21,7 @@ import org.hibernate.exception.ConstraintViolationException;
 
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,23 +37,32 @@ public class TheaterService implements
 
     @Override
     public Long createTheater(CreateTheaterCommand command) {
-        
-        Theater theater = new Theater(
-            command.number(),
-            command.name(),
-            command.layout(),
-            command.screenTypes()
-        );
+
+        Theater theater = new Theater(command.number(), command.name(), command.layout(),
+                command.screenTypes());
 
         try {
             theaterRepository.save(theater);
             return theater.getNumber();
         } catch (ConstraintViolationException e) {
-            throw new BadRequestException(
-                TheaterExceptionCode.THEATER_ALREADY_EXISTS,
-                String.format(TheaterExceptionCode.THEATER_ALREADY_EXISTS.getMessage(), 
-                command.number(), command.name()));
+            throw new BadRequestException(TheaterExceptionCode.THEATER_ALREADY_EXISTS,
+                    String.format(TheaterExceptionCode.THEATER_ALREADY_EXISTS.getMessage(),
+                            command.number(), command.name()));
         }
+    }
+    
+    @Override
+    public List<TheaterResponse> readAllTheater() {
+        return theaterRepository.findAll().stream()
+            .map(theater -> new TheaterResponse(
+                theater.getNumber(),
+                theater.getName(),
+                theater.getLayout(),
+                theater.getScreenTypes().stream()
+                    .map(ScreenType::getType)
+                    .collect(Collectors.toList())
+            ))
+            .collect(Collectors.toList());
     }
 
     @Override

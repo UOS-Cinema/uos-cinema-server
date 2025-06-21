@@ -63,7 +63,7 @@ public class ActorController {
     }
 
     @GetMapping("/search")
-    public ApiResponse<ActorListResponse> searchActors(@RequestBody ActorSearchRequest request) {
+    public ApiResponse<ActorListResponse> searchActors(@ModelAttribute ActorSearchRequest request) {
         
         // TODO: 배우 검색 서비스 호출
         ActorListResponse mockResponse = new ActorListResponse(
@@ -77,7 +77,7 @@ public class ActorController {
     }
 
     @GetMapping
-    public ApiResponse<ActorListResponse> getActorList(@RequestBody ActorListRequest request) {
+    public ApiResponse<ActorListResponse> getActorList(@ModelAttribute ActorListRequest request) {
         
         // TODO: 배우 리스트 조회 서비스 호출 (배우명으로 정렬)
         ActorListResponse mockResponse = new ActorListResponse(

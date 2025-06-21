@@ -118,3 +118,55 @@ CREATE TABLE guests (
     PRIMARY KEY (customer_id),
     FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE CASCADE
 );
+
+-- 영화
+CREATE SEQUENCE movie_seq START WITH 1 INCREMENT BY 1;
+
+CREATE TABLE movies (
+    id INT DEFAULT NEXT VALUE FOR movie_seq,
+    title VARCHAR(255) NOT NULL,
+    synopsis VARCHAR(255),
+    running_time INT NOT NULL,
+    rating VARCHAR(10) NOT NULL,
+    release_date DATE NOT NULL,
+    director VARCHAR(50) NOT NULL,
+distributor VARCHAR(50) NOT NULL,
+    poster_url VARCHAR(255) NOT NULL,
+
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted_at TIMESTAMP,
+
+    PRIMARY KEY (id)
+);
+
+-- 영화 제공 상영유형
+CREATE TABLE movie_screen_types (
+    movie_id INT,
+    screen_type VARCHAR(50),
+
+    PRIMARY KEY (movie_id, screen_type),
+    FOREIGN KEY (movie_id) REFERENCES movies(id),
+    FOREIGN KEY (screen_type) REFERENCES screen_types(type)
+);
+
+-- 상영 일정
+CREATE SEQUENCE screening_seq START WITH 1 INCREMENT BY 1;
+
+CREATE TABLE screenings (
+    id INT DEFAULT NEXT VALUE FOR screening_seq,
+    movie_id INT NOT NULL,
+    theater_id INT NOT NULL,
+    screen_type VARCHAR(50) NOT NULL,
+    start_time TIMESTAMP NOT NULL,
+    duration INT NOT NULL,
+
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted_at TIMESTAMP,
+
+    PRIMARY KEY (id),
+    FOREIGN KEY (movie_id) REFERENCES movies(id),
+    FOREIGN KEY (theater_id) REFERENCES theaters(id),
+    FOREIGN KEY (screen_type) REFERENCES screen_types(type)
+);

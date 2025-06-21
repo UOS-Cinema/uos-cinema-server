@@ -5,12 +5,13 @@ import com.uos.dsd.cinema.domain.screening.Screening;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 public interface ScreeningRepository {
 
     Screening save(Screening screening);
 
-    Screening findById(Long id);
+    Optional<Screening> findById(Long id);
 
     ScreeningResponse get(Long id);
 

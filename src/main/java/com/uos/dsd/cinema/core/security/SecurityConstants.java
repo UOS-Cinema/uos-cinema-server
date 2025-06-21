@@ -21,7 +21,9 @@ public class SecurityConstants {
         "/swagger-ui/**",
         "/v3/api-docs/**",
         "/swagger-resources/**",
-        "/webjars/**"
+        "/webjars/**",
+        "/screenings",
+        "/screenings/{id}"
     );
 
     public static final List<String> GUEST_URLS = List.of(
@@ -32,7 +34,8 @@ public class SecurityConstants {
         "/admins/signup",
         "/admins/update",
         "/admins/delete",
-        "/hello/auth"
+        "/hello/auth",
+        "/admin/screenings"
     );
 
     public static final String USER_NAME_CLAIM = "username";

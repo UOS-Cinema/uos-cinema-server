@@ -52,7 +52,7 @@ public class GuestController {
         String accessToken = jwtUtils.generateAccessToken(id, Role.GUEST);
         String refreshToken = jwtUtils.generateRefreshToken(id, Role.GUEST);
         CookieUtil.addHttpOnlyCookie(response, SecurityConstants.REISSUE_COOKIE_NAME, refreshToken, 
-                jwtUtils.getRefreshTokenExpirationMs(), "/refresh-token");
+                jwtUtils.getRefreshTokenExpirationMs(), "/auth");
 
         log.info("login success, id: {}", id);
         return ApiResponse.success(new GuestLoginResponse(accessToken));

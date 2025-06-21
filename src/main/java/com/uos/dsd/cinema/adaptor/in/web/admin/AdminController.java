@@ -1,9 +1,21 @@
 package com.uos.dsd.cinema.adaptor.in.web.admin;
 
-import com.uos.dsd.cinema.adaptor.in.web.admin.request.*;
-import com.uos.dsd.cinema.adaptor.in.web.admin.response.*;
-import com.uos.dsd.cinema.application.port.in.admin.command.*;
-import com.uos.dsd.cinema.application.port.in.admin.usecase.*;
+import com.uos.dsd.cinema.adaptor.in.web.admin.request.AdminDeleteRequest;
+import com.uos.dsd.cinema.adaptor.in.web.admin.request.AdminLoginRequest;
+import com.uos.dsd.cinema.adaptor.in.web.admin.request.AdminSignupRequest;
+import com.uos.dsd.cinema.adaptor.in.web.admin.request.AdminUpdateRequest;
+import com.uos.dsd.cinema.adaptor.in.web.admin.response.AdminDeleteResponse;
+import com.uos.dsd.cinema.adaptor.in.web.admin.response.AdminLoginResponse;
+import com.uos.dsd.cinema.adaptor.in.web.admin.response.AdminSignupResponse;
+import com.uos.dsd.cinema.adaptor.in.web.admin.response.AdminUpdateResponse;
+import com.uos.dsd.cinema.application.port.in.admin.command.AdminDeleteCommand;
+import com.uos.dsd.cinema.application.port.in.admin.command.AdminLoginCommand;
+import com.uos.dsd.cinema.application.port.in.admin.command.AdminSignupCommand;
+import com.uos.dsd.cinema.application.port.in.admin.command.AdminUpdateCommand;
+import com.uos.dsd.cinema.application.port.in.admin.usecase.AdminDeleteUsecase;
+import com.uos.dsd.cinema.application.port.in.admin.usecase.AdminLoginUsecase;
+import com.uos.dsd.cinema.application.port.in.admin.usecase.AdminSignupUsecase;
+import com.uos.dsd.cinema.application.port.in.admin.usecase.AdminUpdateUsecase;
 import com.uos.dsd.cinema.common.exception.code.CommonResultCode;
 import com.uos.dsd.cinema.common.exception.http.ForbiddenException;
 import com.uos.dsd.cinema.common.response.ApiResponse;
@@ -54,7 +66,7 @@ public class AdminController {
         
         String accessToken = jwtUtils.generateAccessToken(id, Role.ADMIN);
         String refreshToken = jwtUtils.generateRefreshToken(id, Role.ADMIN);
-        CookieUtil.addHttpOnlyCookie(response, SecurityConstants.REISSUE_COOKIE_NAME, refreshToken, jwtUtils.getRefreshTokenExpirationMs(), "/refresh-token");
+        CookieUtil.addHttpOnlyCookie(response, SecurityConstants.REISSUE_COOKIE_NAME, refreshToken, jwtUtils.getRefreshTokenExpirationMs(), "/auth");
 
         log.info("login success, id: {}", id);
         return ApiResponse.success(new AdminLoginResponse(accessToken));

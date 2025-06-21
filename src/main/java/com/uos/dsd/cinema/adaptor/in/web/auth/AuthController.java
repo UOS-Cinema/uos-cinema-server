@@ -1,6 +1,6 @@
 package com.uos.dsd.cinema.adaptor.in.web.auth;
 
-import static com.uos.dsd.cinema.core.security.SecurityConstants.*;
+import static com.uos.dsd.cinema.core.security.SecurityConstants.REISSUE_COOKIE_NAME;
 
 import com.uos.dsd.cinema.adaptor.in.web.auth.response.LogoutResponse;
 import com.uos.dsd.cinema.adaptor.in.web.auth.response.RefreshTokenResponse;
@@ -9,6 +9,7 @@ import com.uos.dsd.cinema.common.response.ApiResponse;
 import com.uos.dsd.cinema.common.utils.CookieUtil;
 import com.uos.dsd.cinema.core.jwt.JwtClaim;
 import com.uos.dsd.cinema.core.jwt.JwtUtils;
+import com.uos.dsd.cinema.core.security.SecurityConstants.Role;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,7 +22,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 
 @Slf4j
-@RestController
+@RestController("/auth")
 @RequiredArgsConstructor
 public class AuthController {
 
@@ -31,12 +32,21 @@ public class AuthController {
     public ApiResponse<LogoutResponse> logout(HttpServletRequest request, HttpServletResponse response) {
 
         String refreshToken = extractRefreshTokenFromCookies(request);
-        JwtClaim jwtClaim = jwtUtils.getJwtClaim(refreshToken);
-        Long id = jwtClaim.id();
-        CookieUtil.deleteCookie(response, REISSUE_COOKIE_NAME, "/refresh-token");
+        if (refreshToken != null && jwtUtils.isValidJwtToken(refreshToken)) {
+            JwtClaim jwtClaim = jwtUtils.getJwtClaim(refreshToken);
+            Long id = jwtClaim.id();
+            Role role = jwtClaim.role();
 
-        log.info("logout success, id: {}", id);       
-        return ApiResponse.success(new LogoutResponse(id));
+            CookieUtil.deleteCookie(response, REISSUE_COOKIE_NAME, "/auth");
+
+            // Refresh Token 무효화 처리
+
+            log.info("logout success, id: {}, role: {}", id, role);
+        } else {
+            log.info("Already logged out(Token is invalid)");
+        }
+
+        return ApiResponse.success();
     }
 
     @PostMapping("/refresh-token")
@@ -53,7 +63,7 @@ public class AuthController {
 
             String newAccessToken = jwtUtils.generateAccessToken(id, role);
             String newRefreshToken = jwtUtils.generateRefreshToken(id, role);
-            CookieUtil.addHttpOnlyCookie(response, REISSUE_COOKIE_NAME, newRefreshToken, jwtUtils.getRefreshTokenExpirationMs(), "/refresh-token");
+            CookieUtil.addHttpOnlyCookie(response, REISSUE_COOKIE_NAME, newRefreshToken, jwtUtils.getRefreshTokenExpirationMs(), "/auth");
 
             log.info("refresh token success, id: {}, role: {}", id, role);
             return ApiResponse.success(new RefreshTokenResponse(newAccessToken));

@@ -37,8 +37,7 @@ public class MovieCast {
     private Movie movie;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("actorId")
-    @JoinColumn(name = "actor_id")
+    @JoinColumn(name = "actor_id", insertable = false, updatable = false)
     private Actor actor;
 
     @Column(nullable = true)
@@ -48,10 +47,9 @@ public class MovieCast {
     @Column(nullable = false)
     private CastingType castingType;
 
-    public MovieCast(Movie movie, Actor actor, String role, CastingType castingType) {
-        this.id = new MovieCastId(movie.getId(), actor.getId());
+    public MovieCast(Movie movie, Long actorId, String role, CastingType castingType) {
+        this.id = new MovieCastId(movie.getId(), actorId);
         this.movie = movie;
-        this.actor = actor;
         this.role = role;
         this.castingType = castingType;
     }

@@ -36,6 +36,11 @@ public class TheaterRepositoryAdaptor implements TheaterRepository {
     }
 
     @Override
+    public List<Theater> findAll() {
+        return theaterJPARepository.findAll();
+    }
+
+    @Override
     public Optional<Theater> findById(Long theaterNumber) {
         return theaterJPARepository.findById(theaterNumber);
     }
@@ -45,6 +50,5 @@ public class TheaterRepositoryAdaptor implements TheaterRepository {
         Theater theater = theaterJPARepository.findById(theaterNumber)
                 .orElseThrow(() -> new NotFoundException(TheaterExceptionCode.THEATER_NOT_FOUND));
         return theater.getLayout();
-        // return theaterJPARepository.getSeatingStatus(theaterNumber);
     }
 }

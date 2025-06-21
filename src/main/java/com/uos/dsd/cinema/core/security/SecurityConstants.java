@@ -46,8 +46,8 @@ public class SecurityConstants {
     public static final List<String> PUBLIC_POST_URLS = List.of(
         "/admins/login",        // 관리자 로그인
         "/guests/login",        // 게스트 로그인
-        "/logout",              // 로그아웃
-        "/refresh-token"        // 리프레쉬 토큰 사용한 토큰 재발급
+        "/auth/logout",         // 로그아웃
+        "/auth/refresh-token"  // 리프레쉬 토큰 사용한 토큰 재발급
     );
 
     // 모든 권한 허용 - PUT 요청만

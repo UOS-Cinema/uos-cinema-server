@@ -12,6 +12,7 @@ import com.uos.dsd.cinema.core.jwt.JwtUtils;
 import com.uos.dsd.cinema.core.security.SecurityConstants.Role;
 
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,8 @@ import jakarta.servlet.http.HttpServletResponse;
 
 
 @Slf4j
-@RestController("/auth")
+@RestController
+@RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController {
 
@@ -37,7 +39,7 @@ public class AuthController {
             Long id = jwtClaim.id();
             Role role = jwtClaim.role();
 
-            CookieUtil.deleteCookie(response, REISSUE_COOKIE_NAME, "/auth");
+            CookieUtil.deleteCookie(response, REISSUE_COOKIE_NAME, "/auth", request.isSecure());
 
             // Refresh Token 무효화 처리
 
@@ -63,7 +65,7 @@ public class AuthController {
 
             String newAccessToken = jwtUtils.generateAccessToken(id, role);
             String newRefreshToken = jwtUtils.generateRefreshToken(id, role);
-            CookieUtil.addHttpOnlyCookie(response, REISSUE_COOKIE_NAME, newRefreshToken, jwtUtils.getRefreshTokenExpirationMs(), "/auth");
+            CookieUtil.addHttpOnlyCookie(response, REISSUE_COOKIE_NAME, newRefreshToken, jwtUtils.getRefreshTokenExpirationMs(), "/auth", request.isSecure());
 
             log.info("refresh token success, id: {}, role: {}", id, role);
             return ApiResponse.success(new RefreshTokenResponse(newAccessToken));

@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
 import java.io.Serializable;
@@ -16,7 +17,9 @@ import java.io.Serializable;
 @EqualsAndHashCode(of = {"movieId", "actorId"})
 public class MovieCastId implements Serializable {
 
+    @Column(name = "movie_id")
     private Long movieId;
 
+    @Column(name = "actor_id")
     private Long actorId;
 } 

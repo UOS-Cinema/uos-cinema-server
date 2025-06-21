@@ -2,7 +2,6 @@ package com.uos.dsd.cinema.domain.movie;
 
 import com.uos.dsd.cinema.common.converter.StringListConverter;
 import com.uos.dsd.cinema.common.model.Base;
-import com.uos.dsd.cinema.domain.actor.Actor;
 import com.uos.dsd.cinema.domain.director.Director;
 import com.uos.dsd.cinema.domain.genre.Genre;
 import com.uos.dsd.cinema.domain.movie.enums.CastingType;
@@ -73,10 +72,14 @@ public class Movie extends Base {
     @Column(nullable = false)
     private String distributorName;
 
+    @Column(name = "director_id")
+    private Long directorId;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "director_id")
+    @JoinColumn(name = "director_id", insertable = false, updatable = false)
     private Director director;
 
+    // ScreenType은 조회용임
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "movie_screen_types",
         joinColumns = @JoinColumn(name = "movie_id"),
@@ -86,6 +89,7 @@ public class Movie extends Base {
     @OneToMany(mappedBy = "movie", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MovieCast> movieCasts;
 
+    // Genre은 조회용임
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "movie_genres",
         joinColumns = @JoinColumn(name = "movie_id"),
@@ -99,9 +103,9 @@ public class Movie extends Base {
             List<String> posterUrls,
             LocalDate releaseDate,
             String distributorName,
-            Director director,
+            Long directorId,
             List<ScreenType> screenTypes,
-            List<Actor> actors,
+            List<Long> actorIds,
             List<String> roles,
             List<CastingType> castingTypes,
             List<Genre> genres) {
@@ -113,25 +117,25 @@ public class Movie extends Base {
         this.posterUrls = posterUrls;
         this.releaseDate = releaseDate;
         this.distributorName = distributorName;
-        this.director = director;
+        this.directorId = directorId;
         this.screenTypes = screenTypes;
-        this.setMovieCasts(actors, roles, castingTypes);
+        this.setMovieCasts(actorIds, roles, castingTypes);
         this.genres = genres;
     }
 
-    public void setMovieCasts(List<Actor> actors, List<String> roles, List<CastingType> castingTypes) {
+    public void setMovieCasts(List<Long> actorIds, List<String> roles, List<CastingType> castingTypes) {
 
-        if (actors == null || roles == null || castingTypes == null) {
+        if (actorIds == null || roles == null || castingTypes == null) {
             throw new IllegalArgumentException("actors, roles, and castingTypes lists cannot be null.");
         }
 
-        if (actors.size() != roles.size() || actors.size() != castingTypes.size()) {
+        if (actorIds.size() != roles.size() || actorIds.size() != castingTypes.size()) {
             throw new IllegalArgumentException("actors, roles, and castingTypes lists must have the same size.");
         }
         
         this.movieCasts = new ArrayList<>();
-        for (int i = 0; i < actors.size(); i++) {
-            MovieCast movieCast = new MovieCast(this, actors.get(i), roles.get(i), castingTypes.get(i));
+        for (int i = 0; i < actorIds.size(); i++) {
+            MovieCast movieCast = new MovieCast(this, actorIds.get(i), roles.get(i), castingTypes.get(i));
             this.movieCasts.add(movieCast);
         }
     }

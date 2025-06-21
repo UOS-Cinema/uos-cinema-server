@@ -17,13 +17,15 @@ public class SecurityConstants {
         "/admins/login",
         "/guests/login",
         "/" + StorageConstants.STORAGE_URL_PREFIX + "/**",
+        "/screenings",
+        "/screenings/{id}",
+        "/theaters",
+        "/theaters/{theaterNumber}",
         // Swagger UI 접근을 위한 엔드포인트들
         "/swagger-ui/**",
         "/v3/api-docs/**",
         "/swagger-resources/**",
-        "/webjars/**",
-        "/screenings",
-        "/screenings/{id}"
+        "/webjars/**"
     );
 
     public static final List<String> GUEST_URLS = List.of(
@@ -35,7 +37,8 @@ public class SecurityConstants {
         "/admins/update",
         "/admins/delete",
         "/hello/auth",
-        "/admin/screenings"
+        "/admin/screenings",
+        "/theaters/admin"
     );
 
     public static final String USER_NAME_CLAIM = "username";

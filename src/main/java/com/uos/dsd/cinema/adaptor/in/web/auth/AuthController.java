@@ -45,7 +45,7 @@ public class AuthController {
 
             log.info("logout success, id: {}, role: {}", id, role);
         } else {
-            log.info("Already logged out(Token is invalid)");
+            log.info("Already logged out (RefreshToken is already invalid)");
         }
 
         return ApiResponse.success();

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -24,8 +25,10 @@ import lombok.ToString;
 
 import com.uos.dsd.cinema.domain.reservation.exception.ReservationExceptionCode;
 import com.uos.dsd.cinema.common.exception.http.BadRequestException;
+import com.uos.dsd.cinema.common.exception.http.UnauthorizedException;
 import com.uos.dsd.cinema.domain.reservation.constraint.ReservationConstraint;
 import com.uos.dsd.cinema.domain.reservation.enums.ReservationStatus;
+import com.uos.dsd.cinema.domain.reservation.converter.MapToJsonConverter;
 
 @Entity
 @Table(name = "reservations")
@@ -55,6 +58,7 @@ public class Reservation {
     @Column(name = "seat_snapshot")
     private List<String> seatSnapshot;
 
+    @Convert(converter = MapToJsonConverter.class)
     @Column(name = "customer_count_snapshot")
     private Map<String, String> customerCountSnapshot;
 
@@ -87,7 +91,10 @@ public class Reservation {
         createReservationCustomerCount(customerCount);
     }
 
-    public void cancel() {
+    public void cancel(Long customerId) {
+        if (!this.customerId.equals(customerId)) {
+            throw new UnauthorizedException(ReservationExceptionCode.INVALID_CUSTOMER_ID);
+        }
         this.status = ReservationStatus.CANCELLED;
         this.reservationSeats.clear();
         this.reservationCustomerCounts.clear();

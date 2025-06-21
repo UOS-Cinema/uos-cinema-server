@@ -8,13 +8,14 @@ import com.uos.dsd.cinema.core.security.SecurityConstants;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 
 @EnableWebSecurity
 @Configuration
@@ -42,9 +43,28 @@ public class SecurityConfig {
             .sessionManagement(sessionManagement -> sessionManagement
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                .requestMatchers(SecurityConstants.OPEN_ACCESS_URLS.toArray(String[]::new)).permitAll()
-                .requestMatchers(SecurityConstants.ADMIN_URLS.toArray(String[]::new)).hasRole(SecurityConstants.Role.ADMIN.name())
+
+                // 모든 권한 허용
+                .requestMatchers(SecurityConstants.PUBLIC_URLS.toArray(String[]::new)).permitAll()
+                .requestMatchers(HttpMethod.GET, SecurityConstants.PUBLIC_GET_URLS.toArray(String[]::new)).permitAll()
+                .requestMatchers(HttpMethod.POST, SecurityConstants.PUBLIC_POST_URLS.toArray(String[]::new)).permitAll()
+                .requestMatchers(HttpMethod.PUT, SecurityConstants.PUBLIC_PUT_URLS.toArray(String[]::new)).permitAll()
+                .requestMatchers(HttpMethod.DELETE, SecurityConstants.PUBLIC_DELETE_URLS.toArray(String[]::new)).permitAll()
+                
+                // GUEST 권한
                 .requestMatchers(SecurityConstants.GUEST_URLS.toArray(String[]::new)).hasRole(SecurityConstants.Role.GUEST.name())
+                .requestMatchers(HttpMethod.GET, SecurityConstants.GUEST_GET_URLS.toArray(String[]::new)).hasRole(SecurityConstants.Role.GUEST.name())
+                .requestMatchers(HttpMethod.POST, SecurityConstants.GUEST_POST_URLS.toArray(String[]::new)).hasRole(SecurityConstants.Role.GUEST.name())
+                .requestMatchers(HttpMethod.PUT, SecurityConstants.GUEST_PUT_URLS.toArray(String[]::new)).hasRole(SecurityConstants.Role.GUEST.name())
+                .requestMatchers(HttpMethod.DELETE, SecurityConstants.GUEST_DELETE_URLS.toArray(String[]::new)).hasRole(SecurityConstants.Role.GUEST.name())
+                
+                // ADMIN 권한
+                .requestMatchers(SecurityConstants.ADMIN_URLS.toArray(String[]::new)).hasRole(SecurityConstants.Role.ADMIN.name())
+                .requestMatchers(HttpMethod.GET, SecurityConstants.ADMIN_GET_URLS.toArray(String[]::new)).hasRole(SecurityConstants.Role.ADMIN.name())
+                .requestMatchers(HttpMethod.POST, SecurityConstants.ADMIN_POST_URLS.toArray(String[]::new)).hasRole(SecurityConstants.Role.ADMIN.name())
+                .requestMatchers(HttpMethod.PUT, SecurityConstants.ADMIN_PUT_URLS.toArray(String[]::new)).hasRole(SecurityConstants.Role.ADMIN.name())
+                .requestMatchers(HttpMethod.DELETE, SecurityConstants.ADMIN_DELETE_URLS.toArray(String[]::new)).hasRole(SecurityConstants.Role.ADMIN.name())
+
                 .anyRequest().authenticated())
             .exceptionHandling(exception -> exception
                     .authenticationEntryPoint(jwtAuthenticationEntryPoint)

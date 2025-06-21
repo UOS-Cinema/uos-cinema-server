@@ -48,7 +48,6 @@ public class WebConfig implements WebMvcConfigurer {
 
         registry.addInterceptor(this.authenticationInterceptor)
                 .addPathPatterns("/**")
-                .excludePathPatterns(SecurityConstants.OPEN_ACCESS_URLS)
                 .excludePathPatterns(SecurityConstants.BYPASS_URLS);
     }
 

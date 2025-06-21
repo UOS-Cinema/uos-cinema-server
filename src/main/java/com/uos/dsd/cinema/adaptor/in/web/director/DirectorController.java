@@ -1,7 +1,9 @@
 package com.uos.dsd.cinema.adaptor.in.web.director;
 
 import com.uos.dsd.cinema.adaptor.in.web.director.request.DirectorCreateRequest;
+import com.uos.dsd.cinema.adaptor.in.web.director.request.DirectorListRequest;
 import com.uos.dsd.cinema.adaptor.in.web.director.request.DirectorMovieSearchRequest;
+import com.uos.dsd.cinema.adaptor.in.web.director.request.DirectorSearchRequest;
 import com.uos.dsd.cinema.adaptor.in.web.director.request.DirectorUpdateRequest;
 import com.uos.dsd.cinema.adaptor.in.web.director.response.DirectorListResponse;
 import com.uos.dsd.cinema.adaptor.in.web.director.response.DirectorMovieListResponse;
@@ -15,7 +17,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
@@ -62,9 +63,7 @@ public class DirectorController {
 
     @GetMapping("/search")
     public ApiResponse<DirectorListResponse> searchDirectors(
-            @RequestParam(required = false) String query,
-            @RequestParam(defaultValue = "0") Integer page,
-            @RequestParam(defaultValue = "20") Integer size) {
+            @ModelAttribute DirectorSearchRequest request) {
         
         // TODO: 감독 검색 서비스 호출
         DirectorListResponse mockResponse = new DirectorListResponse(
@@ -72,15 +71,14 @@ public class DirectorController {
                 new DirectorListResponse.DirectorInfo(1L, "Mock Director 1", "director1.jpg"),
                 new DirectorListResponse.DirectorInfo(2L, "Mock Director 2", "director2.jpg")
             ),
-            2, page, 1
+            2, request.page(), 1
         );
         return ApiResponse.success(mockResponse);
     }
 
     @GetMapping
     public ApiResponse<DirectorListResponse> getDirectorList(
-            @RequestParam(defaultValue = "0") Integer page,
-            @RequestParam(defaultValue = "20") Integer size) {
+            @ModelAttribute DirectorListRequest request) {
         
         // TODO: 감독 리스트 조회 서비스 호출 (감독명으로 정렬)
         DirectorListResponse mockResponse = new DirectorListResponse(
@@ -89,7 +87,7 @@ public class DirectorController {
                 new DirectorListResponse.DirectorInfo(2L, "Mock Director 2", "director2.jpg"),
                 new DirectorListResponse.DirectorInfo(3L, "Mock Director 3", "director3.jpg")
             ),
-            3, page, 1
+            3, request.page(), 1
         );
         return ApiResponse.success(mockResponse);
     }

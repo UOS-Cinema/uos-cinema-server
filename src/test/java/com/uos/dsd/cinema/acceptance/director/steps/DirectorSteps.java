@@ -11,6 +11,7 @@ import com.uos.dsd.cinema.adaptor.in.web.director.request.DirectorUpdateRequest;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class DirectorSteps {
@@ -70,11 +71,14 @@ public class DirectorSteps {
             Map<String, Object> headers,
             DirectorSearchRequest request) {
 
+        Map<String, Object> queryParams = new HashMap<>();
+        if (request.query() != null) queryParams.put("query", request.query());
+        if (request.page() != null) queryParams.put("page", request.page());
+        if (request.size() != null) queryParams.put("size", request.size());
+
         return given().log().all()
                 .headers(headers)
-                .queryParam("query", request.query())
-                .queryParam("page", request.page())
-                .queryParam("size", request.size())
+                .queryParams(queryParams)
             .when()
                 .get(DIRECTOR_SEARCH_URL)
             .then()
@@ -87,10 +91,13 @@ public class DirectorSteps {
             Map<String, Object> headers,
             DirectorListRequest request) {
 
+        Map<String, Object> queryParams = new HashMap<>();
+        if (request.page() != null) queryParams.put("page", request.page());
+        if (request.size() != null) queryParams.put("size", request.size());
+
         return given().log().all()
                 .headers(headers)
-                .queryParam("page", request.page())
-                .queryParam("size", request.size())
+                .queryParams(queryParams)
             .when()
                 .get(DIRECTOR_LIST_URL)
             .then().log().all()
@@ -103,10 +110,18 @@ public class DirectorSteps {
             Long id,
             DirectorMovieSearchRequest request) {
 
+        Map<String, Object> queryParams = new HashMap<>();
+        if (request.startDate() != null) queryParams.put("startDate", request.startDate().toString());
+        if (request.endDate() != null) queryParams.put("endDate", request.endDate().toString());
+        if (request.genres() != null) queryParams.put("genres", request.genres());
+        if (request.screenTypes() != null) queryParams.put("screenTypes", request.screenTypes());
+        if (request.sortBy() != null) queryParams.put("sortBy", request.sortBy());
+        if (request.page() != null) queryParams.put("page", request.page());
+        if (request.size() != null) queryParams.put("size", request.size());
+
         return given().log().all()
                 .headers(headers)
-                .contentType(ContentType.JSON)
-                .body(request)
+                .queryParams(queryParams)
             .when()
                 .get(DIRECTOR_MOVIES_URL.replace("{id}", id.toString()))
             .then().log().all()

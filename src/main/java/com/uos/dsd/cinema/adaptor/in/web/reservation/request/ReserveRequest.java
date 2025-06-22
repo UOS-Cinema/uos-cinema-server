@@ -9,7 +9,7 @@ public record ReserveRequest(
     Long screeningId,
     Long theaterId,
     List<String> seatNumbers,
-    Map<String, String> customerCount
+    Map<String, Integer> customerCount
 ) {
 
     public ReserveCommand toCommand(Long userId) {

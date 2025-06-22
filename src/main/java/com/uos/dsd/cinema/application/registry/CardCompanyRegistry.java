@@ -1,6 +1,6 @@
 package com.uos.dsd.cinema.application.registry;
 
-import com.uos.dsd.cinema.application.port.out.affiliate.CardCompanyRepository;
+import com.uos.dsd.cinema.adaptor.out.persistence.affliliate.CardCompanyJpaRepository;
 import com.uos.dsd.cinema.domain.affiliate.AffiliateExceptionCode;
 import com.uos.dsd.cinema.domain.affiliate.CardCompany;
 import com.uos.dsd.cinema.domain.affiliate.CardCompanyReloadEvent;
@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CardCompanyRegistry extends LookupRegistry<CardCompany> {
 
-    private final CardCompanyRepository cardCompanyRepository;
+    private final CardCompanyJpaRepository cardCompanyRepository;
 
     @Override
     protected RuntimeException notFoundException() {

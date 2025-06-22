@@ -1,10 +1,10 @@
 package com.uos.dsd.cinema.application.registry;
 
-import com.uos.dsd.cinema.application.port.out.screen_type.ScreenTypeRepository;
 import com.uos.dsd.cinema.domain.screen_type.ScreenType;
 import com.uos.dsd.cinema.domain.screen_type.ScreenTypeReloadEvent;
 import com.uos.dsd.cinema.domain.screen_type.exception.ScreenTypeExceptionCode;
 import com.uos.dsd.cinema.common.exception.http.NotFoundException;
+import com.uos.dsd.cinema.adaptor.out.persistence.screen_type.ScreenTypeJpaRepository;
 
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.context.event.EventListener;
@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ScreenTypeRegistry extends LookupRegistry<ScreenType> {
 
-    private final ScreenTypeRepository screenTypeRepository;
+    private final ScreenTypeJpaRepository screenTypeRepository;
 
     @Override
     protected RuntimeException notFoundException() {

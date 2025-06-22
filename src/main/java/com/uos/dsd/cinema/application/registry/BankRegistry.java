@@ -1,6 +1,6 @@
 package com.uos.dsd.cinema.application.registry;
 
-import com.uos.dsd.cinema.application.port.out.affiliate.BankRepository;
+import com.uos.dsd.cinema.adaptor.out.persistence.affliliate.BankJpaRepository;
 import com.uos.dsd.cinema.domain.affiliate.AffiliateExceptionCode;
 import com.uos.dsd.cinema.domain.affiliate.Bank;
 import com.uos.dsd.cinema.domain.affiliate.BankReloadEvent;
@@ -13,11 +13,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 
+// TODO: 추후 추상화 필요
 @Component
 @RequiredArgsConstructor
 public class BankRegistry extends LookupRegistry<Bank> {
 
-    private final BankRepository bankRepository;
+    private final BankJpaRepository bankJpaRepository;
 
     @Override
     protected RuntimeException notFoundException() {
@@ -27,13 +28,13 @@ public class BankRegistry extends LookupRegistry<Bank> {
     @EventListener(ApplicationReadyEvent.class)
     @Transactional
     public void register() {
-        super.register(bankRepository.findAll(), Bank::getName);
+        super.register(bankJpaRepository.findAll(), Bank::getName);
     }
 
     @EventListener
     public void reload(BankReloadEvent event) {
 
-        super.register(bankRepository.findAll(), Bank::getName);
+        super.register(bankJpaRepository.findAll(), Bank::getName);
     }
 }
 

@@ -1,6 +1,6 @@
 package com.uos.dsd.cinema.application.registry;
 
-import com.uos.dsd.cinema.application.port.out.customer_type.CustomerTypeRepository;
+import com.uos.dsd.cinema.adaptor.out.persistence.customer_type.CustomerTypeJpaRepository;
 import com.uos.dsd.cinema.domain.customer_type.CustomerType;
 import com.uos.dsd.cinema.domain.customer_type.CustomerTypeExceptionCode;
 import com.uos.dsd.cinema.domain.customer_type.CustomerTypeReloadEvent;
@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CustomerTypeRegistry extends LookupRegistry<CustomerType> {
 
-    private final CustomerTypeRepository customerTypeRepository;
+    private final CustomerTypeJpaRepository customerTypeRepository;
 
     @Override
     protected RuntimeException notFoundException() {

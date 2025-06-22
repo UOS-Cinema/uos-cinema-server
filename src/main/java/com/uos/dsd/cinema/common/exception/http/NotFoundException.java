@@ -6,12 +6,18 @@ import com.uos.dsd.cinema.common.exception.code.ResultCode;
 
 public class NotFoundException extends CinemaException {
 
+    private static final ResultCode resultCode = CommonResultCode.NOT_FOUND;
+
     public NotFoundException() {
         super(CommonResultCode.NOT_FOUND);
     }
 
     public NotFoundException(ResultCode resultCode) {
         super(resultCode);
+    }
+
+    public NotFoundException(String message) {
+        super(resultCode, message);
     }
 
     public NotFoundException(ResultCode resultCode, String message) {

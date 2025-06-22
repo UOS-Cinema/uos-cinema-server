@@ -6,12 +6,18 @@ import com.uos.dsd.cinema.common.exception.code.ResultCode;
 
 public class ForbiddenException extends CinemaException {
 
+    private static final ResultCode resultCode = CommonResultCode.FORBIDDEN;
+
     public ForbiddenException() {
-        super(CommonResultCode.FORBIDDEN);
+        super(resultCode);
     }
 
     public ForbiddenException(ResultCode resultCode) {
         super(resultCode);
+    }
+
+    public ForbiddenException(String message) {
+        super(resultCode, message);
     }
 
     public ForbiddenException(ResultCode resultCode, String message) {

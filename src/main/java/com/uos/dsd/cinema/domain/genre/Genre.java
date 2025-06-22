@@ -33,6 +33,17 @@ public class Genre {
         this.imageUrl = imageUrl;
     }
 
+    public static Genre reference(String name) {
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("Genre name cannot be null or blank");
+        }
+        return new Genre(name);
+    }
+
+    private Genre(String name) {
+        this.name = name;
+    }
+
     public void modifyDescription(String description) {
         this.description = description;
     }

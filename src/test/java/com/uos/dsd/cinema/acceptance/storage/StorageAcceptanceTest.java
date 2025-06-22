@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import com.uos.dsd.cinema.acceptance.AcceptanceTest;
 import com.uos.dsd.cinema.application.port.out.storage.Storage;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
@@ -33,12 +32,6 @@ public class StorageAcceptanceTest extends AcceptanceTest {
     
     @LocalServerPort
     private int port;
-
-    @AfterEach
-    public void clear() {
-
-        storage.delete(Path.of(uploadPath, fileName).toString());
-    }
 
     @Test
     public void saveAndDownload() throws IOException {

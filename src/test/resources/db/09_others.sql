@@ -193,3 +193,9 @@ INSERT INTO screenings (id, movie_id, theater_id, screen_type, start_time, durat
 (48, 5, 2, '3D', TO_DATE('2025-06-22 15:00:00', 'YYYY-MM-DD HH24:MI:SS'), 125),
 (49, 5, 3, '4D', TO_DATE('2025-06-23 18:00:00', 'YYYY-MM-DD HH24:MI:SS'), 125),
 (50, 5, 1, '2D', TO_DATE('2025-06-24 21:00:00', 'YYYY-MM-DD HH24:MI:SS'), 125);
+
+UPDATE movies SET cumulative_bookings = 2728 WHERE id = 1;
+UPDATE movies SET cumulative_bookings = 1276 WHERE id = 2;
+UPDATE movies SET cumulative_bookings = 6078 WHERE id = 3;
+UPDATE movies SET cumulative_bookings = 9339 WHERE id = 4;
+UPDATE movies SET cumulative_bookings = 2425 WHERE id = 5;

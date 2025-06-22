@@ -188,6 +188,12 @@ INSERT INTO movie_statistics (statistic_date, movie_id, cumulative_bookings) VAL
 (DATE '2025-01-02', 5, 3690),
 (DATE '2025-01-03', 5, 2425);
 
+UPDATE movies SET cumulative_bookings = 2728 WHERE id = 1;
+UPDATE movies SET cumulative_bookings = 1276 WHERE id = 2;
+UPDATE movies SET cumulative_bookings = 6078 WHERE id = 3;
+UPDATE movies SET cumulative_bookings = 9339 WHERE id = 4;
+UPDATE movies SET cumulative_bookings = 2425 WHERE id = 5;
+
 INSERT INTO movie_screen_types (movie_id, screen_type) VALUES 
 (1, '4D'),
 (1, '3D'),

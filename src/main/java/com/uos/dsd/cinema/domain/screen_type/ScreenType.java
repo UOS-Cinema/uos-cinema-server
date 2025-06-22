@@ -56,4 +56,13 @@ public class ScreenType {
     private ScreenType(String type) {
         this.type = type;
     }
+
+    public void modifyIconUrl(String iconUrl) {
+        this.iconUrl = iconUrl;
+    }
+
+    public void modifyPrice(int price) {
+        PriceConstraint.validatePrice(price);
+        this.price = price;
+    }
 }

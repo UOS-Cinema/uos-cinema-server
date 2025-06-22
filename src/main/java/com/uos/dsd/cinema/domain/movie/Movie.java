@@ -2,9 +2,8 @@ package com.uos.dsd.cinema.domain.movie;
 
 import com.uos.dsd.cinema.common.converter.StringListConverter;
 import com.uos.dsd.cinema.common.model.Base;
-import com.uos.dsd.cinema.domain.director.Director;
 import com.uos.dsd.cinema.domain.genre.Genre;
-import com.uos.dsd.cinema.domain.movie.enums.CastingType;
+import com.uos.dsd.cinema.domain.director.Director;
 import com.uos.dsd.cinema.domain.movie.enums.MovieRating;
 import com.uos.dsd.cinema.domain.screen_type.ScreenType;
 
@@ -28,13 +27,14 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "movies")
@@ -70,31 +70,36 @@ public class Movie extends Base {
     private LocalDate releaseDate;
 
     @Column(name="distributor", nullable = false)
-    private String distributorName;
+    private String distributor;
 
     @Column(name = "director_id")
     private Long directorId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "director_id", insertable = false, updatable = false)
     private Director director;
 
-    // ScreenType은 조회용임
+    @Column(name = "cumulative_bookings")
+    private int cumulativeBookings;
+
+    @OneToMany(mappedBy = "movie", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MovieCast> movieCasts = new ArrayList<>();
+
+    @Lob
+    @Convert(converter = StringListConverter.class)
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "movie_screen_types",
         joinColumns = @JoinColumn(name = "movie_id"),
         inverseJoinColumns = @JoinColumn(name = "screen_type"))
-    private List<ScreenType> screenTypes;
+    private Set<ScreenType> screenTypes;
 
-    @OneToMany(mappedBy = "movie", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<MovieCast> movieCasts;
-
-    // Genre은 조회용임
+    @Lob
+    @Convert(converter = StringListConverter.class)
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "movie_genres",
         joinColumns = @JoinColumn(name = "movie_id"),
         inverseJoinColumns = @JoinColumn(name = "genre_name"))
-    private List<Genre> genres;
+    private Set<Genre> genres;
 
     public Movie(String title,
             String synopsis,
@@ -102,13 +107,11 @@ public class Movie extends Base {
             MovieRating rating,
             List<String> posterUrls,
             LocalDate releaseDate,
-            String distributorName,
+            String distributor,
             Long directorId,
-            List<ScreenType> screenTypes,
-            List<Long> actorIds,
-            List<String> roles,
-            List<CastingType> castingTypes,
-            List<Genre> genres) {
+            Set<ScreenType> screenTypes,
+            List<Casting> castings,
+            Set<Genre> genres) {
 
         this.title = title;
         this.synopsis = synopsis;
@@ -116,28 +119,50 @@ public class Movie extends Base {
         this.rating = rating;
         this.posterUrls = posterUrls;
         this.releaseDate = releaseDate;
-        this.distributorName = distributorName;
+        this.distributor = distributor;
         this.directorId = directorId;
         this.screenTypes = screenTypes;
-        this.setMovieCasts(actorIds, roles, castingTypes);
+        this.setMovieCasts(castings);
         this.genres = genres;
     }
 
-    public void setMovieCasts(List<Long> actorIds, List<String> roles, List<CastingType> castingTypes) {
+    public void update(String title,
+            String synopsis,
+            Integer runningTime,
+            MovieRating rating,
+            List<String> posterUrls,
+            LocalDate releaseDate,
+            String distributor,
+            Long directorId,
+            Set<ScreenType> screenTypes,
+            List<Casting> castings,
+            Set<Genre> genres) {
 
-        if (actorIds == null || roles == null || castingTypes == null) {
-            throw new IllegalArgumentException("actors, roles, and castingTypes lists cannot be null.");
-        }
+        this.title = title;
+        this.synopsis = synopsis;
+        this.runningTime = runningTime;
+        this.rating = rating;
+        this.posterUrls = posterUrls;
+        this.releaseDate = releaseDate;
+        this.distributor = distributor;
+        this.directorId = directorId;
+        this.screenTypes.clear();
+        this.screenTypes = screenTypes;
+        this.movieCasts.clear();
+        this.setMovieCasts(castings);
+        this.genres.clear();
+        this.genres = genres;
+    }
 
-        if (actorIds.size() != roles.size() || actorIds.size() != castingTypes.size()) {
-            throw new IllegalArgumentException("actors, roles, and castingTypes lists must have the same size.");
-        }
-        
-        this.movieCasts = new ArrayList<>();
-        for (int i = 0; i < actorIds.size(); i++) {
-            MovieCast movieCast = new MovieCast(this, actorIds.get(i), roles.get(i), castingTypes.get(i));
+    public void setMovieCasts(List<Casting> castings) {
+        for (Casting casting : castings) {
+            MovieCast movieCast = new MovieCast(this, casting);
             this.movieCasts.add(movieCast);
         }
+    }
+
+    public void updateCumulativeBookings(int cumulativeBookings) {
+        this.cumulativeBookings = cumulativeBookings;
     }
 
     public boolean isReleased(LocalDate date) {
@@ -146,6 +171,13 @@ public class Movie extends Base {
 
     public boolean isUpcoming(LocalDate date) {
         return this.releaseDate.isAfter(date);
+    }
+
+    public void delete() {
+        super.delete();
+        this.screenTypes.clear();
+        this.movieCasts.clear();
+        this.genres.clear();
     }
 }
 

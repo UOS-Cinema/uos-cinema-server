@@ -153,6 +153,8 @@ CREATE TABLE movies (
     release_date    DATE,
     distributor     VARCHAR(50),
     director_id     NUMBER,
+    cumulative_bookings NUMBER(10) DEFAULT 0 NOT NULL,
+
     created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     deleted_at      TIMESTAMP,

@@ -1,4 +1,4 @@
-package com.uos.dsd.cinema.adaptor.in.web.affilliate;
+package com.uos.dsd.cinema.adaptor.in.web.affiliate;
 
 import java.util.List;
 
@@ -13,9 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.uos.dsd.cinema.adaptor.in.web.affilliate.request.CreateCardCompanyRequest;
-import com.uos.dsd.cinema.adaptor.in.web.affilliate.request.UpdateCardCompanyRequest;
+import com.uos.dsd.cinema.adaptor.in.web.affiliate.request.CreateCardCompanyRequest;
+import com.uos.dsd.cinema.adaptor.in.web.affiliate.request.UpdateCardCompanyRequest;
 import com.uos.dsd.cinema.adaptor.out.persistence.affliliate.CardCompanyJpaRepository;
 import com.uos.dsd.cinema.application.registry.CardCompanyRegistry;
 import com.uos.dsd.cinema.core.annotation.UserRole;
@@ -34,7 +33,7 @@ public class AdminCardCompanyController {
     private final CardCompanyRegistry cardCompanyRegistry;
 
     @PostMapping
-    public ApiResponse<CardCompany> createCardCompany(
+    public ApiResponse<String> createCardCompany(
         @UserRole Role role,
             @RequestBody CreateCardCompanyRequest request) {
 
@@ -42,7 +41,7 @@ public class AdminCardCompanyController {
             throw new ForbiddenException();
         }
 
-        return ApiResponse.success(createCardCompany(request));
+        return ApiResponse.success(createCardCompany(request).getName());
     }
 
     @GetMapping
@@ -57,7 +56,7 @@ public class AdminCardCompanyController {
     }
     
     @PutMapping("/{name}")
-    public ApiResponse<CardCompany> updateCardCompany(
+    public ApiResponse<String> updateCardCompany(
         @UserRole Role role,
         @PathVariable String name,
             @RequestBody UpdateCardCompanyRequest request) {
@@ -66,7 +65,7 @@ public class AdminCardCompanyController {
             throw new ForbiddenException();
         }
 
-        return ApiResponse.success(updateCardCompany(name, request));
+        return ApiResponse.success(updateCardCompany(name, request).getName());
     }
 
     @DeleteMapping("/{name}")

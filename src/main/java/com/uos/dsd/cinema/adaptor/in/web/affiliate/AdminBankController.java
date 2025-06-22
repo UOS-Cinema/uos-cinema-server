@@ -1,4 +1,4 @@
-package com.uos.dsd.cinema.adaptor.in.web.affilliate;
+package com.uos.dsd.cinema.adaptor.in.web.affiliate;
 
 import java.util.List;
 
@@ -13,9 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.uos.dsd.cinema.adaptor.in.web.affilliate.request.CreateBankRequest;
-import com.uos.dsd.cinema.adaptor.in.web.affilliate.request.UpdateBankRequest;
+import com.uos.dsd.cinema.adaptor.in.web.affiliate.request.CreateBankRequest;
+import com.uos.dsd.cinema.adaptor.in.web.affiliate.request.UpdateBankRequest;
 import com.uos.dsd.cinema.adaptor.out.persistence.affliliate.BankJpaRepository;
 import com.uos.dsd.cinema.application.registry.BankRegistry;
 import com.uos.dsd.cinema.core.annotation.UserRole;
@@ -34,7 +33,7 @@ public class AdminBankController {
     private final BankRegistry bankRegistry;
 
     @PostMapping
-    public ApiResponse<Bank> createBank(
+    public ApiResponse<String> createBank(
         @UserRole Role role,
             @RequestBody CreateBankRequest request) {
 
@@ -42,7 +41,7 @@ public class AdminBankController {
             throw new ForbiddenException();
         }
 
-        return ApiResponse.success(createBank(request));
+        return ApiResponse.success(createBank(request).getName());
     }
 
     @GetMapping
@@ -57,7 +56,7 @@ public class AdminBankController {
     }
     
     @PutMapping("/{name}")
-    public ApiResponse<Bank> updateBank(
+    public ApiResponse<String> updateBank(
         @UserRole Role role,
         @PathVariable String name,
             @RequestBody UpdateBankRequest request) {
@@ -66,7 +65,7 @@ public class AdminBankController {
             throw new ForbiddenException();
         }
 
-        return ApiResponse.success(updateBank(name, request));
+        return ApiResponse.success(updateBank(name, request).getName());
     }
 
     @DeleteMapping("/{name}")

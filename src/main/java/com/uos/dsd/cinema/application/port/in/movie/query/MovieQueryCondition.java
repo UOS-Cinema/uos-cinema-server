@@ -11,6 +11,8 @@ import java.util.List;
 
 public record MovieQueryCondition(
     String title,
+    String actorName,
+    String directorName,
     LocalDate startDate,
     LocalDate endDate,
     List<String> genres,
@@ -35,6 +37,8 @@ public record MovieQueryCondition(
 
     public static MovieQueryCondition of(
         String title,
+        String directorName,
+        String actorName,
         LocalDate startDate,
         LocalDate endDate,
         List<String> genres,
@@ -42,6 +46,15 @@ public record MovieQueryCondition(
         MovieSortType sortBy,
         Integer page,
         Integer size) {
-        return new MovieQueryCondition(title, startDate, endDate, genres, screenTypes, sortBy, page, size);
+        return new MovieQueryCondition(title,
+                directorName,
+                actorName, 
+                startDate, 
+                endDate, 
+                genres, 
+                screenTypes, 
+                sortBy, 
+                page, 
+                size);
     }
 } 

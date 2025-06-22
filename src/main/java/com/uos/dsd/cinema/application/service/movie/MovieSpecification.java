@@ -1,6 +1,9 @@
 package com.uos.dsd.cinema.application.service.movie;
 
 import com.uos.dsd.cinema.domain.movie.Movie;
+import com.uos.dsd.cinema.domain.movie.MovieCast;
+import com.uos.dsd.cinema.domain.actor.Actor;
+
 import org.springframework.data.jpa.domain.Specification;
 
 import jakarta.persistence.criteria.*;
@@ -20,6 +23,30 @@ public class MovieSpecification {
                 return criteriaBuilder.conjunction();
             }
             return criteriaBuilder.like(root.get("title"), "%" + title + "%");
+        };
+    }
+
+    public static Specification<Movie> hasDirector(String directorName) {
+        return (root, query, criteriaBuilder) -> {
+            if (directorName == null || directorName.isEmpty()) {
+                return criteriaBuilder.conjunction();
+            }
+            return criteriaBuilder.like(root.get("director").get("name"), "%" + directorName + "%");
+        };
+    }
+
+    public static Specification<Movie> hasActor(String actorName) {
+        return (root, query, cb) -> {
+            if (actorName == null || actorName.isEmpty()) {
+                return cb.conjunction();
+            }
+
+            // movie → movieCasts
+            Join<Movie, MovieCast> movieCastJoin = root.join("movieCasts", JoinType.INNER);
+            // movieCasts → actor
+            Join<MovieCast, Actor> actorJoin = movieCastJoin.join("actor", JoinType.INNER);
+
+            return cb.like(actorJoin.get("name"), "%" + actorName + "%");
         };
     }
 

@@ -1,30 +1,30 @@
 package com.uos.dsd.cinema.adaptor.in.web.screen_type;
 
-import java.util.List;
-
-import lombok.RequiredArgsConstructor;
+import com.uos.dsd.cinema.adaptor.in.web.screen_type.request.CreateScreenTypeRequest;
+import com.uos.dsd.cinema.adaptor.in.web.screen_type.request.UpdateScreenTypeRequest;
+import com.uos.dsd.cinema.adaptor.out.persistence.screen_type.ScreenTypeJpaRepository;
+import com.uos.dsd.cinema.application.registry.ScreenTypeRegistry;
+import com.uos.dsd.cinema.common.exception.http.BadRequestException;
+import com.uos.dsd.cinema.common.exception.http.ForbiddenException;
+import com.uos.dsd.cinema.common.exception.http.NotFoundException;
+import com.uos.dsd.cinema.common.response.ApiResponse;
+import com.uos.dsd.cinema.core.annotation.UserRole;
+import com.uos.dsd.cinema.core.security.SecurityConstants.Role;
+import com.uos.dsd.cinema.domain.screen_type.ScreenType;
 
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.uos.dsd.cinema.adaptor.in.web.screen_type.request.CreateScreenTypeRequest;
-import com.uos.dsd.cinema.adaptor.in.web.screen_type.request.UpdateScreenTypeRequest;
-import com.uos.dsd.cinema.adaptor.out.persistence.screen_type.ScreenTypeJpaRepository;
-import com.uos.dsd.cinema.application.registry.ScreenTypeRegistry;
-import com.uos.dsd.cinema.core.annotation.UserRole;
-import com.uos.dsd.cinema.core.security.SecurityConstants.Role;
-import com.uos.dsd.cinema.common.exception.http.ForbiddenException;
-import com.uos.dsd.cinema.common.exception.http.NotFoundException;
-import com.uos.dsd.cinema.common.exception.http.BadRequestException;
-import com.uos.dsd.cinema.common.response.ApiResponse;
-import com.uos.dsd.cinema.domain.screen_type.ScreenType;
+import lombok.RequiredArgsConstructor;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -47,13 +47,7 @@ public class AdminScreenTypeController {
     }
 
     @GetMapping
-    public ApiResponse<List<ScreenType>> getAllScreenTypes(
-            @UserRole Role role) {
-
-        if (role != Role.ADMIN) {
-            throw new ForbiddenException();
-        }
-
+    public ApiResponse<List<ScreenType>> getAllScreenTypes() {
         return ApiResponse.success(screenTypeRegistry.getAll());
     }
 

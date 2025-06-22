@@ -37,7 +37,11 @@ public class SecurityConstants {
         "/actors/search",       // 배우 검색
         "/actors",              // 배우 리스트 조회
         "/directors/search",    // 감독 검색
-            "/directors" // 감독 리스트 조회
+        "/directors",           // 감독 리스트 조회
+        "/admin/screen-types",  // 스크린 타입 리스트 조회
+        "/admin/customer-types", // 고객 타입 리스트 조회
+        "/admin/card-companies", // 카드사 리스트 조회
+        "/admin/banks"          // 은행 리스트 조회
     );
 
     // 모든 권한 허용 - POST 요청만
@@ -109,10 +113,6 @@ public class SecurityConstants {
         "/admin/movies/**",
         "/admin/actors/**",
         "/admin/directors/**",
-        "/admin/banks/**",
-        "/admin/card-companies/**",
-        "/admin/customer-types/**",
-        "/admin/screen-types/**",
         "/admin/theaters/**",
         "/admin/screenings/**",
         "/admin/genres/**"
@@ -130,7 +130,11 @@ public class SecurityConstants {
         "/movies",              // 영화 생성
         "/theaters",            // 극장 생성
         "/actors",              // 배우 생성
-        "/directors"            // 감독 생성
+        "/directors",           // 감독 생성
+        "/admin/banks",         // 은행 생성
+        "/admin/card-companies", // 카드사 생성
+        "/admin/customer-types", // 고객 타입 생성
+        "/admin/screen-types"   // 스크린 타입 생성
     );
 
     // ADMIN 권한만 허용 - PUT 요청만
@@ -139,7 +143,11 @@ public class SecurityConstants {
         "/movies/*",            // 영화 수정
         "/theaters/*",          // 극장 수정
         "/actors/*",            // 배우 수정
-        "/directors/*"          // 감독 수정
+        "/directors/*",         // 감독 수정
+        "/admin/banks/*",       // 은행 수정
+        "/admin/card-companies/*", // 카드사 수정
+        "/admin/customer-types/*", // 고객 타입 수정
+        "/admin/screen-types/*" // 스크린 타입 수정
     );
 
     // ADMIN 권한만 허용 - DELETE 요청만
@@ -148,7 +156,11 @@ public class SecurityConstants {
         "/movies/*",            // 영화 삭제
         "/theaters/*",          // 극장 삭제
         "/actors/*",            // 배우 삭제
-        "/directors/*"          // 감독 삭제
+        "/directors/*",         // 감독 삭제
+        "/admin/banks/*",       // 은행 삭제
+        "/admin/card-companies/*", // 카드사 삭제
+        "/admin/customer-types/*", // 고객 타입 삭제
+        "/admin/screen-types/*" // 스크린 타입 삭제
     );
 
     public static final String USER_NAME_CLAIM = "username";

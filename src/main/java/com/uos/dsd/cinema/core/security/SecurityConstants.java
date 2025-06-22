@@ -86,6 +86,8 @@ public class SecurityConstants {
 
     // ADMIN 권한만 허용 - 모든 메서드
     public static final List<String> ADMIN_URLS = List.of(
+        "/admin/banks/**",
+        "/admin/card-companies/**",
         "/admin/theaters/**",
         "/admin/screenings/**",
         "/admin/genres/**"

@@ -34,8 +34,8 @@ CREATE TABLE theater_screen_types (
     theater_id   NUMBER,
     screen_type  VARCHAR(50),
     PRIMARY KEY (theater_id, screen_type),
-    FOREIGN KEY (theater_id) REFERENCES theaters(id),
-    FOREIGN KEY (screen_type) REFERENCES screen_types(type)
+    FOREIGN KEY (theater_id) REFERENCES theaters(id) ON DELETE CASCADE,
+    FOREIGN KEY (screen_type) REFERENCES screen_types(type) ON DELETE CASCADE
 );
 
 -- 장르
@@ -211,8 +211,8 @@ CREATE TABLE screenings (
     deleted_at          TIMESTAMP,
     PRIMARY KEY (id),
     FOREIGN KEY (movie_id) REFERENCES movies(id) ON DELETE CASCADE,
-    FOREIGN KEY (theater_id) REFERENCES theaters(id) ON DELETE SET NULL,
-    FOREIGN KEY (screen_type) REFERENCES screen_types(type) ON DELETE SET NULL
+    FOREIGN KEY (theater_id) REFERENCES theaters(id) ON DELETE CASCADE,
+    FOREIGN KEY (screen_type) REFERENCES screen_types(type) ON DELETE CASCADE
 );
 
 -- 예매 내역 테이블

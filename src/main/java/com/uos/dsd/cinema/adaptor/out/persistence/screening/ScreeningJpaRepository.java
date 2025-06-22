@@ -15,51 +15,55 @@ import com.uos.dsd.cinema.domain.reservation.ReservationSeat;
 public interface ScreeningJpaRepository extends JpaRepository<Screening, Long> {
 
     @Query("""
-    SELECT s FROM Screening s 
-    WHERE s.startTime BETWEEN :startTime AND :endTime
-    """)
-    List<Screening> findAllAround(@Param("startTime") LocalDateTime startTime, 
-                                @Param("endTime") LocalDateTime endTime);
+            SELECT s FROM Screening s
+            WHERE s.startTime BETWEEN :startTime AND :endTime
+            """)
+    List<Screening> findAllAround(@Param("startTime") LocalDateTime startTime,
+            @Param("endTime") LocalDateTime endTime);
 
     @Query("""
-    SELECT s FROM Screening s 
-    WHERE s.movieId = :movieId 
-    AND s.startTime BETWEEN :startTime AND :endTime
-    """)
+            SELECT s FROM Screening s
+            WHERE s.movieId = :movieId
+            AND s.startTime BETWEEN :startTime AND :endTime
+            """)
     List<Screening> findAllByMovieAround(@Param("movieId") Long movieId,
-                                @Param("startTime") LocalDateTime startTime,
-                                @Param("endTime") LocalDateTime endTime);
+            @Param("startTime") LocalDateTime startTime, @Param("endTime") LocalDateTime endTime);
 
     @Query("""
-    SELECT s FROM Screening s 
-    WHERE s.theaterId = :theaterId 
-    AND s.startTime BETWEEN :startTime AND :endTime
-    """)
+            SELECT s FROM Screening s
+            WHERE s.theaterId = :theaterId
+            AND s.startTime BETWEEN :startTime AND :endTime
+            """)
     List<Screening> findAllByTheaterAround(@Param("theaterId") Long theaterId,
-                                @Param("startTime") LocalDateTime startTime, 
-                                @Param("endTime") LocalDateTime endTime);
+            @Param("startTime") LocalDateTime startTime, @Param("endTime") LocalDateTime endTime);
 
     @Query("""
-    SELECT s FROM Screening s 
-    WHERE s.movieId = :movieId 
-    AND s.theaterId = :theaterId 
-    AND s.startTime BETWEEN :startTime AND :endTime
-    """)
+            SELECT s FROM Screening s
+            WHERE s.movieId = :movieId
+            AND s.theaterId = :theaterId
+            AND s.startTime BETWEEN :startTime AND :endTime
+            """)
     List<Screening> findAllByMovieAndTheaterAround(@Param("movieId") Long movieId,
-                                @Param("theaterId") Long theaterId,
-                                @Param("startTime") LocalDateTime startTime, 
-                                @Param("endTime") LocalDateTime endTime);
+            @Param("theaterId") Long theaterId, @Param("startTime") LocalDateTime startTime,
+            @Param("endTime") LocalDateTime endTime);
 
     @Query("""
-    SELECT rs FROM ReservationSeat rs 
-    WHERE rs.id.screeningId = :screeningId
-    """)
+            SELECT rs FROM ReservationSeat rs
+            WHERE rs.id.screeningId = :screeningId
+            """)
     List<ReservationSeat> getReservationSeats(@Param("screeningId") Long screeningId);
 
     @Query("""
-    SELECT s FROM Screening s
-    JOIN FETCH s.movie
-    JOIN FETCH s.theater
-    """)
+            SELECT s FROM Screening s
+            JOIN FETCH s.movie
+            JOIN FETCH s.theater
+            """)
     List<Screening> findAllWithMovieAndTheater();
+
+    @Query("""
+            SELECT COUNT(s) FROM Screening s
+            WHERE s.movie.id = :movieId
+            AND s.startTime > CURRENT_TIMESTAMP
+            """)
+    int countByMovie(@Param("movieId") Long movieId);
 }

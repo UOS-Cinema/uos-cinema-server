@@ -72,6 +72,11 @@ public class ScreeningRepositoryAdapter implements ScreeningRepository {
     }
 
     @Override
+    public int countByMovie(Long movieId) {
+        return screeningJpaRepository.countByMovie(movieId);
+    }
+
+    @Override
     public void delete(Long id) {
         screeningJpaRepository.deleteById(id);
     }

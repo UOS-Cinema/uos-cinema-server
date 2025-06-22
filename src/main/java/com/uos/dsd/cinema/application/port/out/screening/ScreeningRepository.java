@@ -35,5 +35,7 @@ public interface ScreeningRepository {
 
     List<ReservationSeat> getReservationSeats(Long screeningId);
 
+    int countByMovie(Long movieId);
+
     void delete(Long id);
 }

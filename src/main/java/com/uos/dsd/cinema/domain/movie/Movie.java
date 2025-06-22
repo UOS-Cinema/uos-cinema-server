@@ -7,7 +7,6 @@ import com.uos.dsd.cinema.domain.genre.Genre;
 import com.uos.dsd.cinema.domain.movie.enums.CastingType;
 import com.uos.dsd.cinema.domain.movie.enums.MovieRating;
 import com.uos.dsd.cinema.domain.screen_type.ScreenType;
-import com.uos.dsd.cinema.core.converter.StringListConverter;
 
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
@@ -70,7 +69,7 @@ public class Movie extends Base {
     @Column(nullable = false)
     private LocalDate releaseDate;
 
-    @Column(nullable = false)
+    @Column(name="distributor", nullable = false)
     private String distributorName;
 
     @Column(name = "director_id")

@@ -33,8 +33,8 @@ public class ScreeningReservationAcceptanceTest extends AcceptanceTest {
         Response response = ScreeningReservationSteps.getScreeningReservationSeatingStatus(
             AuthHeaderProvider.createAuthorizationHeader(guestAccessToken),
                 screeningId);
-        ApiResponse<List<List<List<LayoutElement>>>> apiResponse =
-                response.as(new TypeRef<ApiResponse<List<List<List<LayoutElement>>>>>() {});
+        ApiResponse<List<List<LayoutElement>>> apiResponse =
+                response.as(new TypeRef<ApiResponse<List<List<LayoutElement>>>>() {});
         log.info("ApiResponse: {}", apiResponse);
 
         /* Then */

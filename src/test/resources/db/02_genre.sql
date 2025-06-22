@@ -12,7 +12,7 @@ INSERT INTO genres (name, description) VALUES
 ('Musical', '뮤지컬 영화'),
 ('Mystery', '미스터리 영화'),
 ('Romance', '로맨스 영화'),
-('Sci‑Fi', 'SF 영화'),
+('Sci-Fi', 'SF 영화'),
 ('Sport', '스포츠 영화'),
 ('Thriller', '스릴러 영화'),
 ('War', '전쟁 영화'),

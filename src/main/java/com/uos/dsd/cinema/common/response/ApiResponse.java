@@ -33,14 +33,6 @@ public record ApiResponse<T>(
         );
     }
 
-    public static <T> ApiResponse<List<T>> success(List<T> data) {
-        return new ApiResponse<>(
-            CommonResultCode.SUCCESS.getCode(),
-            CommonResultCode.SUCCESS.getMessage(),
-            data
-        );
-    }
-
     public static <T> ApiResponse<PageResponse<T>> success(Page<T> data) {
         return new ApiResponse<>(
             CommonResultCode.SUCCESS.getCode(),

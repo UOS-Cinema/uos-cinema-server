@@ -1,10 +1,21 @@
-INSERT INTO genres (name, description, image_url) VALUES ('Action', 'Action genre', 'https://example.com/action.jpg');
-INSERT INTO genres (name, description, image_url) VALUES ('Drama', 'Drama genre', 'https://example.com/drama.jpg');
-INSERT INTO genres (name, description, image_url) VALUES ('Comedy', 'Comedy genre', 'https://example.com/comedy.jpg');
-INSERT INTO genres (name, description, image_url) VALUES ('Horror', 'Horror genre', 'https://example.com/horror.jpg');
-INSERT INTO genres (name, description, image_url) VALUES ('Romance', 'Romance genre', 'https://example.com/romance.jpg');
-INSERT INTO genres (name, description, image_url) VALUES ('Sci-Fi', 'Sci-Fi genre', 'https://example.com/sci-fi.jpg');
-INSERT INTO genres (name, description, image_url) VALUES ('Thriller', 'Thriller genre', 'https://example.com/thriller.jpg');
-INSERT INTO genres (name, description, image_url) VALUES ('Fantasy', 'Fantasy genre', 'https://example.com/fantasy.jpg');
-INSERT INTO genres (name, description, image_url) VALUES ('Mystery', 'Mystery genre', 'https://example.com/mystery.jpg');
-INSERT INTO genres (name, description, image_url) VALUES ('Western', 'Western genre', 'https://example.com/western.jpg');
+INSERT INTO genres (name, description) VALUES 
+('Action', '신나고 박진감 넘치는 액션 영화'),
+('Adventure', '모험을 테마로 한 영화'),
+('Animation', '애니메이션'),
+('Comedy', '웃음이 있는 코미디 영화'),
+('Crime', '범죄 스릴러 영화'),
+('Documentary', '다큐멘터리'),
+('Drama', '드라마'),
+('Fantasy', '판타지 영화'),
+('History', '역사 영화'),
+('Horror', '공포 영화'),
+('Musical', '뮤지컬 영화'),
+('Mystery', '미스터리 영화'),
+('Romance', '로맨스 영화'),
+('Sci‑Fi', 'SF 영화'),
+('Sport', '스포츠 영화'),
+('Thriller', '스릴러 영화'),
+('War', '전쟁 영화'),
+('Western', '웨스턴 영화'),
+('Cartoon', '카툰'),
+('Biography', '전기 영화');

@@ -1,6 +1,6 @@
 package com.uos.dsd.cinema.application.registry;
 
-import com.uos.dsd.cinema.application.port.out.genre.GenreRepository;
+import com.uos.dsd.cinema.adaptor.out.persistence.genre.GenreJpaRepository;
 import com.uos.dsd.cinema.domain.genre.Genre;
 import com.uos.dsd.cinema.domain.genre.GenreExceptionCode;
 import com.uos.dsd.cinema.domain.genre.GenreReloadEvent;
@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class GenreRegistry extends LookupRegistry<Genre> {
 
-    private final GenreRepository genreRepository;
+    private final GenreJpaRepository genreJpaRepository;
 
     @Override
     protected RuntimeException notFoundException() {
@@ -29,12 +29,12 @@ public class GenreRegistry extends LookupRegistry<Genre> {
     @Transactional
     public void register() {
 
-        super.register(genreRepository.findAll(), Genre::getName);
+        super.register(genreJpaRepository.findAll(), Genre::getName);
     }
 
     @EventListener
     public void reload(GenreReloadEvent event) {
 
-        super.register(genreRepository.findAll(), Genre::getName);
+        super.register(genreJpaRepository.findAll(), Genre::getName);
     }
 }

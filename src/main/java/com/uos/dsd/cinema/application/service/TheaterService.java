@@ -21,6 +21,7 @@ import org.hibernate.exception.ConstraintViolationException;
 
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,23 +37,32 @@ public class TheaterService implements
 
     @Override
     public Long createTheater(CreateTheaterCommand command) {
-        
-        Theater theater = new Theater(
-            command.number(),
-            command.name(),
-            command.layout(),
-            command.screenTypes()
-        );
+
+        Theater theater = new Theater(command.number(), command.name(), command.layout(),
+                command.screenTypes());
 
         try {
             theaterRepository.save(theater);
             return theater.getNumber();
         } catch (ConstraintViolationException e) {
-            throw new BadRequestException(
-                TheaterExceptionCode.THEATER_ALREADY_EXISTS,
-                String.format(TheaterExceptionCode.THEATER_ALREADY_EXISTS.getMessage(), 
-                command.number(), command.name()));
+            throw new BadRequestException(TheaterExceptionCode.THEATER_ALREADY_EXISTS,
+                    String.format(TheaterExceptionCode.THEATER_ALREADY_EXISTS.getMessage(),
+                            command.number(), command.name()));
         }
+    }
+    
+    @Override
+    public List<TheaterResponse> readAllTheater() {
+        return theaterRepository.findAll().stream()
+            .map(theater -> new TheaterResponse(
+                theater.getNumber(),
+                theater.getName(),
+                theater.getLayout(),
+                theater.getScreenTypes().stream()
+                    .map(ScreenType::getType)
+                    .collect(Collectors.toList())
+            ))
+            .collect(Collectors.toList());
     }
 
     @Override
@@ -78,9 +88,12 @@ public class TheaterService implements
         theater.modifyName(command.name());
         if (theater.getLayout() != command.layout()) {
             // TODO: 해당 상영관에 예매한 사람이 없는 경우에만 변경 가능
-            theater.deleteSeats();
-            theaterRepository.saveAndFlush(theater);
-            theater.modifyLayout(command.layout());
+            // TODO: 나중에 변경으로 꼭 바꾸기
+            // theater.deleteSeats();
+            // theaterRepository.saveAndFlush(theater);
+            // theater.modifyLayout(command.layout());
+            deleteTheater(command.number());
+            theater = new Theater(command.number(), command.name(), command.layout(), command.screenTypes());
         }
         if (theater.getScreenTypes() != command.screenTypes()) {
             // TODO: 해당 상영관을 예매한 사람이 없는 경우에만 변경 가능
@@ -97,7 +110,8 @@ public class TheaterService implements
         try {
             theaterRepository.deleteById(theaterNumber);
         } catch (EmptyResultDataAccessException e) {
-            throw new RuntimeException("Theater not found: " + theaterNumber);
+            throw new NotFoundException(TheaterExceptionCode.THEATER_NOT_FOUND,
+                    TheaterExceptionCode.THEATER_NOT_FOUND.getMessage() + ": " + theaterNumber);
         }
     }
 

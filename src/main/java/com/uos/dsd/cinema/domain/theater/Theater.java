@@ -49,7 +49,7 @@ public class Theater extends Base implements Persistable<Long>{
 
     @OneToMany(mappedBy = "theater",
             fetch = FetchType.LAZY, 
-            cascade = CascadeType.PERSIST, 
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, 
             orphanRemoval = true)
     private List<TheaterSeat> seats;
 
@@ -150,6 +150,8 @@ public class Theater extends Base implements Persistable<Long>{
 
         validateLayout(layout);
         this.layout = layout;
+        this.seats.clear();
+        this.seats = new ArrayList<>();
         this.seats.addAll(generateSeats());
     }
 

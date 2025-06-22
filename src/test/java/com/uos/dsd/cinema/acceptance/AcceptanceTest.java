@@ -36,7 +36,7 @@ import java.time.LocalDate;
 )
 @Import({
     DBInitializer.class,
-    TestcontainersConfiguration.class, 
+    TestcontainersConfiguration.class,
     AcceptanceTest.AcceptanceTestConfig.class
 })
 public abstract class AcceptanceTest {
@@ -58,7 +58,7 @@ public abstract class AcceptanceTest {
         @Bean
         DBInitializeStrategy dbInitializeStrategy(@Autowired DataSource dataSource) {
 
-            Resource initScript = new ClassPathResource("db/h2/migration/V1__init.sql");
+            Resource initScript = new ClassPathResource("db/migration/V1__init.sql");
             return new OracleDBInitializeStrategy(dataSource, initScript);
         }
     }

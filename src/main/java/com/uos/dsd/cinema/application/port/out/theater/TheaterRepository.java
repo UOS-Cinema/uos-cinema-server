@@ -12,6 +12,8 @@ public interface TheaterRepository {
 
     Theater saveAndFlush(Theater theater);
 
+    List<Theater> findAll();
+
     Optional<Theater> findById(Long theaterNumber);
 
     List<List<LayoutElement>> getSeatingStatus(Long theaterNumber);

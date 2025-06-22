@@ -41,8 +41,8 @@ CREATE TABLE theater_screen_types (
     screen_type  VARCHAR2(50),
 
     PRIMARY KEY (theater_id, screen_type),
-    FOREIGN KEY (theater_id) REFERENCES theaters(id),
-    FOREIGN KEY (screen_type) REFERENCES screen_types(type)
+    FOREIGN KEY (theater_id) REFERENCES theaters(id) ON DELETE CASCADE,
+    FOREIGN KEY (screen_type) REFERENCES screen_types(type) ON DELETE CASCADE
 );
 
 -- 장르

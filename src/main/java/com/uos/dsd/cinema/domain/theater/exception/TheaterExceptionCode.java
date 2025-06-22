@@ -11,6 +11,7 @@ public enum TheaterExceptionCode implements ResultCode {
 
     THEATER_NOT_FOUND("THE001", "Theater not found: %s"),
     THEATER_ALREADY_EXISTS("THE002", "Theater already exists: %s %s"),
+    ONLY_ADMIN_CAN_ACCESS("THE003", "Only admin can access this endpoint"),
     ;
 
     private final String code;

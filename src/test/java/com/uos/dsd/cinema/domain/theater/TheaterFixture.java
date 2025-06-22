@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 public class TheaterFixture {
 
-    private final static Long theaterNumber = 10L;
+    private final static Long theaterNumber = 100L;
     private final static String theaterName = "Theater Name";
     private final static String updateTheaterName = "Update Theater Name";
     private final static List<List<LayoutElement>> layout = Arrays.asList(

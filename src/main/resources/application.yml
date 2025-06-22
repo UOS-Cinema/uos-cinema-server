@@ -33,3 +33,7 @@ jwt:
 server:
   host: localhost
   port: 8080
+
+storage:
+  root-path: ./storage
+  url-prefix: files

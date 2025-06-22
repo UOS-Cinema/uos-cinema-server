@@ -1,7 +1,7 @@
 package com.uos.dsd.cinema.adaptor.out.storage;
 
 import com.uos.dsd.cinema.application.port.out.storage.Storage;
-import com.uos.dsd.cinema.common.constant.StorageConstants;
+import com.uos.dsd.cinema.core.config.StorageConfig;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -23,15 +23,19 @@ public class FileSystemStorage implements Storage {
 
     private final String domain;
     private final String port;
-    private final Path rootPath = Paths.get(StorageConstants.STORAGE_ROOT_PATH).toAbsolutePath().normalize();
-    private final String urlPrefix = StorageConstants.STORAGE_URL_PREFIX;
+    private final Path rootPath;
+    private final String urlPrefix;
 
     public FileSystemStorage(
         @Value("${server.host}") String domain,
-        @Value("${server.port}") String port) {
+        @Value("${server.port}") String port,
+        StorageConfig storageConfig) {
 
         this.domain = domain;
         this.port = port;
+        this.rootPath = Paths.get(storageConfig.getRootPath()).toAbsolutePath().normalize();
+        this.urlPrefix = storageConfig.getUrlPrefix();
+        
         try {
             Files.createDirectories(this.rootPath);
         } catch (IOException e) {

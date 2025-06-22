@@ -24,12 +24,14 @@ public class SecurityConfig {
     private final JwtUtils jwtUtils;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+    private final StorageConfig storageConfig;
 
     public SecurityConfig(JwtUtils jwtUtils, JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
-            JwtAccessDeniedHandler jwtAccessDeniedHandler) {
+            JwtAccessDeniedHandler jwtAccessDeniedHandler, StorageConfig storageConfig) {
         this.jwtUtils = jwtUtils;
         this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
         this.jwtAccessDeniedHandler = jwtAccessDeniedHandler;
+        this.storageConfig = storageConfig;
     }
 
     @Bean
@@ -44,6 +46,9 @@ public class SecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(authorizeRequests -> authorizeRequests
 
+                // Storage 접근 허용
+                .requestMatchers(HttpMethod.GET, "/" + storageConfig.getUrlPrefix() + "/**").permitAll()
+
                 // 모든 권한 허용
                 .requestMatchers(SecurityConstants.PUBLIC_URLS.toArray(String[]::new)).permitAll()
                 .requestMatchers(HttpMethod.GET, SecurityConstants.PUBLIC_GET_URLS.toArray(String[]::new)).permitAll()
@@ -57,6 +62,13 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, SecurityConstants.GUEST_POST_URLS.toArray(String[]::new)).hasRole(SecurityConstants.Role.GUEST.name())
                 .requestMatchers(HttpMethod.PUT, SecurityConstants.GUEST_PUT_URLS.toArray(String[]::new)).hasRole(SecurityConstants.Role.GUEST.name())
                 .requestMatchers(HttpMethod.DELETE, SecurityConstants.GUEST_DELETE_URLS.toArray(String[]::new)).hasRole(SecurityConstants.Role.GUEST.name())
+                
+                // MEMBER 권한
+                .requestMatchers(SecurityConstants.MEMBER_URLS.toArray(String[]::new)).hasRole(SecurityConstants.Role.MEMBER.name())
+                .requestMatchers(HttpMethod.GET, SecurityConstants.MEMBER_GET_URLS.toArray(String[]::new)).hasRole(SecurityConstants.Role.MEMBER.name())
+                .requestMatchers(HttpMethod.POST, SecurityConstants.MEMBER_POST_URLS.toArray(String[]::new)).hasRole(SecurityConstants.Role.MEMBER.name())
+                .requestMatchers(HttpMethod.PUT, SecurityConstants.MEMBER_PUT_URLS.toArray(String[]::new)).hasRole(SecurityConstants.Role.MEMBER.name())
+                .requestMatchers(HttpMethod.DELETE, SecurityConstants.MEMBER_DELETE_URLS.toArray(String[]::new)).hasRole(SecurityConstants.Role.MEMBER.name())
                 
                 // ADMIN 권한
                 .requestMatchers(SecurityConstants.ADMIN_URLS.toArray(String[]::new)).hasRole(SecurityConstants.Role.ADMIN.name())

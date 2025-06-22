@@ -1,6 +1,5 @@
 package com.uos.dsd.cinema.core.config;
 
-import com.uos.dsd.cinema.common.constant.StorageConstants;
 import com.uos.dsd.cinema.core.interceptor.AuthenticationInterceptor;
 import com.uos.dsd.cinema.core.resolver.UserIdArgumentResolver;
 import com.uos.dsd.cinema.core.resolver.UserRoleArgumentResolver;
@@ -24,15 +23,18 @@ public class WebConfig implements WebMvcConfigurer {
     private final UserIdArgumentResolver userIdArgumentResolver;
     private final UserRoleArgumentResolver userRoleArgumentResolver;
     private final AuthenticationInterceptor authenticationInterceptor;
+    private final StorageConfig storageConfig;
 
     public WebConfig(
         UserIdArgumentResolver userIdArgumentResolver,
         UserRoleArgumentResolver userRoleArgumentResolver,
-        AuthenticationInterceptor authenticationInterceptor) {
+        AuthenticationInterceptor authenticationInterceptor,
+        StorageConfig storageConfig) {
 
         this.userIdArgumentResolver = userIdArgumentResolver;
         this.userRoleArgumentResolver = userRoleArgumentResolver;
         this.authenticationInterceptor = authenticationInterceptor;
+        this.storageConfig = storageConfig;
     }
 
     @Override
@@ -54,7 +56,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(@NonNull ResourceHandlerRegistry registry) {
 
-        registry.addResourceHandler("/" + StorageConstants.STORAGE_URL_PREFIX + "/**")
-                .addResourceLocations("file:" + Paths.get(StorageConstants.STORAGE_ROOT_PATH).toAbsolutePath().normalize() + "/");
+        registry.addResourceHandler("/" + storageConfig.getUrlPrefix() + "/**")
+                .addResourceLocations("file:" + Paths.get(storageConfig.getRootPath()).toAbsolutePath().normalize() + "/");
     }
 }

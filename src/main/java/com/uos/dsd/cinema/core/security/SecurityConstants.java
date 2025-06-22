@@ -1,12 +1,7 @@
 package com.uos.dsd.cinema.core.security;
 
-import com.uos.dsd.cinema.common.constant.StorageConstants;
-
-import org.springframework.stereotype.Component;
-
 import java.util.List;
 
-@Component
 public class SecurityConstants {
 
     // 필터링을 거치지 않는 URL들
@@ -19,9 +14,6 @@ public class SecurityConstants {
         "/movies/**",
         "/actors/**",
         "/directors/**",
-
-        // 파일 저장소 접근을 위한 엔드포인트
-        "/" + StorageConstants.STORAGE_URL_PREFIX + "/**",
         
         // Swagger UI 접근을 위한 엔드포인트들
         "/swagger-ui/**",
@@ -52,6 +44,8 @@ public class SecurityConstants {
     public static final List<String> PUBLIC_POST_URLS = List.of(
         "/admins/login",        // 관리자 로그인
         "/guests/login",        // 게스트 로그인
+        "/members/signup",      // 회원가입
+        "/members/login",       // 회원 로그인
         "/auth/logout",         // 로그아웃
         "/auth/refresh-token"  // 리프레쉬 토큰 사용한 토큰 재발급
     );
@@ -70,7 +64,7 @@ public class SecurityConstants {
 
     // GUEST 권한만 허용 - GET 요청만
     public static final List<String> GUEST_GET_URLS = List.of(
-        "/guests/{id}"          // 게스트 정보 조회
+        "/guests/*"          // 게스트 정보 조회
     );
 
     // GUEST 권한만 허용 - POST 요청만
@@ -79,12 +73,35 @@ public class SecurityConstants {
 
     // GUEST 권한만 허용 - PUT 요청만
     public static final List<String> GUEST_PUT_URLS = List.of(
-        "/guests/{id}"          // 게스트 정보 수정
+        "/guests/*"          // 게스트 정보 수정
     );
 
     // GUEST 권한만 허용 - DELETE 요청만
     public static final List<String> GUEST_DELETE_URLS = List.of(
-        "/guests/{id}"          // 게스트 계정 삭제
+        "/guests/*"          // 게스트 계정 삭제
+    );
+
+    // MEMBER 권한만 허용 - 모든 메서드
+    public static final List<String> MEMBER_URLS = List.of(
+    );
+
+    // MEMBER 권한만 허용 - GET 요청만
+    public static final List<String> MEMBER_GET_URLS = List.of(
+        "/members/*"   // 회원 정보 조회
+    );
+
+    // MEMBER 권한만 허용 - POST 요청만
+    public static final List<String> MEMBER_POST_URLS = List.of(
+    );
+
+    // MEMBER 권한만 허용 - PUT 요청만
+    public static final List<String> MEMBER_PUT_URLS = List.of(
+        "/members/*"   // 회원 정보 수정
+    );
+
+    // MEMBER 권한만 허용 - DELETE 요청만
+    public static final List<String> MEMBER_DELETE_URLS = List.of(
+        "/members/*"   // 회원 탈퇴
     );
 
     // ADMIN 권한만 허용 - 모든 메서드

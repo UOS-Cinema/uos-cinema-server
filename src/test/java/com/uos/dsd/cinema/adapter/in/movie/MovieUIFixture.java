@@ -17,6 +17,8 @@ public class MovieUIFixture {
             null,
             null,
             null,
+            null,
+            null,
             null
             );
         
@@ -29,11 +31,15 @@ public class MovieUIFixture {
             null,
             null,
             null,
+            null,
+            null,
             null
         );
         
     public static MovieQueryCondition startDateQueryCondition(LocalDate startDate) {
         return new MovieQueryCondition(
+            null,
+            null,
             null,
             startDate,
             null,
@@ -48,12 +54,16 @@ public class MovieUIFixture {
             null,
             null,
             null,
+            null,
+            null,
             List.of("2D"),
             null,
             null,
             null);
     
     public static MovieQueryCondition sortByReleaseDateQueryCondition = new MovieQueryCondition(
+            null,
+            null,
             null,
             null,
             null,

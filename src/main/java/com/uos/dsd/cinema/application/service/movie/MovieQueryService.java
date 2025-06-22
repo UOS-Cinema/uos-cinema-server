@@ -60,14 +60,14 @@ public class MovieQueryService {
 
     public Page<Movie> getRankingMovies(Integer page, Integer size) {
         MovieQueryCondition request = new MovieQueryCondition(
-            null, LocalDate.now().minusMonths(1), LocalDate.now().plusDays(7), null, null,
+            null, null, null, LocalDate.now().minusMonths(1), LocalDate.now().plusDays(7), null, null,
                 MovieSortType.POPULARITY, page, size);
 
         return searchMovies(request);
     }
     
     public Page<Movie> getUpcomingMovies(Integer page, Integer size) {
-        MovieQueryCondition request = new MovieQueryCondition(null, null, null, null, null,
+        MovieQueryCondition request = new MovieQueryCondition(null, null, null, null, null, null, null,
                 MovieSortType.RELEASE_DATE, page, size);
 
         return searchMovies(request);

@@ -1,30 +1,32 @@
 package com.uos.dsd.cinema.acceptance;
 
-import com.uos.dsd.cinema.utils.DBInitializer;
-import com.uos.dsd.cinema.utils.DBInitializeStrategy;
+import com.uos.dsd.cinema.TestcontainersConfiguration;
 import com.uos.dsd.cinema.acceptance.admin.steps.AdminSteps;
 import com.uos.dsd.cinema.acceptance.customer.guest.steps.GuestSteps;
 import com.uos.dsd.cinema.adaptor.in.web.admin.request.AdminLoginRequest;
 import com.uos.dsd.cinema.adaptor.in.web.customer.guest.request.GuestLoginRequest;
 import com.uos.dsd.cinema.utils.AuthHeaderProvider;
+import com.uos.dsd.cinema.utils.DBInitializeStrategy;
+import com.uos.dsd.cinema.utils.DBInitializer;
 import com.uos.dsd.cinema.utils.H2DBInitializeStrategy;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.Bean;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.TestExecutionListeners;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ClassPathResource;
+import com.uos.dsd.cinema.utils.StorageCleaner;
 
 import org.junit.jupiter.api.AfterEach;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import io.restassured.response.Response;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestExecutionListeners;
 
+import io.restassured.response.Response;
 import javax.sql.DataSource;
+
 import java.time.LocalDate;
 
 @ActiveProfiles("test")
@@ -35,13 +37,17 @@ import java.time.LocalDate;
 )
 @Import({
     DBInitializer.class,
-    // TestcontainersConfiguration.class,
-    AcceptanceTest.AcceptanceTestConfig.class
+    TestcontainersConfiguration.class,
+    AcceptanceTest.AcceptanceTestConfig.class,
+    StorageCleaner.class
 })
 public abstract class AcceptanceTest {
 
     @Autowired
     DBInitializer dbInitializer;
+
+    @Autowired
+    StorageCleaner storageCleaner;
 
     protected static final Logger log = LoggerFactory.getLogger(AcceptanceTest.class);
 
@@ -49,6 +55,7 @@ public abstract class AcceptanceTest {
     public void clear() {
 
         dbInitializer.clear();
+        storageCleaner.cleanStorage();
     }
 
     @TestConfiguration

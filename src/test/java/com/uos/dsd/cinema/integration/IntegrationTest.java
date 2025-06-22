@@ -1,42 +1,41 @@
 package com.uos.dsd.cinema.integration;
 
-import com.uos.dsd.cinema.utils.DBInitializer;
-import com.uos.dsd.cinema.utils.DBInitializeStrategy;
-import com.uos.dsd.cinema.utils.H2DBInitializeStrategy;
-import com.uos.dsd.cinema.application.registry.ScreenTypeRegistry;
-import com.uos.dsd.cinema.application.port.out.screen_type.ScreenTypeRepository;
-import com.uos.dsd.cinema.application.registry.GenreRegistry;
-import com.uos.dsd.cinema.application.port.out.genre.GenreRepository;
-import com.uos.dsd.cinema.application.registry.BankRegistry;
 import com.uos.dsd.cinema.application.port.out.affiliate.BankRepository;
-import com.uos.dsd.cinema.application.registry.CardCompanyRegistry;
 import com.uos.dsd.cinema.application.port.out.affiliate.CardCompanyRepository;
 import com.uos.dsd.cinema.application.port.out.customer_type.CustomerTypeRepository;
+import com.uos.dsd.cinema.application.port.out.genre.GenreRepository;
+import com.uos.dsd.cinema.application.port.out.screen_type.ScreenTypeRepository;
+import com.uos.dsd.cinema.application.registry.BankRegistry;
+import com.uos.dsd.cinema.application.registry.CardCompanyRegistry;
 import com.uos.dsd.cinema.application.registry.CustomerTypeRegistry;
-
-import org.springframework.context.annotation.Import;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ClassPathResource;
+import com.uos.dsd.cinema.application.registry.GenreRegistry;
+import com.uos.dsd.cinema.application.registry.ScreenTypeRegistry;
+import com.uos.dsd.cinema.utils.DBInitializeStrategy;
+import com.uos.dsd.cinema.utils.DBInitializer;
+import com.uos.dsd.cinema.utils.H2DBInitializeStrategy;
+import com.uos.dsd.cinema.utils.StorageCleaner;
 
 import org.junit.jupiter.api.AfterEach;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.web.servlet.MockMvc;
 
 import javax.sql.DataSource;
 
 @ActiveProfiles("test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
-@Import({DBInitializer.class, IntegrationTest.IntegrationTestConfig.class})
+@Import({DBInitializer.class, IntegrationTest.IntegrationTestConfig.class, StorageCleaner.class})
 public abstract class IntegrationTest {
 
     @Autowired
@@ -44,6 +43,9 @@ public abstract class IntegrationTest {
 
     @Autowired
     protected DBInitializer dbInitializer;
+
+    @Autowired
+    protected StorageCleaner storageCleaner;
 
     @Autowired
     protected ApplicationEventPublisher eventPublisher;
@@ -84,6 +86,7 @@ public abstract class IntegrationTest {
     public void clear() {
 
         dbInitializer.clear();
+        storageCleaner.cleanStorage();
     }
 
     @TestConfiguration

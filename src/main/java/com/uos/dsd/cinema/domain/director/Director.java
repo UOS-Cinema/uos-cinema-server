@@ -39,4 +39,8 @@ public class Director extends Base {
     public Director(String name) {
         this(name, null);
     }
+
+    public void modifyPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
+    }
 }

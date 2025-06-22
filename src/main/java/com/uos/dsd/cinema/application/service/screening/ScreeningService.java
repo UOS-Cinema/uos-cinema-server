@@ -39,10 +39,6 @@ public class ScreeningService implements ScreeningDeleteUseCase,
         return screeningRepository.save(screening).getId();
     }
 
-    List<Screening> findAllAround(Long movieId, LocalDate date) {
-        return null;
-    }
-
     List<Screening> findAllAround(LocalDate date) {
 
         LocalDate startDate = date;

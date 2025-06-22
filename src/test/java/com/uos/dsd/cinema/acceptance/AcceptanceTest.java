@@ -2,13 +2,12 @@ package com.uos.dsd.cinema.acceptance;
 
 import com.uos.dsd.cinema.utils.DBInitializer;
 import com.uos.dsd.cinema.utils.DBInitializeStrategy;
-import com.uos.dsd.cinema.utils.OracleDBInitializeStrategy;
-import com.uos.dsd.cinema.TestcontainersConfiguration;
 import com.uos.dsd.cinema.acceptance.admin.steps.AdminSteps;
 import com.uos.dsd.cinema.acceptance.customer.guest.steps.GuestSteps;
 import com.uos.dsd.cinema.adaptor.in.web.admin.request.AdminLoginRequest;
 import com.uos.dsd.cinema.adaptor.in.web.customer.guest.request.GuestLoginRequest;
 import com.uos.dsd.cinema.utils.AuthHeaderProvider;
+import com.uos.dsd.cinema.utils.H2DBInitializeStrategy;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -36,7 +35,7 @@ import java.time.LocalDate;
 )
 @Import({
     DBInitializer.class,
-    TestcontainersConfiguration.class,
+    // TestcontainersConfiguration.class,
     AcceptanceTest.AcceptanceTestConfig.class
 })
 public abstract class AcceptanceTest {
@@ -58,8 +57,9 @@ public abstract class AcceptanceTest {
         @Bean
         DBInitializeStrategy dbInitializeStrategy(@Autowired DataSource dataSource) {
 
-            Resource initScript = new ClassPathResource("db/migration/V1__init.sql");
-            return new OracleDBInitializeStrategy(dataSource, initScript);
+            Resource initScript = new ClassPathResource("db/h2/migration/V1__init.sql");
+            // return new OracleDBInitializeStrategy(dataSource, initScript);
+            return new H2DBInitializeStrategy(dataSource, initScript);
         }
     }
 

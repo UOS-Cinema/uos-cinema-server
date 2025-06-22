@@ -1,6 +1,5 @@
 package com.uos.dsd.cinema.domain.affiliate;
 
-import com.uos.dsd.cinema.common.model.Base;
 import com.uos.dsd.cinema.domain.price.constaint.PriceConstraint;
 
 import lombok.Getter;
@@ -16,9 +15,9 @@ import jakarta.persistence.Table;
 @Table(name = "banks")
 @Getter
 @ToString
-@EqualsAndHashCode(of = "name", callSuper = false)
+@EqualsAndHashCode(of = "name")
 @NoArgsConstructor
-public class Bank extends Base {
+public class Bank {
 
     @Id
     private String name;

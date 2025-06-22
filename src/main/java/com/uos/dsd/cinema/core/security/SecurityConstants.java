@@ -88,6 +88,8 @@ public class SecurityConstants {
     public static final List<String> ADMIN_URLS = List.of(
         "/admin/banks/**",
         "/admin/card-companies/**",
+        "/admin/customer-types/**",
+        "/admin/screen-types/**",
         "/admin/theaters/**",
         "/admin/screenings/**",
         "/admin/genres/**"

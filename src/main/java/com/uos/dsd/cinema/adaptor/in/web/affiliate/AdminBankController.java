@@ -1,28 +1,29 @@
 package com.uos.dsd.cinema.adaptor.in.web.affiliate;
 
-import java.util.List;
-
-import lombok.RequiredArgsConstructor;
+import com.uos.dsd.cinema.adaptor.in.web.affiliate.request.CreateBankRequest;
+import com.uos.dsd.cinema.adaptor.in.web.affiliate.request.UpdateBankRequest;
+import com.uos.dsd.cinema.adaptor.out.persistence.affliliate.BankJpaRepository;
+import com.uos.dsd.cinema.application.registry.BankRegistry;
+import com.uos.dsd.cinema.common.exception.http.ForbiddenException;
+import com.uos.dsd.cinema.common.exception.http.NotFoundException;
+import com.uos.dsd.cinema.common.response.ApiResponse;
+import com.uos.dsd.cinema.core.annotation.UserRole;
+import com.uos.dsd.cinema.core.security.SecurityConstants.Role;
+import com.uos.dsd.cinema.domain.affiliate.Bank;
 
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.uos.dsd.cinema.adaptor.in.web.affiliate.request.CreateBankRequest;
-import com.uos.dsd.cinema.adaptor.in.web.affiliate.request.UpdateBankRequest;
-import com.uos.dsd.cinema.adaptor.out.persistence.affliliate.BankJpaRepository;
-import com.uos.dsd.cinema.application.registry.BankRegistry;
-import com.uos.dsd.cinema.core.annotation.UserRole;
-import com.uos.dsd.cinema.core.security.SecurityConstants.Role;
-import com.uos.dsd.cinema.common.exception.http.ForbiddenException;
-import com.uos.dsd.cinema.common.exception.http.NotFoundException;
-import com.uos.dsd.cinema.common.response.ApiResponse;
-import com.uos.dsd.cinema.domain.affiliate.Bank;
+
+import lombok.RequiredArgsConstructor;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -45,13 +46,7 @@ public class AdminBankController {
     }
 
     @GetMapping
-    public ApiResponse<List<Bank>> getAllBanks(
-            @UserRole Role role) {
-
-        if (role != Role.ADMIN) {
-            throw new ForbiddenException();
-        }
-
+    public ApiResponse<List<Bank>> getAllBanks() {
         return ApiResponse.success(bankRegistry.getAll());
     }
     

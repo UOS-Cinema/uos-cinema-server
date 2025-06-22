@@ -124,4 +124,23 @@ public class Member {
     public boolean isDeleted() {
         return this.deletedAt != null;
     }
+
+    public void updateInfo(String name, String phone, LocalDate birthDate, String profileImageUrl) {
+        if (name != null) {
+            validateAndSetName(name);
+        }
+        if (phone != null) {
+            validateAndSetPhone(phone);
+        }
+        if (birthDate != null) {
+            validateAndSetBirthDate(birthDate);
+        }
+        if (profileImageUrl != null) {
+            this.profileImageUrl = profileImageUrl;
+        }
+    }
+
+    public void updatePassword(String newPassword) {
+        validateAndSetPassword(newPassword);
+    }
 }

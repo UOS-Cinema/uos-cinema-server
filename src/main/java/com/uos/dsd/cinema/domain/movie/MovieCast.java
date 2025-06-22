@@ -47,10 +47,10 @@ public class MovieCast {
     @Column(nullable = false)
     private CastingType castingType;
 
-    public MovieCast(Movie movie, Long actorId, String role, CastingType castingType) {
-        this.id = new MovieCastId(movie.getId(), actorId);
+    public MovieCast(Movie movie, Casting casting) {
+        this.id = new MovieCastId(movie.getId(), casting.actorId());
         this.movie = movie;
-        this.role = role;
-        this.castingType = castingType;
+        this.role = casting.role();
+        this.castingType = casting.castingType();
     }
 } 

@@ -2,6 +2,7 @@ package com.uos.dsd.cinema.domain.movie;
 
 import com.uos.dsd.cinema.common.model.Base;
 import com.uos.dsd.cinema.domain.screen_type.ScreenType;
+import com.uos.dsd.cinema.core.converter.StringListConverter;
 
 import lombok.Getter;
 import lombok.ToString;
@@ -19,6 +20,7 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.Convert;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -27,7 +29,7 @@ import java.util.List;
 @Table(name = "movies")
 @Getter
 @ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true, of = "id")
 @NoArgsConstructor
 public class Movie extends Base {
 
@@ -39,6 +41,7 @@ public class Movie extends Base {
 
     private String synopsis;
 
+    @Convert(converter = StringListConverter.class)
     private List<String> posterUrls;
 
     private int runningTime;
@@ -50,7 +53,7 @@ public class Movie extends Base {
 
     private String distributor;
 
-    private String director;
+    private Long directorId;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "movie_screen_types",
@@ -65,7 +68,7 @@ public class Movie extends Base {
                 MovieRating rating,
                 LocalDate releaseDate,
                 String distributor,
-                String director,
+                Long directorId,
                 List<ScreenType> screenTypes) {
 
         this.title = title;
@@ -75,7 +78,7 @@ public class Movie extends Base {
         this.rating = rating;
         this.releaseDate = releaseDate;
         this.distributor = distributor;
-        this.director = director;
+        this.directorId = directorId;
         this.screenTypes = screenTypes;
     }
 }

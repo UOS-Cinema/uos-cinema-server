@@ -53,15 +53,15 @@ INSERT INTO actors (id, name, photo_url) VALUES
 
 -- movies 테이블 INSERT
 INSERT INTO movies (id, title, synopsis, running_time, rating, poster_urls, release_date, distributor, director_id) VALUES
-(1, '기생충', '빈부 격차와 계층 갈등을 블랙코미디적 풍자로 담아낸 사회파 드라마', 132, '15',
+(1, '기생충', '빈부 격차와 계층 갈등을 블랙코미디적 풍자로 담아낸 사회파 드라마', 132, 'FIFTEEN',
    '["https://image.tmdb.org/t/p/original/7IiTTgloJzvGI1TAYymCfbfl3vT.jpg"]',
    TO_DATE('2019-05-30T00:00:00', 'YYYY-MM-DD"T"HH24:MI:SS'),
    '바른손 COVID', 1),
-(2, '인셉션', '꿈 속 여러 층위를 오가며 현실과 환상의 경계를 흔드는 SF 심리 스릴러', 148, '15',
+(2, '인셉션', '꿈 속 여러 층위를 오가며 현실과 환상의 경계를 흔드는 SF 심리 스릴러', 148, 'FIFTEEN',
    '["https://i.namu.wiki/i/O2uuv7bO0Hc33rLHS7t3OGhc5_guUiIyY6VThmyKSP8lC1kwtN6vS8KsiUIbda5n46DAVy7_Z2_c2KRR_mUYEw.webp"]',
    TO_DATE('2010-07-16T00:00:00', 'YYYY-MM-DD"T"HH24:MI:SS'),
    '워너브라더스', 2),
-(3, '좋은 놈, 나쁜 놈, 이상한 놈', '한국식 서부극으로, 전쟁 직후 혼란 속 유쾌한 모험을 그린 웨스턴 드라마', 159, '15',
+(3, '좋은 놈, 나쁜 놈, 이상한 놈', '한국식 서부극으로, 전쟁 직후 혼란 속 유쾌한 모험을 그린 웨스턴 드라마', 159, 'FIFTEEN',
    '["https://i.namu.wiki/i/K0asY-_xCplVJXasAStJAq3IjDQb7KedpeIrfhEFLsuzYPGTAa3mKMoA09rk9ZpCI7Akz8O01sjI-nIy5kkvLQ.webp"]',
    TO_DATE('2008-11-27T00:00:00', 'YYYY-MM-DD"T"HH24:MI:SS'),
    'CINE2000', 3),

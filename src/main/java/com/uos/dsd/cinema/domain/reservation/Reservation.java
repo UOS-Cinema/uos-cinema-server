@@ -26,9 +26,10 @@ import lombok.ToString;
 import com.uos.dsd.cinema.domain.reservation.exception.ReservationExceptionCode;
 import com.uos.dsd.cinema.common.exception.http.BadRequestException;
 import com.uos.dsd.cinema.common.exception.http.UnauthorizedException;
+import com.uos.dsd.cinema.core.converter.MapToJsonConverter;
+import com.uos.dsd.cinema.core.converter.StringListConverter;
 import com.uos.dsd.cinema.domain.reservation.constraint.ReservationConstraint;
 import com.uos.dsd.cinema.domain.reservation.enums.ReservationStatus;
-import com.uos.dsd.cinema.domain.reservation.converter.MapToJsonConverter;
 
 @Entity
 @Table(name = "reservations")
@@ -56,10 +57,12 @@ public class Reservation {
     private LocalDateTime createdAt;
 
     @Column(name = "seat_snapshot")
+    @Convert(converter = StringListConverter.class)
     private List<String> seatSnapshot;
 
     @Convert(converter = MapToJsonConverter.class)
     @Column(name = "customer_count_snapshot")
+    @Convert(converter = MapToJsonConverter.class)
     private Map<String, String> customerCountSnapshot;
 
     @OneToMany(mappedBy = "reservation",

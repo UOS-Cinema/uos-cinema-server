@@ -18,18 +18,18 @@ public record MovieCreateRequest(
     String synopsis,
 
     @NotNull(message = "runningTime은 필수입니다.")
-    Long runningTime,
+    int runningTime,
 
     @NotNull(message = "rating은 필수입니다.")
     MovieRating rating,
 
-    String posterUrls,
+    List<String> posterUrls,
 
     @NotNull(message = "releaseDate은 필수입니다.")
     LocalDate releaseDate,
 
-    @NotBlank(message = "distributorName은 필수입니다.")
-    String distributorName,
+    @NotBlank(message = "distributor은 필수입니다.")
+    String distributor,
 
     @NotNull(message = "directorId는 필수입니다.")
     Long directorId,

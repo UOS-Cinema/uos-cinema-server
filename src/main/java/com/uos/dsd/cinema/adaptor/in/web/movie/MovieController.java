@@ -1,114 +1,62 @@
 package com.uos.dsd.cinema.adaptor.in.web.movie;
 
-import com.uos.dsd.cinema.adaptor.in.web.movie.request.MovieCreateRequest;
-import com.uos.dsd.cinema.adaptor.in.web.movie.request.MovieListRequest;
-import com.uos.dsd.cinema.adaptor.in.web.movie.request.MovieSearchRequest;
-import com.uos.dsd.cinema.adaptor.in.web.movie.request.MovieUpdateRequest;
-import com.uos.dsd.cinema.adaptor.in.web.movie.response.MovieDetailResponse;
-import com.uos.dsd.cinema.adaptor.in.web.movie.response.MovieListResponse;
-import com.uos.dsd.cinema.adaptor.in.web.movie.response.MovieSimpleResponse;
+import com.uos.dsd.cinema.application.port.in.movie.query.MovieQueryCondition;
+import com.uos.dsd.cinema.application.service.movie.MovieQueryService;
+import com.uos.dsd.cinema.adaptor.in.web.movie.response.MovieResponse;
+import com.uos.dsd.cinema.adaptor.in.web.movie.response.MovieElement;
 import com.uos.dsd.cinema.common.response.ApiResponse;
-import com.uos.dsd.cinema.domain.movie.enums.CastingType;
-import com.uos.dsd.cinema.domain.movie.enums.MovieRating;
+import com.uos.dsd.cinema.common.response.ApiResponse.PageResponse;
+import com.uos.dsd.cinema.domain.movie.Movie;
 
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.data.domain.Page;
 
 import lombok.RequiredArgsConstructor;
 
 import jakarta.validation.Valid;
-
-import java.time.LocalDate;
-import java.util.List;
 
 @RestController
 @RequestMapping("/movies")
 @RequiredArgsConstructor
 public class MovieController {
 
-    // TODO: 서비스 의존성 주입 예정
-
-    @PostMapping
-    public ApiResponse<Long> createMovie(@Valid @RequestBody MovieCreateRequest request) {
-
-        // TODO: 영화 생성 서비스 호출
-        return ApiResponse.success(1L); // Mock response
-    }
-
-    @PutMapping("/{id}")
-    public ApiResponse<Long> updateMovie(
-            @PathVariable("id") Long id, 
-            @Valid @RequestBody MovieUpdateRequest request) {
-
-        // TODO: 영화 수정 서비스 호출
-        return ApiResponse.success(id); // Mock response
-    }
-
-    @DeleteMapping("/{id}")
-    public ApiResponse<Void> deleteMovie(@PathVariable("id") Long id) {
-
-        // TODO: 영화 삭제 서비스 호출
-        return ApiResponse.success();
-    }
+    private final MovieQueryService movieQueryService;
 
     @GetMapping("/{id}")
-    public ApiResponse<MovieDetailResponse> getMovieDetail(@PathVariable("id") Long id) {
+    public ApiResponse<MovieResponse> getMovie(@PathVariable("id") Long id) {
 
-        // TODO: 영화 상세 조회 서비스 호출
-        MovieDetailResponse mockResponse = new MovieDetailResponse(
-            id, "Mock Title", "Mock Synopsis", 120L, MovieRating.FIFTEEN, 
-            "poster.jpg", LocalDate.now(), "Mock Distributor",
-            new MovieDetailResponse.DirectorInfo(1L, "Mock Director", "director.jpg"),
-            List.of(new MovieDetailResponse.ActorCastingInfo(1L, "Mock Actor", "actor.jpg", "주인공", CastingType.LEAD)), 
-            List.of("액션", "드라마")
-        );
-        return ApiResponse.success(mockResponse);
+        MovieResponse movie = movieQueryService.getMovieResponse(id);
+        return ApiResponse.success(movie);
     }
 
-    @GetMapping("/{id}/simple")
-    public ApiResponse<MovieSimpleResponse> getMovieSimple(@PathVariable("id") Long id) {
+    @GetMapping
+    public ApiResponse<PageResponse<MovieElement>> getMovies(
+            @Valid @ModelAttribute MovieQueryCondition request) {
 
-        // TODO: 영화 간단 조회 서비스 호출
-        MovieSimpleResponse mockResponse = new MovieSimpleResponse(
-            id, "Mock Title", "poster.jpg", LocalDate.now()
-        );
-        return ApiResponse.success(mockResponse);
+        Page<Movie> movies = movieQueryService.searchMovies(request);
+        return ApiResponse.success(movies.map(MovieElement::from));
     }
 
-    @GetMapping("/search")
-    public ApiResponse<MovieListResponse> searchMovies(@Valid @ModelAttribute MovieSearchRequest request) {
+    @GetMapping("/ranking")
+    public ApiResponse<PageResponse<MovieElement>> getRankingMovies(
+        @RequestParam(required = false, defaultValue = "0") Integer page,
+        @RequestParam(required = false, defaultValue = "10") Integer size) {
 
-        // TODO: 영화 검색 서비스 호출
-        MovieListResponse mockResponse = new MovieListResponse(
-            List.of(1L, 2L, 3L), 3, request.page(), 1
-        );
-        return ApiResponse.success(mockResponse);
-    }
-
-    @GetMapping("/now-playing")
-    public ApiResponse<MovieListResponse> getNowPlayingMovies(@Valid @ModelAttribute MovieListRequest request) {
-
-        // TODO: 현재 상영중인 영화 조회 서비스 호출
-        MovieListResponse mockResponse = new MovieListResponse(
-            List.of(1L, 2L, 3L), 3, request.page(), 1
-        );
-        return ApiResponse.success(mockResponse);
+        Page<Movie> movies = movieQueryService.getRankingMovies(page, size);
+        return ApiResponse.success(movies.map(MovieElement::from));
     }
 
     @GetMapping("/upcoming")
-    public ApiResponse<MovieListResponse> getUpcomingMovies(@Valid @ModelAttribute MovieListRequest request) {
+    public ApiResponse<PageResponse<MovieElement>> getUpcomingMovies(
+        @RequestParam(required = false, defaultValue = "0") Integer page,
+        @RequestParam(required = false, defaultValue = "10") Integer size) {
 
-        // TODO: 상영 예정 영화 조회 서비스 호출
-        MovieListResponse mockResponse = new MovieListResponse(
-            List.of(4L, 5L, 6L), 3, request.page(), 1
-        );
-        return ApiResponse.success(mockResponse);
+        Page<Movie> movies = movieQueryService.getUpcomingMovies(page, size);
+        return ApiResponse.success(movies.map(MovieElement::from));
     }
 }

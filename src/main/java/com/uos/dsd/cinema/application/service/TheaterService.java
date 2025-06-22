@@ -88,9 +88,12 @@ public class TheaterService implements
         theater.modifyName(command.name());
         if (theater.getLayout() != command.layout()) {
             // TODO: 해당 상영관에 예매한 사람이 없는 경우에만 변경 가능
-            theater.deleteSeats();
-            theaterRepository.saveAndFlush(theater);
-            theater.modifyLayout(command.layout());
+            // TODO: 나중에 변경으로 꼭 바꾸기
+            // theater.deleteSeats();
+            // theaterRepository.saveAndFlush(theater);
+            // theater.modifyLayout(command.layout());
+            deleteTheater(command.number());
+            theater = new Theater(command.number(), command.name(), command.layout(), command.screenTypes());
         }
         if (theater.getScreenTypes() != command.screenTypes()) {
             // TODO: 해당 상영관을 예매한 사람이 없는 경우에만 변경 가능
@@ -107,7 +110,8 @@ public class TheaterService implements
         try {
             theaterRepository.deleteById(theaterNumber);
         } catch (EmptyResultDataAccessException e) {
-            throw new RuntimeException("Theater not found: " + theaterNumber);
+            throw new NotFoundException(TheaterExceptionCode.THEATER_NOT_FOUND,
+                    TheaterExceptionCode.THEATER_NOT_FOUND.getMessage() + ": " + theaterNumber);
         }
     }
 

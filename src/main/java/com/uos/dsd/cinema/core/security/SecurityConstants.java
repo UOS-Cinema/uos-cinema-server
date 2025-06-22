@@ -29,6 +29,7 @@ public class SecurityConstants {
 
     // 모든 권한 허용 - GET 요청만
     public static final List<String> PUBLIC_GET_URLS = List.of(
+        "/genres",          // 장르 리스트 조회
         "/screenings", // 전체 상영 정보 조회
         "/theaters/**",         // 극장 정보 조회
         "/movies/search",       // 영화 검색
@@ -86,7 +87,8 @@ public class SecurityConstants {
     // ADMIN 권한만 허용 - 모든 메서드
     public static final List<String> ADMIN_URLS = List.of(
         "/admin/theaters/**",
-        "/admin/screenings/**"
+        "/admin/screenings/**",
+        "/admin/genres/**"
     );
 
     // ADMIN 권한만 허용 - GET 요청만

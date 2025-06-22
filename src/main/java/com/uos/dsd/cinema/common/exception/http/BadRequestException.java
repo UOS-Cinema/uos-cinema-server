@@ -6,12 +6,18 @@ import com.uos.dsd.cinema.common.exception.code.ResultCode;
 
 public class BadRequestException extends CinemaException {
 
+    private static final ResultCode resultCode = CommonResultCode.BAD_REQUEST;
+
     public BadRequestException() {
-        super(CommonResultCode.BAD_REQUEST);
+        super(resultCode);
     }
 
     public BadRequestException(ResultCode resultCode) {
         super(resultCode);
+    }
+
+    public BadRequestException(String message) {
+        super(resultCode, message);
     }
 
     public BadRequestException(ResultCode resultCode, String message) {

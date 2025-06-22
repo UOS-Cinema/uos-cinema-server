@@ -118,28 +118,28 @@ INSERT INTO movie_genres (movie_id, genre_name) VALUES
 
 -- 기생충 (봉준호)
 INSERT INTO movie_casts (movie_id, actor_id, role, casting_type) VALUES
-(1, 1, '기택', '주연'),  -- 송강호
-(1, 2, '동익', '조연');  -- 이선균
+(1, 1, '기택', 'LEAD'),  -- 송강호
+(1, 2, '동익', 'SUPPORTING');  -- 이선균
 
 -- 인셉션 (스필버그 대역)
 INSERT INTO movie_casts (movie_id, actor_id, role, casting_type) VALUES
-(2, 4, 'Dom Cobb', '주연'),      -- 레오나르도 디카프리오
-(2, 3, 'Arthur', '조연');       -- 앤서니 스타
+(2, 4, 'Dom Cobb', 'LEAD'),      -- 레오나르도 디카프리오
+(2, 3, 'Arthur', 'SUPPORTING');       -- 앤서니 스타
 
 -- 좋은 놈 나쁜 놈 이상한 놈 (김지운)
 INSERT INTO movie_casts (movie_id, actor_id, role, casting_type) VALUES
-(3, 6, '박도원', '주연'),       -- 이병헌
-(3, 5, '송이', '조연');         -- 전혜진
+(3, 6, '박도원', 'LEAD'),       -- 이병헌
+(3, 5, '송이', 'SUPPORTING');         -- 전혜진
 
 -- 가위손 (팀 버튼)
 INSERT INTO movie_casts (movie_id, actor_id, role, casting_type) VALUES
-(4, 7, 'Edward', '주연'),       -- 조니 뎁
-(4, 8, 'Kim', '조연');          -- 위노나 라이더
+(4, 7, 'Edward', 'LEAD'),       -- 조니 뎁
+(4, 8, 'Kim', 'SUPPORTING');          -- 위노나 라이더
 
 -- 비몽 (홍상수)
 INSERT INTO movie_casts (movie_id, actor_id, role, casting_type) VALUES
-(5, 6, '용수', '주연'),         -- 이병헌
-(5, 5, '란희', '조연');         -- 전혜진
+(5, 6, '용수', 'LEAD'),         -- 이병헌
+(5, 5, '란희', 'SUPPORTING');         -- 전혜진
 
 -- screenings 테이블 INSERT
 INSERT INTO screenings (id, movie_id, theater_id, screen_type, start_time, duration) VALUES 

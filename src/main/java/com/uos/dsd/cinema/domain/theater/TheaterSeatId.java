@@ -11,7 +11,7 @@ import jakarta.persistence.Column;
 import java.io.Serializable;
 @Embeddable
 @Getter
-@EqualsAndHashCode
+@EqualsAndHashCode(of = {"theaterId", "seatNumber"})
 @AllArgsConstructor
 @NoArgsConstructor
 public class TheaterSeatId implements Serializable {

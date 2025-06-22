@@ -16,6 +16,9 @@ public class SecurityConstants {
 
     // 모든 권한 허용 - 모든 메서드
     public static final List<String> PUBLIC_URLS = List.of(
+        "/movies/**",
+        "/actors/**",
+        "/directors/**",
 
         // 파일 저장소 접근을 위한 엔드포인트
         "/" + StorageConstants.STORAGE_URL_PREFIX + "/**",
@@ -86,6 +89,9 @@ public class SecurityConstants {
 
     // ADMIN 권한만 허용 - 모든 메서드
     public static final List<String> ADMIN_URLS = List.of(
+        "/admin/movies/**",
+        "/admin/actors/**",
+        "/admin/directors/**",
         "/admin/banks/**",
         "/admin/card-companies/**",
         "/admin/customer-types/**",

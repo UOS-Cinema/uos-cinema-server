@@ -35,7 +35,7 @@ public class AdminScreenTypeController {
     private final ScreenTypeRegistry screenTypeRegistry;
 
     @PostMapping
-    public ApiResponse<ScreenType> createScreenType(
+    public ApiResponse<String> createScreenType(
         @UserRole Role role,
             @RequestBody CreateScreenTypeRequest request) {
 
@@ -43,7 +43,7 @@ public class AdminScreenTypeController {
             throw new ForbiddenException();
         }
 
-        return ApiResponse.success(createScreenType(request));
+        return ApiResponse.success(createScreenType(request).getType());
     }
 
     @GetMapping
@@ -57,35 +57,35 @@ public class AdminScreenTypeController {
         return ApiResponse.success(screenTypeRegistry.getAll());
     }
 
-    @PutMapping("/{name}")
-    public ApiResponse<ScreenType> updateScreenType(
+    @PutMapping("/{type}")
+    public ApiResponse<String> updateScreenType(
         @UserRole Role role,
-        @PathVariable String name,
+        @PathVariable String type,
         @RequestBody UpdateScreenTypeRequest request) {
 
         if (role != Role.ADMIN) {
             throw new ForbiddenException();
         }
 
-        return ApiResponse.success(updateScreenType(name, request));
+        return ApiResponse.success(updateScreenType(type, request).getType());
     }
 
-    @DeleteMapping("/{name}")
+    @DeleteMapping("/{type}")
     public ApiResponse<Void> deleteScreenType(
         @UserRole Role role,
-        @PathVariable String name) {
+        @PathVariable String type) {
 
         if (role != Role.ADMIN) {
             throw new ForbiddenException();
         }
 
-        deleteScreenType(name);
+        deleteScreenType(type);
         return ApiResponse.success();
     }
 
     @Transactional
-    private ScreenType updateScreenType(String name, UpdateScreenTypeRequest request) {
-        ScreenType screenType = screenTypeRegistry.get(name);
+    private ScreenType updateScreenType(String type, UpdateScreenTypeRequest request) {
+        ScreenType screenType = screenTypeRegistry.get(type);
         if (screenType == null) {
             throw new NotFoundException();
         }
@@ -107,15 +107,15 @@ public class AdminScreenTypeController {
 
     // Screen Type이 사용중인 극장이나 영화가 있으면 삭제 불가능
     @Transactional
-    private void deleteScreenType(String name) {
-        ScreenType screenType = screenTypeRegistry.get(name);
+    private void deleteScreenType(String type) {
+        ScreenType screenType = screenTypeRegistry.get(type);
         if (screenType == null) {
             throw new NotFoundException();
         }
-        if (screenTypeJpaRepository.countFromTheater(name) > 0) {
+        if (screenTypeJpaRepository.countFromTheater(type) > 0) {
             throw new BadRequestException("Screen type is used in theater");
         }
-        if (screenTypeJpaRepository.countFromMovie(name) > 0) {
+        if (screenTypeJpaRepository.countFromMovie(type) > 0) {
             throw new BadRequestException("Screen type is used in movie");
         }
         screenTypeJpaRepository.delete(screenType);

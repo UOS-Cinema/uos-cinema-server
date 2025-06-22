@@ -34,7 +34,7 @@ public class AdminCustomerTypeController {
     private final CustomerTypeRegistry customerTypeRegistry;
 
     @PostMapping
-    public ApiResponse<CustomerType> createCustomerType(
+    public ApiResponse<String> createCustomerType(
         @UserRole Role role,
             @RequestBody CreateCustomerTypeRequest request) {
 
@@ -42,7 +42,7 @@ public class AdminCustomerTypeController {
             throw new ForbiddenException();
         }
 
-        return ApiResponse.success(createCustomerType(request));
+        return ApiResponse.success(createCustomerType(request).getType());
     }
 
     @GetMapping
@@ -56,35 +56,35 @@ public class AdminCustomerTypeController {
         return ApiResponse.success(customerTypeRegistry.getAll());
     }
 
-    @PutMapping("/{name}")
-    public ApiResponse<CustomerType> updateCustomerType(
+    @PutMapping("/{type}")
+    public ApiResponse<String> updateCustomerType(
         @UserRole Role role,
-        @PathVariable String name,
+        @PathVariable String type,
         @RequestBody UpdateCustomerTypeRequest request) {
 
         if (role != Role.ADMIN) {
             throw new ForbiddenException();
         }
 
-        return ApiResponse.success(updateCustomerType(name, request));
+        return ApiResponse.success(updateCustomerType(type, request).getType());
     }
 
-    @DeleteMapping("/{name}")
+    @DeleteMapping("/{type}")
     public ApiResponse<Void> deleteCustomerType(
         @UserRole Role role,
-        @PathVariable String name) {
+        @PathVariable String type) {
 
         if (role != Role.ADMIN) {
             throw new ForbiddenException();
         }
 
-        deleteScreenType(name);
+        deleteScreenType(type);
         return ApiResponse.success();
     }
 
     @Transactional
-    private CustomerType updateCustomerType(String name, UpdateCustomerTypeRequest request) {
-        CustomerType customerType = customerTypeRegistry.get(name);
+    private CustomerType updateCustomerType(String type, UpdateCustomerTypeRequest request) {
+        CustomerType customerType = customerTypeRegistry.get(type);
         if (customerType == null) {
             throw new NotFoundException();
         }
@@ -105,8 +105,8 @@ public class AdminCustomerTypeController {
 
     // Screen Type이 사용중인 극장이나 영화가 있으면 삭제 불가능
     @Transactional
-    private void deleteScreenType(String name) {
-        CustomerType customerType = customerTypeRegistry.get(name);
+    private void deleteScreenType(String type) {
+        CustomerType customerType = customerTypeRegistry.get(type);
         if (customerType == null) {
             throw new NotFoundException();
         }

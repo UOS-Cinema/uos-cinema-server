@@ -13,11 +13,13 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.JoinColumn;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -81,11 +83,15 @@ public class Reservation implements Persistable<Long>{
             fetch = FetchType.LAZY)
     private Set<ReservationCustomerCount> reservationCustomerCounts = new HashSet<>();
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "screening_id", insertable = false, updatable = false)
+    private Screening screening;
+
     public Reservation(Long customerId,
                         Screening screening,
                         Long theaterId,
                         List<String> seatNumbers, 
-            Map<String, Integer> customerCount) {
+                        Map<String, Integer> customerCount) {
         this.customerId = customerId;
         if (!ReservationConstraint.canEnter(screening.getStartTime())) {
             throw new BadRequestException(ReservationExceptionCode.LAST_ENTRANCES_TIME_EXCEEDED);

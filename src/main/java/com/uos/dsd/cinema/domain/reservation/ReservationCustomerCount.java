@@ -7,6 +7,7 @@ import jakarta.persistence.MapsId;
 import jakarta.persistence.Table;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
+
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,7 +18,7 @@ import lombok.ToString;
 @Getter
 @NoArgsConstructor
 @ToString
-@EqualsAndHashCode(of = {"id", "count"})
+@EqualsAndHashCode(of = {"id"})
 public class ReservationCustomerCount {
 
     @EmbeddedId
@@ -31,8 +32,16 @@ public class ReservationCustomerCount {
     private Reservation reservation;
 
     public ReservationCustomerCount(Reservation reservation, String customerType, int count) {
-        this.id = new ReservationCustomerCountId(customerType);
+        this.id = new ReservationCustomerCountId(reservation.getId(), customerType);
         this.count = count;
         this.reservation = reservation;
+    }
+
+    public Long getReservationId() {
+        return this.id.getReservationId();
+    }
+
+    public String getCustomerType() {
+        return this.id.getCustomerType();
     }
 }

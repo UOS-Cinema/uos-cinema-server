@@ -18,7 +18,7 @@ import lombok.ToString;
 @Getter
 @NoArgsConstructor
 @ToString
-@EqualsAndHashCode(of = {"id"})
+@EqualsAndHashCode(of = {"id", "reservationId"})
 public class ReservationSeat {
 
     @EmbeddedId

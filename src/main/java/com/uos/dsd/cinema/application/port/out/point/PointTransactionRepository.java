@@ -4,21 +4,15 @@ import com.uos.dsd.cinema.domain.point.PointTransaction;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface PointTransactionRepository extends JpaRepository<PointTransaction, Long> {
+public interface PointTransactionRepository {
 
-    @Query(value = """
-        SELECT pt FROM PointTransaction pt
-        WHERE pt.customerId = :customerId
-        ORDER BY pt.id DESC
-    """)
-    Page<PointTransaction> findByCustomerId(@Param("customerId") Long customerId, Pageable pageable);
+    PointTransaction save(PointTransaction pointTransaction);
+    
+    Page<PointTransaction> findByCustomerId(Long customerId, Pageable pageable);
     
     Optional<PointTransaction> findFirstByCustomerIdOrderByIdDesc(Long customerId);
     

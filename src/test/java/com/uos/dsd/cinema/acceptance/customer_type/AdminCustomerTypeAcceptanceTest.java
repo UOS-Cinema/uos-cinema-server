@@ -9,6 +9,9 @@ import java.util.Map;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.Order;
 
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
@@ -23,6 +26,7 @@ import com.uos.dsd.cinema.domain.customer_type.CustomerType;
 import com.uos.dsd.cinema.utils.AuthHeaderProvider;
 
 @DisplayNameGeneration(ReplaceUnderscores.class)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class AdminCustomerTypeAcceptanceTest extends AcceptanceTest {
 
     private final String customerTypeName = "test";
@@ -43,6 +47,7 @@ public class AdminCustomerTypeAcceptanceTest extends AcceptanceTest {
     private final Map<String, Object> adminHeaders = AuthHeaderProvider.createAuthorizationHeader(adminToken);
 
     @Test
+    @Order(1)
     public void createCustomerTypeTest() {
         /* when */
         // 1. create customer type
@@ -69,6 +74,7 @@ public class AdminCustomerTypeAcceptanceTest extends AcceptanceTest {
     
 
     @Test
+    @Order(2)
     public void updateCustomerTypeTest() {
 
         /* given */
@@ -100,6 +106,7 @@ public class AdminCustomerTypeAcceptanceTest extends AcceptanceTest {
     }
     
     @Test
+    @Order(3)
     public void deleteCustomerTypeTest() {
         /* when */
         // 1. delete customer type

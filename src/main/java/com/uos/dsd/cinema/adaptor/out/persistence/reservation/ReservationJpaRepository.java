@@ -1,23 +1,24 @@
-package com.uos.dsd.cinema.application.port.out.reservation;
+package com.uos.dsd.cinema.adaptor.out.persistence.reservation;
 
+import com.uos.dsd.cinema.application.port.out.reservation.ReservationRepository;
 import com.uos.dsd.cinema.domain.reservation.Reservation;
 import com.uos.dsd.cinema.domain.reservation.enums.ReservationStatus;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-public interface ReservationRepository {
-
-    Reservation save(Reservation reservation);
-
-    Reservation saveAndFlush(Reservation reservation);
+@Repository
+public interface ReservationJpaRepository 
+        extends JpaRepository<Reservation, Long>, ReservationRepository {
 
     Optional<Reservation> findById(Long id);
 
@@ -38,9 +39,12 @@ public interface ReservationRepository {
     @Query("DELETE FROM ReservationSeat rs WHERE rs.reservation.id IN :ids")
     void deleteSeatsByReservationIds(@Param("ids") List<Long> reservationIds);
 
-    @Query("SELECT r FROM Reservation r LEFT JOIN FETCH r.screening WHERE r.id = :id")
-    Optional<Reservation> findByIdWithScreening(@Param("id") Long id);
-
-    @Query("SELECT r FROM Reservation r WHERE r.customerId = :customerId AND (r.status = 'COMPLETED' OR r.status = 'CANCELED')")
-    Page<Reservation> findCompletedReservationsByCustomerId(@Param("customerId") Long customerId, PageRequest pageRequest);
-}
+    @Query("""
+        SELECT r FROM Reservation r
+        WHERE r.customerId = :customerId
+        AND (r.status = 'COMPLETED' 
+             OR r.status = 'CANCELED')
+        ORDER BY r.createdAt DESC
+    """)
+    Page<Reservation> findCompletedReservationsByCustomerId(@Param("customerId") Long customerId, Pageable pageable);
+} 

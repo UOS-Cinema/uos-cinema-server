@@ -536,3 +536,85 @@ UPDATE movies SET cumulative_bookings = 70000 WHERE id = 27;
 UPDATE movies SET cumulative_bookings = 55000 WHERE id = 28;
 UPDATE movies SET cumulative_bookings = 45000 WHERE id = 29;
 UPDATE movies SET cumulative_bookings = 35000 WHERE id = 30;
+
+-- ====================================================================================================================
+-- 포인트 및 예매/결제 내역 테스트 데이터
+-- ====================================================================================================================
+
+-- 회원 포인트 테스트용 예매 데이터 (PointAcceptanceTest 용)
+INSERT INTO reservations (id, customer_id, screening_id, status, created_at, seat_snapshot, customer_count_snapshot)
+VALUES (101, 1, 1, 'COMPLETED', TO_DATE('2025-06-20 10:00:00', 'YYYY-MM-DD HH24:MI:SS'), 
+        '["A1"]', '{"ADULT": 1}');
+
+INSERT INTO reservations (id, customer_id, screening_id, status, created_at, seat_snapshot, customer_count_snapshot)
+VALUES (102, 1, 2, 'COMPLETED', TO_DATE('2025-06-21 14:00:00', 'YYYY-MM-DD HH24:MI:SS'),
+        '["B1", "B2"]', '{"ADULT": 2}');
+
+INSERT INTO reservations (id, customer_id, screening_id, status, created_at, seat_snapshot, customer_count_snapshot)
+VALUES (103, 1, 3, 'COMPLETED', TO_DATE('2025-06-22 18:00:00', 'YYYY-MM-DD HH24:MI:SS'),
+        '["C1"]', '{"ADULT": 1}');
+
+-- 회원 포인트 테스트용 결제 데이터
+INSERT INTO payments (id, reservation_id, customer_id, requested_at, approved_at, payment_method, 
+                     approval_number, original_price, discount_amount, final_price)
+VALUES (101, 101, 1, TO_DATE('2025-06-20 10:00:00', 'YYYY-MM-DD HH24:MI:SS'), 
+        TO_DATE('2025-06-20 10:00:00', 'YYYY-MM-DD HH24:MI:SS'), 
+        'CARD', 'APPROVAL1001', 12000, 0, 12000);
+
+INSERT INTO payments (id, reservation_id, customer_id, requested_at, approved_at, payment_method, 
+                     approval_number, original_price, discount_amount, final_price)
+VALUES (102, 102, 1, TO_DATE('2025-06-21 14:00:00', 'YYYY-MM-DD HH24:MI:SS'),
+        TO_DATE('2025-06-21 14:00:00', 'YYYY-MM-DD HH24:MI:SS'),
+        'BANK', 'APPROVAL1002', 24000, 0, 24000);
+
+INSERT INTO payments (id, reservation_id, customer_id, requested_at, approved_at, payment_method, 
+                     approval_number, original_price, discount_amount, final_price)
+VALUES (103, 103, 1, TO_DATE('2025-06-22 18:00:00', 'YYYY-MM-DD HH24:MI:SS'),
+        TO_DATE('2025-06-22 18:00:00', 'YYYY-MM-DD HH24:MI:SS'),
+        'CARD', 'APPROVAL1003', 12000, 0, 12000);
+
+-- 회원 포인트 거래 데이터 (최종 잔액: 1120 포인트)
+INSERT INTO point_transactions (payment_id, customer_id, point, total_point)
+VALUES (101, 1, 500, 500);
+
+INSERT INTO point_transactions (payment_id, customer_id, point, total_point)
+VALUES (102, 1, -200, 300);
+
+INSERT INTO point_transactions (payment_id, customer_id, point, total_point)
+VALUES (103, 1, 100, 400);
+
+-- 예매/결제 내역 테스트용 데이터 (CustomerHistoryAcceptanceTest 용)
+-- 회원의 완료된 예매
+INSERT INTO reservations (id, customer_id, screening_id, status, created_at, seat_snapshot, customer_count_snapshot)
+VALUES (201, 1, 11, 'COMPLETED', TO_DATE('2025-06-22 15:00:00', 'YYYY-MM-DD HH24:MI:SS'), 
+        '["A1", "A2"]', '{"ADULT": 2}');
+
+-- 회원의 취소된 예매 (결제 없음)
+INSERT INTO reservations (id, customer_id, screening_id, status, created_at, seat_snapshot, customer_count_snapshot)
+VALUES (202, 1, 12, 'CANCELED', TO_DATE('2025-06-21 10:00:00', 'YYYY-MM-DD HH24:MI:SS'),
+        '["B1"]', '{"ADULT": 1}');
+
+-- 비회원의 완료된 예매
+INSERT INTO reservations (id, customer_id, screening_id, status, created_at, seat_snapshot, customer_count_snapshot)
+VALUES (203, 2, 13, 'COMPLETED', TO_DATE('2025-06-20 20:00:00', 'YYYY-MM-DD HH24:MI:SS'),
+        '["C1", "C2", "C3"]', '{"ADULT": 2, "CHILD": 1}');
+
+-- 예매/결제 내역 테스트용 결제 데이터 (완료된 예매에만)
+INSERT INTO payments (id, reservation_id, customer_id, requested_at, approved_at, payment_method, 
+                     approval_number, original_price, discount_amount, final_price)
+VALUES (301, 201, 1, TO_DATE('2025-06-22 15:00:00', 'YYYY-MM-DD HH24:MI:SS'), 
+        TO_DATE('2025-06-22 15:00:00', 'YYYY-MM-DD HH24:MI:SS'), 
+        'CARD', 'APPROVAL001', 24000, 2000, 22000);
+
+INSERT INTO payments (id, reservation_id, customer_id, requested_at, approved_at, payment_method, 
+                     approval_number, original_price, discount_amount, final_price)
+VALUES (303, 203, 2, TO_DATE('2025-06-20 20:00:00', 'YYYY-MM-DD HH24:MI:SS'),
+        TO_DATE('2025-06-20 20:00:00', 'YYYY-MM-DD HH24:MI:SS'),
+        'BANK', 'APPROVAL003', 36000, 3000, 33000);
+
+-- 예매/결제 내역 테스트용 포인트 데이터 (회원 결제에만)
+INSERT INTO point_transactions (payment_id, customer_id, point, total_point)
+VALUES (301, 1, -500, 900);  -- 포인트 사용
+
+INSERT INTO point_transactions (payment_id, customer_id, point, total_point)
+VALUES (301, 1, 220, 1120);  -- 포인트 적립

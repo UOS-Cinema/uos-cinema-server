@@ -56,6 +56,10 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.PUT, SecurityConstants.PUBLIC_PUT_URLS.toArray(String[]::new)).permitAll()
                 .requestMatchers(HttpMethod.DELETE, SecurityConstants.PUBLIC_DELETE_URLS.toArray(String[]::new)).permitAll()
                 
+                // MEMBER 또는 GUEST 권한
+                .requestMatchers(HttpMethod.GET, SecurityConstants.MEMBER_OR_GUEST_GET_URLS.toArray(String[]::new))
+                    .hasAnyRole(SecurityConstants.Role.MEMBER.name(), SecurityConstants.Role.GUEST.name())
+
                 // GUEST 권한
                 .requestMatchers(SecurityConstants.GUEST_URLS.toArray(String[]::new)).hasRole(SecurityConstants.Role.GUEST.name())
                 .requestMatchers(HttpMethod.GET, SecurityConstants.GUEST_GET_URLS.toArray(String[]::new)).hasRole(SecurityConstants.Role.GUEST.name())

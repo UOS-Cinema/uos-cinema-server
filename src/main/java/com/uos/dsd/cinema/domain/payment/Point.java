@@ -30,7 +30,7 @@ public class Point {
     @Column(name = "payment_id")
     private Long paymentId;
 
-    @JoinColumn(name = "customer_id", referencedColumnName = "id", table = "customers")
+    @Column(name = "customer_id")
     private Long customerId;
     
     @Column(name = "point", nullable = false)

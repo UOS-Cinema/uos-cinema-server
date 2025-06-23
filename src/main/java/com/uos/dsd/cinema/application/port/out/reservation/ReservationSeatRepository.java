@@ -1,13 +1,13 @@
 package com.uos.dsd.cinema.application.port.out.reservation;
 
-import java.util.Optional;
-
-import org.springframework.data.jpa.repository.JpaRepository;
-
 import com.uos.dsd.cinema.domain.reservation.ReservationSeat;
 import com.uos.dsd.cinema.domain.reservation.ReservationSeatId;
 
-public interface ReservationSeatRepository extends JpaRepository<ReservationSeat, ReservationSeatId> {
+import java.util.Optional;
+
+public interface ReservationSeatRepository {
+
+    ReservationSeat save(ReservationSeat reservationSeat);
 
     Optional<ReservationSeat> findById(ReservationSeatId id);
 }

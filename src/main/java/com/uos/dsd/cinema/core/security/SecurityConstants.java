@@ -62,13 +62,19 @@ public class SecurityConstants {
     public static final List<String> PUBLIC_DELETE_URLS = List.of(
     );
 
+    // MEMBER 또는 GUEST 권한 허용 - GET 요청만
+    public static final List<String> MEMBER_OR_GUEST_GET_URLS = List.of(
+        "/customers/payments",        // 고객 결제 내역 조회
+        "/customers/reservations"     // 고객 예매 내역 조회
+    );
+
     // GUEST 권한만 허용 - 모든 메서드
     public static final List<String> GUEST_URLS = List.of(
     );
 
     // GUEST 권한만 허용 - GET 요청만
     public static final List<String> GUEST_GET_URLS = List.of(
-        "/guests/*"          // 게스트 정보 조회
+        "/guests/*"           // 게스트 정보 조회
     );
 
     // GUEST 권한만 허용 - POST 요청만
@@ -91,7 +97,7 @@ public class SecurityConstants {
 
     // MEMBER 권한만 허용 - GET 요청만
     public static final List<String> MEMBER_GET_URLS = List.of(
-        "/members/*"   // 회원 정보 조회
+        "/members/*"         // 회원 정보 조회
     );
 
     // MEMBER 권한만 허용 - POST 요청만

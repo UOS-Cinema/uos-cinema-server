@@ -25,6 +25,7 @@ import com.uos.dsd.cinema.domain.reservation.exception.ReservationExceptionCode;
 import com.uos.dsd.cinema.domain.screening.exception.ScreeningExceptionCode;
 import com.uos.dsd.cinema.common.exception.http.NotFoundException;
 import com.uos.dsd.cinema.common.exception.http.BadRequestException;
+import com.uos.dsd.cinema.application.service.payment.PaymentService;
 
 @Transactional
 @Service
@@ -34,6 +35,7 @@ public class ReservationService implements ReserveUseCase, CancelReservationUseC
     private final ReservationRepository reservationRepository;
     private final ScreeningRepository screeningRepository;
     private final ReservationSeatRepository reservationSeatRepository;
+    private final PaymentService paymentService;
 
     @Override
     public Long reserve(ReserveCommand command) {
@@ -72,5 +74,6 @@ public class ReservationService implements ReserveUseCase, CancelReservationUseC
             .orElseThrow(() -> new NotFoundException(ReservationExceptionCode.RESERVATION_NOT_FOUND));
         reservation.cancel(command.customerId());
         reservationRepository.save(reservation);
+        paymentService.cancelPayment(command.customerId(), command.id());
     }
 }

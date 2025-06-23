@@ -11,7 +11,8 @@ public record MovieElement(
     LocalDate releaseDate,
     int cumulativeBookings,
     String rating,
-    String directorName
+    String directorName,
+    int runningTime
 ) {
 
     public static MovieElement from(Movie movie) {
@@ -22,7 +23,8 @@ public record MovieElement(
             movie.getReleaseDate(),
             movie.getCumulativeBookings(),
             movie.getRating().getValue(),
-            movie.getDirector().getName()
+            movie.getDirector().getName(),
+            movie.getRunningTime()
         );
     }
 } 

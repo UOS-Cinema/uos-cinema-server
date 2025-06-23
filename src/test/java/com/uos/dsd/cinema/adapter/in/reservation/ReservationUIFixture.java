@@ -7,7 +7,7 @@ import com.uos.dsd.cinema.adaptor.in.web.reservation.request.ReserveRequest;
 
 public class ReservationUIFixture {
 
-    static Long screeningId = 40L;
+    static Long screeningId = 52L;
     static Long theaterId = 1L;
     static List<String> seatNumbers = List.of("A1", "A2", "A3");
     static Map<String, Integer> customerCount = Map.of("ADULT", 2, "CHILD", 1);

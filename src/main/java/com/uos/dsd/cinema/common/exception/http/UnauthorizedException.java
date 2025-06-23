@@ -6,8 +6,14 @@ import com.uos.dsd.cinema.common.exception.code.ResultCode;
 
 public class UnauthorizedException extends CinemaException {
 
+    private static final ResultCode DEFAULT_RESULT_CODE = CommonResultCode.UNAUTHORIZED;
+
     public UnauthorizedException() {
-        super(CommonResultCode.UNAUTHORIZED);
+        super(DEFAULT_RESULT_CODE);
+    }
+
+    public UnauthorizedException(String message) {
+        super(DEFAULT_RESULT_CODE, message);
     }
 
     public UnauthorizedException(ResultCode resultCode) {

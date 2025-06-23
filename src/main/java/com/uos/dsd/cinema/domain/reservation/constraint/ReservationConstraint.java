@@ -15,7 +15,7 @@ public enum ReservationConstraint {
     private final int minutes;
 
     public static boolean isExceeded(LocalDateTime createdAt) {
-        return createdAt.isAfter(LocalDateTime.now().minusMinutes(COMPLETION_TIME_LIMIT.minutes));
+        return createdAt.isBefore(LocalDateTime.now().minusMinutes(COMPLETION_TIME_LIMIT.minutes));
     }
 
     public static boolean canEnter(LocalDateTime startTime) {

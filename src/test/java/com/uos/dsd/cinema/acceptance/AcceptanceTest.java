@@ -8,6 +8,7 @@ import com.uos.dsd.cinema.adaptor.in.web.customer.guest.request.GuestLoginReques
 import com.uos.dsd.cinema.utils.AuthHeaderProvider;
 import com.uos.dsd.cinema.utils.DBInitializeStrategy;
 import com.uos.dsd.cinema.utils.DBInitializer;
+// import com.uos.dsd.cinema.utils.H2DBInitializeStrategy;
 import com.uos.dsd.cinema.utils.OracleDBInitializeStrategy;
 import com.uos.dsd.cinema.utils.StorageCleaner;
 
@@ -64,7 +65,7 @@ public abstract class AcceptanceTest {
         @Bean
         DBInitializeStrategy dbInitializeStrategy(@Autowired DataSource dataSource) {
 
-            Resource initScript = new ClassPathResource("db/h2/migration/V1__init.sql");
+            Resource initScript = new ClassPathResource("db/oracle/migration/V1__init.sql");
             return new OracleDBInitializeStrategy(dataSource, initScript);
             // return new H2DBInitializeStrategy(dataSource, initScript);
         }

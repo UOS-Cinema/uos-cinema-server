@@ -3,8 +3,10 @@ package com.uos.dsd.cinema.acceptance;
 import com.uos.dsd.cinema.TestcontainersConfiguration;
 import com.uos.dsd.cinema.acceptance.admin.steps.AdminSteps;
 import com.uos.dsd.cinema.acceptance.customer.guest.steps.GuestSteps;
+import com.uos.dsd.cinema.acceptance.customer.member.steps.MemberSteps;
 import com.uos.dsd.cinema.adaptor.in.web.admin.request.AdminLoginRequest;
 import com.uos.dsd.cinema.adaptor.in.web.customer.guest.request.GuestLoginRequest;
+import com.uos.dsd.cinema.adaptor.in.web.customer.member.request.MemberLoginRequest;
 import com.uos.dsd.cinema.utils.AuthHeaderProvider;
 import com.uos.dsd.cinema.utils.DBInitializeStrategy;
 import com.uos.dsd.cinema.utils.DBInitializer;
@@ -90,6 +92,16 @@ public abstract class AcceptanceTest {
         );
 
         Response response = GuestSteps.sendLoginGuest(AuthHeaderProvider.createEmptyHeader(), request);
+        return response.jsonPath().getString("data.accessToken");
+    }
+
+    protected String loginMember() {
+        MemberLoginRequest request = new MemberLoginRequest(
+            "user1",
+            "password123!"
+        );
+
+        Response response = MemberSteps.sendLoginMember(AuthHeaderProvider.createEmptyHeader(), request);
         return response.jsonPath().getString("data.accessToken");
     }
 }

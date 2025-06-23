@@ -7,9 +7,11 @@ import com.uos.dsd.cinema.domain.movie.Movie;
 public record MovieElement(
     Long id,
     String title,
-    String posterUrls,
+    String posterUrl,
     LocalDate releaseDate,
-    int cumulativeBookings
+    int cumulativeBookings,
+    String rating,
+    String directorName
 ) {
 
     public static MovieElement from(Movie movie) {
@@ -18,7 +20,9 @@ public record MovieElement(
             movie.getTitle(),
             movie.getPosterUrls().get(0),
             movie.getReleaseDate(),
-            movie.getCumulativeBookings()
+            movie.getCumulativeBookings(),
+            movie.getRating().getValue(),
+            movie.getDirector().getName()
         );
     }
 } 

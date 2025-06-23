@@ -32,4 +32,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     @Modifying
     @Query("DELETE FROM ReservationSeat rs WHERE rs.reservation.id IN :ids")
     void deleteSeatsByReservationIds(@Param("ids") List<Long> reservationIds);
+
+    @Query("SELECT r FROM Reservation r LEFT JOIN FETCH r.screening WHERE r.id = :id")
+    Optional<Reservation> findByIdWithScreening(@Param("id") Long id);
 }

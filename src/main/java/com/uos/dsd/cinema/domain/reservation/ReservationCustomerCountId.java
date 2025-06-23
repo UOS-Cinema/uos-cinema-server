@@ -3,7 +3,6 @@ package com.uos.dsd.cinema.domain.reservation;
 import java.io.Serializable;
 
 import jakarta.persistence.Embeddable;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Column;
 
 import lombok.AllArgsConstructor;
@@ -21,7 +20,7 @@ public class ReservationCustomerCountId implements Serializable {
     @Column(name = "reservation_id")
     private Long reservationId;
 
-    @JoinColumn(name = "customer_type", referencedColumnName = "type", table = "customer_types")
+    @Column(name = "customer_type")
     private String customerType;
 
     public ReservationCustomerCountId(String customerType) {

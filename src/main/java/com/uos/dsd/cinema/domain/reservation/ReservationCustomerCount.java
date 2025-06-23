@@ -31,7 +31,7 @@ public class ReservationCustomerCount {
     private Reservation reservation;
 
     public ReservationCustomerCount(Reservation reservation, String customerType, int count) {
-        this.id = new ReservationCustomerCountId(customerType);
+        this.id = new ReservationCustomerCountId(reservation.getId(), customerType);
         this.count = count;
         this.reservation = reservation;
     }

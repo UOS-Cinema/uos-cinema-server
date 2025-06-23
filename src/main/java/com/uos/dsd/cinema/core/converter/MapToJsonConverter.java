@@ -9,12 +9,12 @@ import jakarta.persistence.Converter;
 import java.util.Map;
 
 @Converter
-public class MapToJsonConverter implements AttributeConverter<Map<String, String>, String> {
+public class MapToJsonConverter implements AttributeConverter<Map<String, Integer>, String> {
 
     private static final ObjectMapper mapper = new ObjectMapper();
 
     @Override
-    public String convertToDatabaseColumn(Map<String, String> attribute) {
+    public String convertToDatabaseColumn(Map<String, Integer> attribute) {
         try {
             return attribute == null ? null : mapper.writeValueAsString(attribute);
         } catch (Exception e) {
@@ -23,7 +23,7 @@ public class MapToJsonConverter implements AttributeConverter<Map<String, String
     }
 
     @Override
-    public Map<String, String> convertToEntityAttribute(String dbData) {
+    public Map<String, Integer> convertToEntityAttribute(String dbData) {
         try {
             return dbData == null ? null : mapper.readValue(dbData, new TypeReference<>() {});
         } catch (Exception e) {

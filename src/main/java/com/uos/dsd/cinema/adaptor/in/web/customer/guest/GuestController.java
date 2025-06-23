@@ -8,8 +8,6 @@ import com.uos.dsd.cinema.application.port.in.customer.guest.query.GetGuestInfoQ
 import com.uos.dsd.cinema.application.port.in.customer.guest.response.GuestInfoResponse;
 import com.uos.dsd.cinema.application.port.in.customer.guest.usecase.GetGuestInfoUsecase;
 import com.uos.dsd.cinema.application.port.in.customer.guest.usecase.LoginGuestUsecase;
-import com.uos.dsd.cinema.common.exception.code.CommonResultCode;
-import com.uos.dsd.cinema.common.exception.http.ForbiddenException;
 import com.uos.dsd.cinema.common.response.ApiResponse;
 import com.uos.dsd.cinema.common.utils.CookieUtil;
 import com.uos.dsd.cinema.core.annotation.UserId;
@@ -18,7 +16,6 @@ import com.uos.dsd.cinema.core.security.SecurityConstants;
 import com.uos.dsd.cinema.core.security.SecurityConstants.Role;
 
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -56,17 +53,12 @@ public class GuestController {
                 jwtUtils.getRefreshTokenExpirationMs(), "/auth", httpRequest.isSecure());
 
         log.info("login success, id: {}", id);
-        return ApiResponse.success(new GuestLoginResponse(accessToken));
+        return ApiResponse.success(new GuestLoginResponse(id, accessToken));
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/info")
     public ApiResponse<GetGuestInfoResponse> getGuestInfo(
-        @UserId Long requesterId,
-        @PathVariable("id") Long id) {
-
-        if (!requesterId.equals(id)) {
-            throw new ForbiddenException(CommonResultCode.FORBIDDEN, "You can only get your own info");
-        }
+        @UserId Long id) {
 
         GuestInfoResponse guest = getGuestInfoUsecase.getGuestInfo(new GetGuestInfoQuery(id));
         GetGuestInfoResponse response = new GetGuestInfoResponse(

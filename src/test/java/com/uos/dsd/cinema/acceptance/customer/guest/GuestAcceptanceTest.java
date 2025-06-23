@@ -86,6 +86,8 @@ public class GuestAcceptanceTest extends AcceptanceTest {
 
         /* Then */
         checkSuccess(response.statusCode(), apiResponse.code());
+        // check body id
+        assertEquals(id, apiResponse.data().id());
         // check body accessToken
         String accessToken = apiResponse.data().accessToken();
         JwtClaim accessTokenClaim = jwtUtils.getJwtClaim(accessToken);
@@ -251,7 +253,6 @@ public class GuestAcceptanceTest extends AcceptanceTest {
     public void getGuestInfo() {
 
         /* Given */
-        Long id = EXIST_GUEST_ID;
         String name = EXIST_GUEST_NAME;
         String phone = EXIST_GUEST_PHONE;
         LocalDate birthDate = EXIST_GUEST_BIRTH_DATE;
@@ -260,7 +261,7 @@ public class GuestAcceptanceTest extends AcceptanceTest {
         String accessToken = getAccessToken(name, phone, birthDate, EXIST_GUEST_PASSWORD);
         Map<String, Object> headers = AuthHeaderProvider.createAuthorizationHeader(accessToken);
 
-        Response response = GuestSteps.sendGetGuestInfo(headers, id);
+        Response response = GuestSteps.sendGetGuestInfo(headers);
         log.info("response: {}", response.asString());
         ApiResponse<GetGuestInfoResponse> apiResponse = response.as(new TypeRef<ApiResponse<GetGuestInfoResponse>>() {});
         log.info("ApiResponse: {}", apiResponse);
@@ -273,40 +274,14 @@ public class GuestAcceptanceTest extends AcceptanceTest {
     }
 
     @Test
-    public void getGuestInfoWithOtherGuest() {
-
-        /* Given */
-        Long id = EXIST_GUEST_ID;
-        String name = EXIST_GUEST_NAME_2;
-        String phone = EXIST_GUEST_PHONE_2;
-        LocalDate birthDate = EXIST_GUEST_BIRTH_DATE_2;
-        String password = EXIST_GUEST_PASSWORD_2;
-
-        /* When */
-        String accessToken = getAccessToken(name, phone, birthDate, password);
-        Map<String, Object> headers = AuthHeaderProvider.createAuthorizationHeader(accessToken);
-
-        Response response = GuestSteps.sendGetGuestInfo(headers, id);
-        log.info("response: {}", response.asString());
-        ApiResponse<GetGuestInfoResponse> apiResponse = response.as(new TypeRef<ApiResponse<GetGuestInfoResponse>>() {});
-        log.info("ApiResponse: {}", apiResponse);
-
-        /* Then */
-        checkForbidden(response.statusCode(), apiResponse.code());
-        assertEquals("You can only get your own info", apiResponse.message());
-    }
-
-    @Test
     public void getGuestInfoWithInvalidToken() {
 
         /* Given */
-        Long id = EXIST_GUEST_ID;
-
         /* When */
         String accessToken = "invalidToken";
         Map<String, Object> headers = AuthHeaderProvider.createAuthorizationHeader(accessToken);
 
-        Response response = GuestSteps.sendGetGuestInfo(headers, id);
+        Response response = GuestSteps.sendGetGuestInfo(headers);
         log.info("response: {}", response.asString());
         ApiResponse<GetGuestInfoResponse> apiResponse = response.as(new TypeRef<ApiResponse<GetGuestInfoResponse>>() {});
         log.info("ApiResponse: {}", apiResponse);

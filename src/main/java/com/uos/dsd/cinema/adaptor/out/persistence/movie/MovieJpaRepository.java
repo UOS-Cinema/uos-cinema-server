@@ -7,20 +7,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.EntityGraph;
 
 @Repository
 public interface MovieJpaRepository
         extends 
     JpaRepository<Movie, Long>, JpaSpecificationExecutor<Movie>, MovieRepository {
 
-    @Query("""
-        SELECT m
-        FROM Movie m
-        JOIN FETCH m.director d
-        LEFT JOIN FETCH m.movieCasts mc
-        LEFT JOIN FETCH mc.actor a
-        LEFT JOIN FETCH m.genres g
-        WHERE m.id = :id
-    """)
+    @EntityGraph(value = "Movie.withAll", type = EntityGraph.EntityGraphType.FETCH)
+    @Query("SELECT m FROM Movie m WHERE m.id = :id")
     Movie findWithDetail(Long id);
 }

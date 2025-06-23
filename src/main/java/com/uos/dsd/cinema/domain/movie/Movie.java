@@ -27,6 +27,9 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.NamedAttributeNode;
+import jakarta.persistence.NamedEntityGraph;
+import jakarta.persistence.NamedSubgraph;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -42,6 +45,16 @@ import java.util.Set;
 @Setter
 @EqualsAndHashCode(of = "id", callSuper = false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NamedEntityGraph(name = "Movie.withAll", attributeNodes = {
+    @NamedAttributeNode("director"),
+    @NamedAttributeNode(value = "movieCasts", subgraph = "movieCasts-subgraph"),
+    @NamedAttributeNode("genres"),
+    @NamedAttributeNode("screenTypes")
+}, subgraphs = {
+    @NamedSubgraph(name = "movieCasts-subgraph", attributeNodes = {
+        @NamedAttributeNode("actor")
+    })
+})
 public class Movie extends Base {
 
     @Id

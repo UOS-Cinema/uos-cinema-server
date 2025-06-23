@@ -38,7 +38,6 @@ public class MovieAcceptanceTest extends AcceptanceTest {
         Long movieId = 1L;
 
         /* When */
-        // 1. create movie
         Response response = MovieSteps
                 .sendGetMovie(GUEST_HEADERS, movieId);
         ApiResponse<MovieResponse> apiResponse = response.as(new TypeRef<ApiResponse<MovieResponse>>() {});

@@ -4,6 +4,7 @@ import com.uos.dsd.cinema.domain.genre.Genre;
 import com.uos.dsd.cinema.domain.movie.Movie;
 import com.uos.dsd.cinema.domain.movie.enums.CastingType;
 import com.uos.dsd.cinema.domain.movie.enums.MovieRating;
+import com.uos.dsd.cinema.domain.screen_type.ScreenType;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -21,20 +22,27 @@ public record MovieResponse(
     DirectorInfo director,
     List<ActorCastingInfo> actors,
     List<String> genres,
+    List<String> screenTypes,
     int cumulativeBookings
 ) {
 
     public static MovieResponse from(Movie movie) {
 
         List<ActorCastingInfo> actors = movie.getMovieCasts().stream()
-            .map(mc -> new ActorCastingInfo(
-                mc.getActor().getId(),
-                mc.getActor().getName(),
-                mc.getActor().getPhotoUrl(),
-                mc.getRole(),
-                mc.getCastingType()
+            .collect(Collectors.toMap(
+                mc -> mc.getActor().getId(),
+                mc -> new ActorCastingInfo(
+                    mc.getActor().getId(),
+                    mc.getActor().getName(),
+                    mc.getActor().getPhotoUrl(),
+                    mc.getRole(),
+                    mc.getCastingType()
+                ),
+                (existing, replacement) -> existing
             ))
-                .collect(Collectors.toList());
+            .values()
+            .stream()
+            .collect(Collectors.toList());
             
         DirectorInfo director = new DirectorInfo(
             movie.getDirector().getId(),
@@ -44,6 +52,10 @@ public record MovieResponse(
 
         List<String> genres = movie.getGenres().stream()
             .map(Genre::getName)
+            .collect(Collectors.toList());
+
+        List<String> screenTypes = movie.getScreenTypes().stream()
+            .map(ScreenType::getType)
             .collect(Collectors.toList());
 
         return new MovieResponse(
@@ -58,6 +70,7 @@ public record MovieResponse(
             director,
             actors,
             genres,
+            screenTypes,
             movie.getCumulativeBookings()
         );
     }

@@ -51,4 +51,9 @@ public class TheaterRepositoryAdaptor implements TheaterRepository {
                 .orElseThrow(() -> new NotFoundException(TheaterExceptionCode.THEATER_NOT_FOUND));
         return theater.getLayout();
     }
+
+    @Override
+    public int countByScreeningsFromNow(Long theaterNumber) {
+        return theaterJPARepository.countByScreeningsFromNow(theaterNumber);
+    }
 }

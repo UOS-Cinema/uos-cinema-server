@@ -32,9 +32,9 @@ import java.util.List;
 @Table(name = "theaters")
 @Getter
 @ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true, of = "number")
 @NoArgsConstructor
-public class Theater extends Base implements Persistable<Long>{
+public class Theater extends Base implements Persistable<Long> {
 
     @Id
     @Column(name = "id")

@@ -15,9 +15,12 @@ import com.uos.dsd.cinema.domain.theater.Theater;
 import com.uos.dsd.cinema.domain.theater.exception.TheaterExceptionCode;
 import com.uos.dsd.cinema.common.exception.http.BadRequestException;
 import com.uos.dsd.cinema.common.exception.http.NotFoundException;
+
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.hibernate.exception.ConstraintViolationException;
+
+import jakarta.persistence.EntityManager;
 
 import lombok.RequiredArgsConstructor;
 
@@ -33,6 +36,7 @@ public class TheaterService implements
         ModifyTheaterUseCase, 
         DeleteTheaterUseCase {
 
+    private final EntityManager entityManager;
     private final TheaterRepository theaterRepository;
 
     @Override
@@ -80,24 +84,21 @@ public class TheaterService implements
         );
     }
 
+    // TODO: 추후 수정 필요. 안됨
     @Override
     public Long modifyTheater(ModifyTheaterCommand command) {
 
         Theater theater = findByNumber(command.number());
 
         theater.modifyName(command.name());
-        if (theater.getLayout() != command.layout()) {
-            // TODO: 해당 상영관에 예매한 사람이 없는 경우에만 변경 가능
-            // TODO: 나중에 변경으로 꼭 바꾸기
-            // theater.deleteSeats();
-            // theaterRepository.saveAndFlush(theater);
-            // theater.modifyLayout(command.layout());
+        if (theater.getLayout() != command.layout() || theater.getScreenTypes() != command.screenTypes()) {
+            if (theaterRepository.countByScreeningsFromNow(command.number()) > 0) {
+                throw new BadRequestException(TheaterExceptionCode.THEATER_HAS_RUNNING_SCREENINGS);
+            }
             deleteTheater(command.number());
+            entityManager.flush();
+            entityManager.detach(theater);
             theater = new Theater(command.number(), command.name(), command.layout(), command.screenTypes());
-        }
-        if (theater.getScreenTypes() != command.screenTypes()) {
-            // TODO: 해당 상영관을 예매한 사람이 없는 경우에만 변경 가능
-            theater.modifyScreenTypes(command.screenTypes());
         }
         theaterRepository.save(theater);
         return theater.getNumber();
@@ -106,7 +107,9 @@ public class TheaterService implements
     @Override
     public void deleteTheater(Long theaterNumber) {
 
-        // TODO: 해당 상영관의 상영 예정 예매 내역이 없는 경우에만 삭제 가능
+        if (theaterRepository.countByScreeningsFromNow(theaterNumber) > 0) {
+            throw new BadRequestException(TheaterExceptionCode.THEATER_HAS_RUNNING_SCREENINGS);
+        }
         try {
             theaterRepository.deleteById(theaterNumber);
         } catch (EmptyResultDataAccessException e) {

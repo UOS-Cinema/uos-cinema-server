@@ -19,4 +19,6 @@ public interface TheaterRepository {
     List<List<LayoutElement>> getSeatingStatus(Long theaterNumber);
 
     void deleteById(Long theaterNumber);
+
+    int countByScreeningsFromNow(Long theaterNumber);
 }

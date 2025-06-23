@@ -54,6 +54,12 @@ public class MovieQueryService {
         if (request.screenTypes() != null && !request.screenTypes().isEmpty()) {
             spec = spec.and(MovieSpecification.hasScreenTypes(request.screenTypes()));
         }
+        if (request.directorName() != null) {
+            spec = spec.and(MovieSpecification.hasDirector(request.directorName()));
+        }
+        if (request.actorName() != null) {
+            spec = spec.and(MovieSpecification.hasActor(request.actorName()));
+        }
 
         return movieRepository.findAll(spec, pageable);
     }

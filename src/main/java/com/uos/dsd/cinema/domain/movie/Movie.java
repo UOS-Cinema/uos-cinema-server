@@ -125,6 +125,7 @@ public class Movie extends Base {
             Set<ScreenType> screenTypes,
             List<Casting> castings,
             Set<Genre> genres) {
+        super();
 
         this.title = title;
         this.synopsis = synopsis;

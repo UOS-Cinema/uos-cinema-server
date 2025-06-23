@@ -13,6 +13,8 @@ public enum ReservationExceptionCode implements ResultCode {
     ALREADY_RESERVED_SEAT("RSV002", "Already reserved seat"),
     INVALID_SEAT_AND_CUSTOMER_COUNT("RSV003", "Seat and customer count must be the same"),
     INVALID_CUSTOMER_ID("RSV004", "Only the customer who made the reservation can cancel it"),
+    RESERVATION_NOT_FOUND("RSV005", "Reservation not found"),
+    LAST_ENTRANCES_TIME_EXCEEDED("RSV006", "Last entrances time exceeded"),
     ;
 
     private final String code;

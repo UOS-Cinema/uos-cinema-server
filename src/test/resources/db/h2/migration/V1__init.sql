@@ -247,12 +247,12 @@ CREATE TABLE reservation_seats (
 
 -- 예매 고객 유형별 인원 수 테이블
 CREATE TABLE reservation_customer_counts (
-    id NUMBER,
+    reservation_id NUMBER,
     customer_type VARCHAR(20) NOT NULL,
     count NUMBER(10) NOT NULL,
-    PRIMARY KEY (id),
+    PRIMARY KEY (reservation_id, customer_type),
     FOREIGN KEY (customer_type) REFERENCES customer_types(type) ON DELETE SET NULL,
-    FOREIGN KEY (id) REFERENCES reservations(id) ON DELETE CASCADE
+    FOREIGN KEY (reservation_id) REFERENCES reservations(id) ON DELETE CASCADE
 );
 
 -- 결제 내역 테이블

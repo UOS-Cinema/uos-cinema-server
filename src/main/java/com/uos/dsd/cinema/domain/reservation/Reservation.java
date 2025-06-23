@@ -3,7 +3,8 @@ package com.uos.dsd.cinema.domain.reservation;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -23,7 +24,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import org.springframework.data.domain.Persistable;
+
 import com.uos.dsd.cinema.domain.reservation.exception.ReservationExceptionCode;
+import com.uos.dsd.cinema.domain.screening.Screening;
 import com.uos.dsd.cinema.common.exception.http.BadRequestException;
 import com.uos.dsd.cinema.common.exception.http.UnauthorizedException;
 import com.uos.dsd.cinema.core.converter.MapToJsonConverter;
@@ -37,7 +41,7 @@ import com.uos.dsd.cinema.domain.reservation.enums.ReservationStatus;
 @NoArgsConstructor
 @ToString
 @EqualsAndHashCode(of = {"id", "customerId", "screeningId"})
-public class Reservation {
+public class Reservation implements Persistable<Long>{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -63,42 +67,47 @@ public class Reservation {
     @Convert(converter = MapToJsonConverter.class)
     @Column(name = "customer_count_snapshot")
     @Convert(converter = MapToJsonConverter.class)
-    private Map<String, String> customerCountSnapshot;
+    private Map<String, Integer> customerCountSnapshot;
 
     @OneToMany(mappedBy = "reservation",
-            cascade = CascadeType.PERSIST, 
-            orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<ReservationSeat> reservationSeats = new ArrayList<>();
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE}, 
+            orphanRemoval = true, 
+            fetch = FetchType.LAZY)
+    private Set<ReservationSeat> reservationSeats = new HashSet<>();
 
     @OneToMany(mappedBy = "reservation",
-            cascade = CascadeType.PERSIST,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE},
             orphanRemoval = true,
             fetch = FetchType.LAZY)
-    private List<ReservationCustomerCount> reservationCustomerCounts = new ArrayList<>();
+    private Set<ReservationCustomerCount> reservationCustomerCounts = new HashSet<>();
 
     public Reservation(Long customerId,
-                        Long screeningId,
+                        Screening screening,
                         Long theaterId,
                         List<String> seatNumbers, 
-                        Map<String, String> customerCount) {
+            Map<String, Integer> customerCount) {
         this.customerId = customerId;
-        this.screeningId = screeningId;
+        if (!ReservationConstraint.canEnter(screening.getStartTime())) {
+            throw new BadRequestException(ReservationExceptionCode.LAST_ENTRANCES_TIME_EXCEEDED);
+        }
+        this.screeningId = screening.getId();
         this.status = ReservationStatus.PROGRESS;
         this.seatSnapshot = seatNumbers;
         this.customerCountSnapshot = customerCount;
         this.createdAt = LocalDateTime.now();
-        if (seatNumbers.size() != customerCount.size()) {
-            throw new BadRequestException(ReservationExceptionCode.INVALID_SEAT_AND_CUSTOMER_COUNT);
-        }
-        createReservationSeat(screeningId, theaterId, seatNumbers);
-        createReservationCustomerCount(customerCount);
+    }
+    
+    public void afterPersist(Long theaterId) {
+        validateSeatAndCustomerCount(this.seatSnapshot, this.customerCountSnapshot);
+        createReservationSeat(this.screeningId, theaterId, this.seatSnapshot);
+        createReservationCustomerCount(this.customerCountSnapshot);
     }
 
     public void cancel(Long customerId) {
         if (!this.customerId.equals(customerId)) {
             throw new UnauthorizedException(ReservationExceptionCode.INVALID_CUSTOMER_ID);
         }
-        this.status = ReservationStatus.CANCELLED;
+        this.status = ReservationStatus.CANCELED;
         this.reservationSeats.clear();
         this.reservationCustomerCounts.clear();
     }
@@ -118,11 +127,33 @@ public class Reservation {
         }
     }
 
-    private void createReservationCustomerCount(Map<String, String> customerCount) {
-        for (Map.Entry<String, String> entry : customerCount.entrySet()) {
+    private void createReservationCustomerCount(Map<String, Integer> customerCount) {
+        for (Map.Entry<String, Integer> entry : customerCount.entrySet()) {
             this.reservationCustomerCounts
                 .add(new ReservationCustomerCount(
-                    this, entry.getKey(), Integer.parseInt(entry.getValue())));
+                    this, entry.getKey(), entry.getValue()));
         }
+    }
+
+    private void validateSeatAndCustomerCount(
+            List<String> seatNumbers,
+            Map<String, Integer> customerCount) {
+        int totalCustomerCount = seatNumbers.size();
+        for (Map.Entry<String, Integer> entry : customerCount.entrySet()) {
+            totalCustomerCount -= entry.getValue();
+        }
+        if (totalCustomerCount != 0) {
+            throw new BadRequestException(ReservationExceptionCode.INVALID_SEAT_AND_CUSTOMER_COUNT);
+        }
+    }
+
+    @Override
+    public boolean isNew() {
+        return id == null;
+    }
+
+    @Override
+    public Long getId() {
+        return this.id;
     }
 }

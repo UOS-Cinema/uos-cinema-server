@@ -65,7 +65,7 @@ public abstract class AcceptanceTest {
         @Bean
         DBInitializeStrategy dbInitializeStrategy(@Autowired DataSource dataSource) {
 
-            Resource initScript = new ClassPathResource("db/oracle/migration/V1__init.sql");
+            Resource initScript = new ClassPathResource("db/migration/V1__init.sql");
             return new OracleDBInitializeStrategy(dataSource, initScript);
             // return new H2DBInitializeStrategy(dataSource, initScript);
         }

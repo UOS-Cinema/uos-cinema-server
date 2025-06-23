@@ -25,6 +25,15 @@ logging:
     '[org.hibernate.SQL]': DEBUG
     '[org.hibernate.type.descriptor.sql.BasicBinder]': TRACE
     '[org.hibernate.type]': TRACE
+    '[org.springframework.web]': DEBUG
+    '[org.springframework.transaction]': DEBUG
+    '[org.springframework.orm.jpa]': DEBUG
+    '[com.uos.dsd.cinema]': DEBUG
+    '[org.springframework.test]': DEBUG
+    '[org.springframework.boot.test]': DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
 
 storage:
   root-path: ./test-storage

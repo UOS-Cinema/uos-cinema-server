@@ -559,19 +559,19 @@ INSERT INTO payments (id, reservation_id, customer_id, requested_at, approved_at
                      approval_number, original_price, discount_amount, final_price)
 VALUES (101, 101, 1, TO_DATE('2025-06-20 10:00:00', 'YYYY-MM-DD HH24:MI:SS'), 
         TO_DATE('2025-06-20 10:00:00', 'YYYY-MM-DD HH24:MI:SS'), 
-        'CARD', 'APPROVAL1001', 12000, 0, 12000);
+        'CARD', 'APPROVAL101', 12000, 0, 12000);
 
 INSERT INTO payments (id, reservation_id, customer_id, requested_at, approved_at, payment_method, 
                      approval_number, original_price, discount_amount, final_price)
 VALUES (102, 102, 1, TO_DATE('2025-06-21 14:00:00', 'YYYY-MM-DD HH24:MI:SS'),
         TO_DATE('2025-06-21 14:00:00', 'YYYY-MM-DD HH24:MI:SS'),
-        'BANK', 'APPROVAL1002', 24000, 0, 24000);
+        'BANK', 'APPROVAL102', 24000, 0, 24000);
 
 INSERT INTO payments (id, reservation_id, customer_id, requested_at, approved_at, payment_method, 
                      approval_number, original_price, discount_amount, final_price)
 VALUES (103, 103, 1, TO_DATE('2025-06-22 18:00:00', 'YYYY-MM-DD HH24:MI:SS'),
         TO_DATE('2025-06-22 18:00:00', 'YYYY-MM-DD HH24:MI:SS'),
-        'CARD', 'APPROVAL1003', 12000, 0, 12000);
+        'CARD', 'APPROVAL103', 12000, 0, 12000);
 
 -- 회원 포인트 거래 데이터 (최종 잔액: 1120 포인트)
 INSERT INTO point_transactions (payment_id, customer_id, point, total_point)

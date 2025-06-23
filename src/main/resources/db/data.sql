@@ -41,9 +41,15 @@ INSERT INTO customer_types (type, discount_amount) VALUES
 
 -- card_companies 테이블 INSERT
 INSERT INTO card_companies (name, logo_url, discount_amount) VALUES
-('토스', 'https://logo.clearbit.com/toss.im', 500),
-('하나', 'https://upload.wikimedia.org/wikipedia/commons/…/Hana_Bank_Logo_(eng).svg', 700),
-('국민', 'https://seeklogo.com/images/K/kb-kookmin-bank-logo.svg', 600);
+('토스카드', 'https://logo.clearbit.com/toss.im', 500),
+('하나카드', 'https://upload.wikimedia.org/wikipedia/commons/…/Hana_Bank_Logo_(eng).svg', 700),
+('국민카드', 'https://seeklogo.com/images/K/kb-kookmin-bank-logo.svg', 600),
+('신한카드', 'https://seeklogo.com/images/S/shinhan-bank-logo-0000000000-seeklogo.com.png', 800),
+('비씨카드', 'https://seeklogo.com/images/B/bc-card-logo-0000000000-seeklogo.com.png', 900),
+('삼성카드', 'https://seeklogo.com/images/S/samsung-card-logo-0000000000-seeklogo.com.png', 100),
+('우리카드', 'https://seeklogo.com/images/L/lotte-card-logo-0000000000-seeklogo.com.png', 0),
+('롯데카드', 'https://seeklogo.com/images/L/lotte-card-logo-0000000000-seeklogo.com.png', 0);
+
 
 -- banks 테이블 INSERT
 INSERT INTO banks (name, logo_url, discount_amount) VALUES
@@ -295,7 +301,10 @@ INSERT INTO screenings (id, movie_id, theater_id, screen_type, start_time, durat
 (47, 5, 1, '2D', TO_DATE('2025-06-21 12:00:00', 'YYYY-MM-DD HH24:MI:SS'), 125),
 (48, 5, 2, '3D', TO_DATE('2025-06-22 15:00:00', 'YYYY-MM-DD HH24:MI:SS'), 125),
 (49, 5, 3, '4D', TO_DATE('2025-06-23 18:00:00', 'YYYY-MM-DD HH24:MI:SS'), 125),
-(50, 5, 1, '2D', TO_DATE('2025-06-24 21:00:00', 'YYYY-MM-DD HH24:MI:SS'), 125);
+(50, 5, 1, '2D', TO_DATE('2025-06-24 21:00:00', 'YYYY-MM-DD HH24:MI:SS'), 125),
+(51, 5, 1, '2D', TO_DATE('2025-06-25 21:00:00', 'YYYY-MM-DD HH24:MI:SS'), 125),
+(52, 5, 1, '2D', TO_DATE('2025-06-26 21:00:00', 'YYYY-MM-DD HH24:MI:SS'), 125);
+
 
 
 -- 감독 추가 (7번)

@@ -43,7 +43,7 @@ public class ScreeningService implements ScreeningDeleteUseCase,
 
         LocalDate startDate = date;
         LocalDate endDate;
-        if (date == null) {
+    if (date == null) {
             startDate = LocalDate.now().minusDays(3);
             endDate = startDate.plusDays(3);
         } else {

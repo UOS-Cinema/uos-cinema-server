@@ -81,7 +81,7 @@ public class MovieQueryService {
 
     private Sort resolveSort(MovieSortType sortBy) {
     if (MovieSortType.RELEASE_DATE.equals(sortBy)) {
-        return Sort.by(Sort.Direction.ASC, "releaseDate");
+        return Sort.by(Sort.Direction.DESC, "releaseDate");
         } else {
             return Sort.by(Sort.Direction.DESC, "cumulativeBookings");
         }

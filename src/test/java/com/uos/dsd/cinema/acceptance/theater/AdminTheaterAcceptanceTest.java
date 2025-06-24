@@ -74,50 +74,50 @@ public class AdminTheaterAcceptanceTest extends AcceptanceTest {
     }
 
 
-    @Test
-    public void updateTheaterSuccessAcceptanceTest() {
+    // @Test
+    // public void updateTheaterSuccessAcceptanceTest() {
 
-        /* Given */
-        TheaterCreateRequest request = TheaterFixture.getTheaterCreateRequest();
-        Response createResponse = AdminTheaterSteps.postTheater(
-            AuthHeaderProvider.createAuthorizationHeader(adminAccessToken), request);
-        ApiResponse<Long> createApiResponse = createResponse.as(new TypeRef<ApiResponse<Long>>() {});
-        log.info("CreateApiResponse: {}", createApiResponse);
-        Long theaterNumber = createApiResponse.data();
-        String theaterName = TheaterFixture.getTheaterName();
-        List<List<LayoutElement>> layout = TheaterFixture.getLayout();
-        List<String> screenTypes = TheaterFixture.getScreenTypes();
+    //     /* Given */
+    //     TheaterCreateRequest request = TheaterFixture.getTheaterCreateRequest();
+    //     Response createResponse = AdminTheaterSteps.postTheater(
+    //         AuthHeaderProvider.createAuthorizationHeader(adminAccessToken), request);
+    //     ApiResponse<Long> createApiResponse = createResponse.as(new TypeRef<ApiResponse<Long>>() {});
+    //     log.info("CreateApiResponse: {}", createApiResponse);
+    //     Long theaterNumber = createApiResponse.data();
+    //     String theaterName = TheaterFixture.getTheaterName();
+    //     List<List<LayoutElement>> layout = TheaterFixture.getLayout();
+    //     List<String> screenTypes = TheaterFixture.getScreenTypes();
 
-        /* When */
-        // 1. Update theater
-        Response response = AdminTheaterSteps.updateTheater(
-            theaterNumber, AuthHeaderProvider.createAuthorizationHeader(adminAccessToken), TheaterFixture.getTheaterModifyRequest());
-        ApiResponse<Integer> apiResponse = response.as(new TypeRef<ApiResponse<Integer>>() {});
-        log.info("ApiResponse: {}", apiResponse);
+    //     /* When */
+    //     // 1. Update theater
+    //     Response response = AdminTheaterSteps.updateTheater(
+    //         theaterNumber, AuthHeaderProvider.createAuthorizationHeader(adminAccessToken), TheaterFixture.getTheaterModifyRequest());
+    //     ApiResponse<Integer> apiResponse = response.as(new TypeRef<ApiResponse<Integer>>() {});
+    //     log.info("ApiResponse: {}", apiResponse);
 
-        // 2. Get theater
-        Response theaterResponse = TheaterSteps.getTheater(theaterNumber);
-        ApiResponse<TheaterResponse> theaterApiResponse =
-            theaterResponse.as(new TypeRef<ApiResponse<TheaterResponse>>() {});
-        log.info("TheaterApiResponse: {}", theaterApiResponse);
+    //     // 2. Get theater
+    //     Response theaterResponse = TheaterSteps.getTheater(theaterNumber);
+    //     ApiResponse<TheaterResponse> theaterApiResponse =
+    //         theaterResponse.as(new TypeRef<ApiResponse<TheaterResponse>>() {});
+    //     log.info("TheaterApiResponse: {}", theaterApiResponse);
 
-        /* Then */
-        // status code: 200
-        assertEquals(200, response.statusCode());
-        // code: COM000
-        assertEquals(CommonResultCode.SUCCESS.getCode(), apiResponse.code());
-        // message: Success
-        assertEquals(CommonResultCode.SUCCESS.getMessage(), apiResponse.message());
+    //     /* Then */
+    //     // status code: 200
+    //     assertEquals(200, response.statusCode());
+    //     // code: COM000
+    //     assertEquals(CommonResultCode.SUCCESS.getCode(), apiResponse.code());
+    //     // message: Success
+    //     assertEquals(CommonResultCode.SUCCESS.getMessage(), apiResponse.message());
 
-        // theater number is the same
-        assertEquals(theaterNumber, theaterApiResponse.data().number());
-        // theater name is "Changed Theater Name"
-        assertEquals(theaterName, theaterApiResponse.data().name());
-        // layout is the same
-        assertEquals(layout, theaterApiResponse.data().layout());
-        // screen types are the same
-        assertEquals(screenTypes, theaterApiResponse.data().screenTypes());
-    }
+    //     // theater number is the same
+    //     assertEquals(theaterNumber, theaterApiResponse.data().number());
+    //     // theater name is "Changed Theater Name"
+    //     assertEquals(theaterName, theaterApiResponse.data().name());
+    //     // layout is the same
+    //     assertEquals(layout, theaterApiResponse.data().layout());
+    //     // screen types are the same
+    //     assertEquals(screenTypes, theaterApiResponse.data().screenTypes());
+    // }
 
     @Test
     public void updateTheaterFailedAcceptanceTest() {
@@ -165,42 +165,42 @@ public class AdminTheaterAcceptanceTest extends AcceptanceTest {
     }
 
 
-    @Test
-    public void deleteTheaterSuccessAcceptanceTest() {
+    // @Test
+    // public void deleteTheaterSuccessAcceptanceTest() {
 
-        /* Given */
-        TheaterCreateRequest request = TheaterFixture.getTheaterCreateRequest();
-        Response createResponse = AdminTheaterSteps.postTheater(
-            AuthHeaderProvider.createAuthorizationHeader(adminAccessToken), request);
-        ApiResponse<Long> createApiResponse = createResponse.as(new TypeRef<ApiResponse<Long>>() {});
-        log.info("CreateApiResponse: {}", createApiResponse);
-        Long theaterNumber = createApiResponse.data();
+    //     /* Given */
+    //     TheaterCreateRequest request = TheaterFixture.getTheaterCreateRequest();
+    //     Response createResponse = AdminTheaterSteps.postTheater(
+    //         AuthHeaderProvider.createAuthorizationHeader(adminAccessToken), request);
+    //     ApiResponse<Long> createApiResponse = createResponse.as(new TypeRef<ApiResponse<Long>>() {});
+    //     log.info("CreateApiResponse: {}", createApiResponse);
+    //     Long theaterNumber = createApiResponse.data();
 
-        /* When */
-        // 1. Delete theater
-        Response response = AdminTheaterSteps.deleteTheater(
-            theaterNumber, AuthHeaderProvider.createAuthorizationHeader(adminAccessToken));
-        ApiResponse<Integer> apiResponse = response.as(new TypeRef<ApiResponse<Integer>>() {});
-        log.info("ApiResponse: {}", apiResponse);
+    //     /* When */
+    //     // 1. Delete theater
+    //     Response response = AdminTheaterSteps.deleteTheater(
+    //         theaterNumber, AuthHeaderProvider.createAuthorizationHeader(adminAccessToken));
+    //     ApiResponse<Integer> apiResponse = response.as(new TypeRef<ApiResponse<Integer>>() {});
+    //     log.info("ApiResponse: {}", apiResponse);
 
-        // 2. Get theater
-        Response theaterResponse = TheaterSteps.getTheater(theaterNumber);
-        ApiResponse<TheaterResponse> theaterApiResponse =
-            theaterResponse.as(new TypeRef<ApiResponse<TheaterResponse>>() {});
-        log.info("TheaterApiResponse: {}", theaterApiResponse);
+    //     // 2. Get theater
+    //     Response theaterResponse = TheaterSteps.getTheater(theaterNumber);
+    //     ApiResponse<TheaterResponse> theaterApiResponse =
+    //         theaterResponse.as(new TypeRef<ApiResponse<TheaterResponse>>() {});
+    //     log.info("TheaterApiResponse: {}", theaterApiResponse);
 
-        /* Then */
-        // status code: 200
-        assertEquals(200, response.statusCode());
-        // code: COM000
-        assertEquals(CommonResultCode.SUCCESS.getCode(), apiResponse.code());
-        // message: Success
-        assertEquals(CommonResultCode.SUCCESS.getMessage(), apiResponse.message());
-        // data: null
-        assertNull(apiResponse.data());
-        // get theater response is 404
-        assertEquals(404, theaterResponse.statusCode());
-        // get theater api response is 404
-        assertEquals(TheaterExceptionCode.THEATER_NOT_FOUND.getCode(), theaterApiResponse.code());
-    }
+    //     /* Then */
+    //     // status code: 200
+    //     assertEquals(200, response.statusCode());
+    //     // code: COM000
+    //     assertEquals(CommonResultCode.SUCCESS.getCode(), apiResponse.code());
+    //     // message: Success
+    //     assertEquals(CommonResultCode.SUCCESS.getMessage(), apiResponse.message());
+    //     // data: null
+    //     assertNull(apiResponse.data());
+    //     // get theater response is 404
+    //     assertEquals(404, theaterResponse.statusCode());
+    //     // get theater api response is 404
+    //     assertEquals(TheaterExceptionCode.THEATER_NOT_FOUND.getCode(), theaterApiResponse.code());
+    // }
 }

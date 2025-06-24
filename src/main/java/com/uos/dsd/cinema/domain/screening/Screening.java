@@ -76,6 +76,7 @@ public class Screening extends Base {
             LocalDateTime startTime,
             List<Screening> existingScreenings) {
 
+        super();
         if (movie == null) {
             throw new IllegalArgumentException("Movie cannot be null");
         }

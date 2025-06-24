@@ -1,6 +1,5 @@
 package com.uos.dsd.cinema.application.service.screening;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import lombok.RequiredArgsConstructor;
@@ -24,6 +23,7 @@ import com.uos.dsd.cinema.domain.theater.enums.LayoutElement;
 import com.uos.dsd.cinema.domain.reservation.ReservationSeat;
 import com.uos.dsd.cinema.domain.movie.Movie;
 import com.uos.dsd.cinema.domain.movie.exception.MovieExceptionCode;
+import com.uos.dsd.cinema.domain.screening.exception.ScreeningExceptionCode;
 
 @Service
 @RequiredArgsConstructor
@@ -134,7 +134,9 @@ public class ScreeningFacadeService implements
 
     @Override
     public List<List<LayoutElement>> getScreeningTheaterLayout(Long id) {
-        List<List<LayoutElement>> layout = theaterRepository.getSeatingStatus(id);
+        Screening screening = screeningRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(ScreeningExceptionCode.SCREENING_NOT_FOUND));
+        List<List<LayoutElement>> layout = theaterRepository.getSeatingStatus(screening.getTheaterId());
         List<ReservationSeat> reservationSeats = screeningRepository.getReservationSeats(id);
 
         char row = 'A';

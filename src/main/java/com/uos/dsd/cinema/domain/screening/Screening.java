@@ -33,7 +33,7 @@ import java.util.List;
 @Entity
 @Table(name = "screenings")
 @Getter
-@ToString(callSuper = true)
+@ToString(callSuper = true, exclude = {"movie", "theater"})
 @EqualsAndHashCode(callSuper = true, of = "id")
 @NoArgsConstructor
 public class Screening extends Base {

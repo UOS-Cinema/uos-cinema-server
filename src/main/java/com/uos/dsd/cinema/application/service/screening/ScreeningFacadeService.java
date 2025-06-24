@@ -4,6 +4,8 @@ import java.util.List;
 
 import lombok.RequiredArgsConstructor;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,8 +41,11 @@ public class ScreeningFacadeService implements
     private final TheaterRepository theaterRepository;
     private final ScreeningService screeningService;
 
+    private final Logger log = LoggerFactory.getLogger(ScreeningFacadeService.class);
+
     @Override
     public Long create(ScreeningCreateCommand command) {
+        log.info("create screening: ", command);
         Movie movie = movieRepository.findById(command.movieId())
                 .orElseThrow(() -> new NotFoundException(MovieExceptionCode.MOVIE_NOT_FOUND));
         return screeningService
@@ -50,7 +55,9 @@ public class ScreeningFacadeService implements
 
     @Override
     public ScreeningResponse get(Long id) {
+        log.info("get screening: {}", id);
         Screening screening = screeningRepository.getWithMovieAndTheater(id);
+        log.info("screening: {}", screening);
         return new ScreeningResponse(
             screening.getId(),
             screening.getMovieId(),
@@ -59,7 +66,7 @@ public class ScreeningFacadeService implements
             screening.getScreenType().getType(),
             screening.getStartTime(),
             screening.getDuration(),
-            getScreeningTheaterLayout(screening.getTheaterId())
+            getScreeningTheaterLayout(id)
         );
     }
 
@@ -80,7 +87,7 @@ public class ScreeningFacadeService implements
                     screening.getScreenType().getType(),
                     screening.getStartTime(),
                     screening.getDuration(),
-                    getScreeningTheaterLayout(screening.getTheaterId())
+                    getScreeningTheaterLayout(screening.getId())
                 ))
                 .toList();
         } else if (query.theaterId() != null) {
@@ -95,7 +102,7 @@ public class ScreeningFacadeService implements
                     screening.getScreenType().getType(),
                     screening.getStartTime(),
                     screening.getDuration(),
-                    getScreeningTheaterLayout(screening.getTheaterId())
+                    getScreeningTheaterLayout(screening.getId())
                 ))
                 .toList();
         } else if (query.movieId() != null) {
@@ -112,7 +119,7 @@ public class ScreeningFacadeService implements
                     screening.getScreenType().getType(),
                     screening.getStartTime(),
                     screening.getDuration(),
-                    getScreeningTheaterLayout(screening.getTheaterId())
+                    getScreeningTheaterLayout(screening.getId())
                 ))
                 .toList();
         } else {
@@ -126,7 +133,7 @@ public class ScreeningFacadeService implements
                     screening.getScreenType().getType(),
                     screening.getStartTime(),
                     screening.getDuration(),
-                    getScreeningTheaterLayout(screening.getTheaterId())
+                    getScreeningTheaterLayout(screening.getId())
                 ))
                 .toList();
         }
@@ -134,10 +141,14 @@ public class ScreeningFacadeService implements
 
     @Override
     public List<List<LayoutElement>> getScreeningTheaterLayout(Long id) {
+        log.info("get screening theater layout: {}", id);
         Screening screening = screeningRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(ScreeningExceptionCode.SCREENING_NOT_FOUND));
+        log.info("screening: {}", screening);
         List<List<LayoutElement>> layout = theaterRepository.getSeatingStatus(screening.getTheaterId());
+        log.info("layout: {}", layout);
         List<ReservationSeat> reservationSeats = screeningRepository.getReservationSeats(id);
+        log.info("reservationSeats: {}", reservationSeats);
 
         char row = 'A';
         int column = 0;
@@ -158,6 +169,7 @@ public class ScreeningFacadeService implements
                 column = 0;
             }
         }
+        log.info("layout: {}", layout);
         return layout;
     }
 }

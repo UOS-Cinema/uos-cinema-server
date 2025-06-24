@@ -19,7 +19,7 @@ import jakarta.persistence.Convert;
 @Entity
 @Table(name = "theater_seats")
 @Getter
-@ToString(callSuper = true)
+@ToString(callSuper = true, exclude = "theater")
 @EqualsAndHashCode(callSuper = true, of = "id")
 @NoArgsConstructor
 public class TheaterSeat extends Base {

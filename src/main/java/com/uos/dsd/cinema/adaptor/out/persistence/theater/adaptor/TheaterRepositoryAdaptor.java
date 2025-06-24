@@ -7,6 +7,8 @@ import com.uos.dsd.cinema.domain.theater.enums.LayoutElement;
 import com.uos.dsd.cinema.common.exception.http.NotFoundException;
 import com.uos.dsd.cinema.domain.theater.exception.TheaterExceptionCode;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import lombok.RequiredArgsConstructor;
@@ -17,6 +19,8 @@ import java.util.Optional;
 @Repository
 @RequiredArgsConstructor
 public class TheaterRepositoryAdaptor implements TheaterRepository {
+
+    private final Logger log = LoggerFactory.getLogger(TheaterRepositoryAdaptor.class);
 
     private final TheaterJPARepository theaterJPARepository;
 
@@ -47,8 +51,10 @@ public class TheaterRepositoryAdaptor implements TheaterRepository {
 
     @Override
     public List<List<LayoutElement>> getSeatingStatus(Long theaterNumber) {
+        log.info("get seating status: {}", theaterNumber);
         Theater theater = theaterJPARepository.findById(theaterNumber)
                 .orElseThrow(() -> new NotFoundException(TheaterExceptionCode.THEATER_NOT_FOUND));
+        log.info("theater: {}", theater);
         return theater.getLayout();
     }
 

@@ -61,12 +61,12 @@ public class PointAcceptanceTest extends AcceptanceTest {
         assertEquals(5, content.size()); // 5개의 포인트 거래 내역
         
         // 최신 내역부터 확인 (적립)
-        assertEquals(3001L, content.get(0).paymentId());
+        assertEquals(301L, content.get(0).paymentId());
         assertEquals(220, content.get(0).point());
         assertEquals(1120, content.get(0).totalPoint());
         
         // 사용
-        assertEquals(3001L, content.get(1).paymentId());
+        assertEquals(301L, content.get(1).paymentId());
         assertEquals(-500, content.get(1).point());
         assertEquals(900, content.get(1).totalPoint());
     }
